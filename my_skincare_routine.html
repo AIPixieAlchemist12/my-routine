@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="My Routine">
+<title>My Skincare Routine</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #faf7f2;
+  --warm-white: #f5f0e8;
+  --blush: #e8d5c4;
+  --rose: #c4907a;
+  --deep-rose: #a06b58;
+  --mauve: #8b6f6f;
+  --sage: #7a8c7a;
+  --deep-sage: #556655;
+  --lavender: #9b8faa;
+  --deep-lav: #6b5f7a;
+  --gold: #b8965a;
+  --text-dark: #2c2420;
+  --text-mid: #5a4a42;
+  --text-light: #9a8a82;
+  --border: rgba(180,150,130,0.2);
+  --shadow: rgba(100,60,40,0.08);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html{height:100%;background:var(--cream);}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--cream);
+  color:var(--text-dark);
+  min-height:100vh;
+  max-width:480px;
+  margin:0 auto;
+  padding-bottom:40px;
+}
+
+/* HEADER */
+.header{
+  background:var(--text-dark);
+  color:var(--cream);
+  padding:20px 20px 16px;
+  position:sticky;
+  top:0;
+  z-index:100;
+}
+.header-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;}
+.app-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;letter-spacing:0.02em;line-height:1.1;}
+.app-title span{font-style:italic;color:var(--blush);}
+.reset-btn{
+  font-size:11px;font-family:'DM Sans',sans-serif;
+  padding:5px 12px;border:1px solid rgba(255,255,255,0.2);
+  border-radius:20px;background:transparent;color:rgba(255,255,255,0.6);
+  cursor:pointer;letter-spacing:0.05em;white-space:nowrap;
+}
+.reset-btn:active{background:rgba(255,255,255,0.1);}
+
+/* DAY SELECTOR */
+.day-scroll{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none;}
+.day-scroll::-webkit-scrollbar{display:none;}
+.day-pill{
+  flex-shrink:0;padding:6px 14px;border-radius:20px;
+  border:1px solid rgba(255,255,255,0.2);background:transparent;
+  color:rgba(255,255,255,0.5);cursor:pointer;font-size:12px;
+  font-family:'DM Sans',sans-serif;letter-spacing:0.04em;
+  transition:all 0.2s;
+}
+.day-pill.active{background:var(--rose);border-color:var(--rose);color:#fff;font-weight:500;}
+.day-pill:active{opacity:0.7;}
+
+/* SESSION TOGGLE */
+.session-bar{
+  display:flex;margin:0;border-bottom:1px solid var(--border);
+  background:var(--warm-white);
+}
+.session-btn{
+  flex:1;padding:13px;text-align:center;cursor:pointer;
+  font-size:13px;font-family:'DM Sans',sans-serif;letter-spacing:0.04em;
+  border:none;background:transparent;color:var(--text-light);
+  border-bottom:2px solid transparent;margin-bottom:-1px;
+  transition:all 0.2s;
+}
+.session-btn.active{color:var(--deep-rose);border-bottom-color:var(--rose);font-weight:500;}
+
+/* DAY SUBTITLE */
+.day-info{padding:14px 20px 0;background:var(--warm-white);}
+.day-name{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:var(--text-dark);}
+.day-sub{font-size:12px;color:var(--text-light);letter-spacing:0.04em;margin-top:2px;}
+
+/* PROGRESS */
+.progress-wrap{padding:12px 20px 14px;background:var(--warm-white);}
+.progress-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.progress-label{font-size:11px;color:var(--text-light);letter-spacing:0.05em;}
+.progress-pct{font-size:11px;color:var(--rose);font-weight:500;}
+.progress-track{height:3px;background:var(--blush);border-radius:2px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--rose),var(--gold));border-radius:2px;transition:width 0.4s ease;}
+
+/* LEGEND */
+.legend{
+  display:flex;gap:8px;flex-wrap:wrap;
+  padding:10px 20px;background:var(--warm-white);
+  border-bottom:1px solid var(--border);
+}
+.leg-item{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text-light);letter-spacing:0.03em;}
+.leg-dot{width:8px;height:8px;border-radius:50%;}
+
+/* STEPS */
+.steps-wrap{padding:16px 16px 0;}
+
+.step-card{
+  background:#fff;border:1px solid var(--border);
+  border-radius:14px;margin-bottom:10px;
+  overflow:hidden;box-shadow:0 2px 8px var(--shadow);
+  transition:opacity 0.3s;
+}
+.step-card.done-card{opacity:0.5;}
+
+.step-header{
+  display:flex;align-items:center;gap:12px;
+  padding:13px 14px;cursor:pointer;
+}
+.step-num{
+  width:30px;height:30px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:500;flex-shrink:0;
+  font-family:'DM Sans',sans-serif;
+}
+.num-am{background:#fff3e0;color:#c47c2a;}
+.num-pm{background:#fce4ec;color:#c2185b;}
+.num-yoga{background:#fce7f3;color:#9d174d;}
+.num-gua{background:#ede9fe;color:#5b21b6;}
+.num-device{background:#e3f2fd;color:#1565c0;}
+.num-cleanse{background:#f1f8e9;color:#33691e;}
+
+.step-main{flex:1;min-width:0;}
+.step-title{font-size:13px;font-weight:500;color:var(--text-dark);margin-bottom:3px;line-height:1.3;}
+.step-product{font-size:11px;color:var(--text-light);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+.step-badges{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px;}
+.badge{
+  display:inline-block;padding:1px 7px;border-radius:8px;
+  font-size:9px;font-weight:500;letter-spacing:0.04em;
+}
+.b-am{background:#fff3e0;color:#c47c2a;}
+.b-pm{background:#fce4ec;color:#c2185b;}
+.b-device{background:#e3f2fd;color:#1565c0;}
+.b-cleanse{background:#f1f8e9;color:#33691e;}
+.b-acid{background:#fff8e1;color:#f57f17;}
+.b-yoga{background:#fce7f3;color:#9d174d;}
+.b-gua{background:#ede9fe;color:#5b21b6;}
+.b-wet{background:#e0f7fa;color:#00695c;}
+.b-damp{background:#e8f5e9;color:#2e7d32;}
+.b-dry{background:#fafafa;color:#757575;border:1px solid #e0e0e0;}
+
+.step-check{
+  width:26px;height:26px;border-radius:50%;
+  border:1.5px solid var(--blush);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;cursor:pointer;transition:all 0.2s;
+}
+.step-check.done{background:var(--sage);border-color:var(--sage);}
+.step-check:active{transform:scale(0.9);}
+
+.step-detail{
+  display:none;
+  padding:0 14px 14px;
+  font-size:12px;color:var(--text-mid);
+  line-height:1.75;
+  border-top:1px solid var(--border);
+  padding-top:12px;
+}
+.step-detail.open{display:block;}
+
+/* ALERTS */
+.alert{
+  border-radius:12px;padding:11px 14px;
+  font-size:12px;line-height:1.6;margin-bottom:10px;
+  font-family:'DM Sans',sans-serif;
+}
+.alert-warn{background:#fff8e1;color:#856404;border:1px solid #ffe08a;}
+.alert-info{background:#e8f4fd;color:#0c5460;border:1px solid #bee5eb;}
+.alert-success{background:#e8f5e9;color:#155724;border:1px solid #c3e6cb;}
+.alert-danger{background:#fde8e8;color:#721c24;border:1px solid #f5c6cb;}
+
+/* DONE BANNER */
+.done-banner{
+  text-align:center;padding:24px 20px;
+  font-family:'Cormorant Garamond',serif;
+  font-size:22px;font-weight:300;font-style:italic;
+  color:var(--deep-rose);
+}
+.done-banner small{display:block;font-family:'DM Sans',sans-serif;font-style:normal;font-size:12px;color:var(--text-light);margin-top:4px;letter-spacing:0.05em;}
+
+/* INSTALL BANNER */
+.install-banner{
+  margin:16px 16px 0;padding:12px 16px;
+  background:var(--text-dark);border-radius:12px;
+  font-size:12px;color:rgba(255,255,255,0.7);line-height:1.6;
+  display:flex;gap:10px;align-items:flex-start;
+}
+.install-banner .icon{font-size:18px;flex-shrink:0;margin-top:1px;}
+.install-banner strong{color:#fff;display:block;margin-bottom:2px;}
+.install-close{
+  margin-left:auto;flex-shrink:0;background:transparent;border:none;
+  color:rgba(255,255,255,0.4);font-size:16px;cursor:pointer;padding:0 0 0 8px;
+  line-height:1;
+}
+</style>
+</head>
+<body>
+
+<div id="install-banner" class="install-banner">
+  <div class="icon">📱</div>
+  <div>
+    <strong>Save to Home Screen</strong>
+    Tap your browser's Share button → "Add to Home Screen" to open this like an app anytime.
+  </div>
+  <button class="install-close" onclick="document.getElementById('install-banner').remove()">×</button>
+</div>
+
+<div class="header">
+  <div class="header-top">
+    <div class="app-title">My <span>Skin</span> Routine</div>
+    <button class="reset-btn" onclick="resetAll()">Reset ↺</button>
+  </div>
+  <div class="day-scroll">
+    <button class="day-pill active" onclick="setDay('mon',this)">Mon</button>
+    <button class="day-pill" onclick="setDay('tue',this)">Tue</button>
+    <button class="day-pill" onclick="setDay('wed',this)">Wed</button>
+    <button class="day-pill" onclick="setDay('thu',this)">Thu</button>
+    <button class="day-pill" onclick="setDay('fri',this)">Fri</button>
+    <button class="day-pill" onclick="setDay('sat',this)">Sat</button>
+    <button class="day-pill" onclick="setDay('sun',this)">Sun</button>
+  </div>
+</div>
+
+<div class="session-bar">
+  <button class="session-btn active" id="btn-am" onclick="setSession('am')">☀️ Morning</button>
+  <button class="session-btn" id="btn-pm" onclick="setSession('pm')">🌙 Evening</button>
+</div>
+
+<div class="day-info">
+  <div class="day-name" id="day-name">Monday</div>
+  <div class="day-sub" id="day-sub">Air Shot · Peptide · GF · Gua Sha</div>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-meta">
+    <span class="progress-label" id="prog-label">0 OF 0 STEPS</span>
+    <span class="progress-pct" id="prog-pct">0%</span>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+</div>
+
+<div class="legend">
+  <div class="leg-item"><span class="badge b-wet">💧 wet</span></div>
+  <div class="leg-item"><span class="badge b-damp">〰 damp</span></div>
+  <div class="leg-item"><span class="badge b-dry">○ dry</span></div>
+  <div class="leg-item"><span class="badge b-yoga">face yoga</span></div>
+  <div class="leg-item"><span class="badge b-gua">gua sha</span></div>
+  <div class="leg-item"><span class="badge b-device">device</span></div>
+</div>
+
+<div class="steps-wrap" id="steps-wrap"></div>
+
+<script>
+const DAYS={
+  mon:{name:'Monday',sub:'Air Shot · Peptide · GF · Gua Sha'},
+  tue:{name:'Tuesday',sub:'Retinol night — Celimax'},
+  wed:{name:'Wednesday',sub:'Acid exfoliant night'},
+  thu:{name:'Thursday',sub:'NuDerma · LED · Peptide · GF · Gua Sha'},
+  fri:{name:'Friday',sub:'Retinol night — Dallas & James'},
+  sat:{name:'Saturday',sub:'Air Shot · Retinol · Full routine'},
+  sun:{name:'Sunday',sub:'Rest · Recovery · Extended Yoga · Gua Sha'}
+};
+
+const sk=(s)=>s==='wet'?'<span class="badge b-wet">💧 wet</span>':s==='damp'?'<span class="badge b-damp">〰 damp</span>':s==='dry'?'<span class="badge b-dry">○ dry</span>':'';
+const T={t:'Spray toner',p:'Anua Heartleaf 77% Soothing Toner',type:'cleanse',skin:'damp',d:'Spritz 2–3 times from 6–8 inches away. Leave skin visibly damp — do NOT pat dry. Rebalances pH and creates the damp base your serums need.'};
+const NB={t:'Numbuzin No. 9 Serum',p:'Full face + double layer on 11 lines between brows',skin:'damp',d:'Apply a full layer all over face on damp skin. Then immediately go back and apply a SECOND layer specifically between your eyebrows on your 11 lines — this is how this product is designed to be used. Contains NAD+ and 50 peptides. First serum every PM.'};
+const GF={t:'Growth Factor serum',p:'The Ordinary GF 15% Solution',skin:'damp',d:'2–3 drops pressed gently into damp skin. Growth factors are proteins — they need a clean, non-acidic surface. Never same night as Vitamin C or AHA/BHA. Apply after Numbuzin.'};
+const NIA={t:'Niacinamide serum',p:'Medicube Pore Zero / Be The Skin BHA Serum',skin:'damp',d:'After GF on damp skin. Compatible with growth factors and peptides. Consistently calms your redness-prone skin over time — one of your most important ingredients for rosacea.'};
+const PEPS={t:'Argireline 10% + Volufiline 92%',p:'The Ordinary peptide serums',skin:'damp',d:'Apply Argireline first (targets expression lines including 11 lines), then Volufiline (plumps and volumizes). Two different peptide mechanisms working together. 30 seconds between each.'};
+const COP={t:'Copper Peptide Firming Serum',p:'Peach & Lily Copper Peptide Pro',skin:'damp',d:'Layer after peptides on GF nights. Supports collagen synthesis and firming. Do not use same night as retinol.'};
+const GUA={t:'Gua sha — 5 min',p:'After face oil — lift + drain + jawline',type:'gua',skin:'damp',d:'Always after face oil — the oil is your slip layer. Never dry skin.\n\n1. NECK FIRST — stroke downward from jaw to collarbone, 5x each side. Opens lymph drainage.\n2. JAWLINE — stone at 45°, stroke chin to earlobe, 5x each side. Most important move for jawline definition.\n3. CHEEKS — stroke nose outward to ear, 5x each side.\n4. UNDER EYES — smallest edge, very light pressure, inner corner to temple, 3x each side.\n5. FOREHEAD — stroke brow upward to hairline, 5x.\n6. FINISH — press stone flat on each cheek 5 sec to cool and calm.\n\nAlways UPWARD and OUTWARD. Skip if skin looks very flushed — rosacea caution.'};
+const AIR={t:'Medicube Age-R Air Shot',p:'5 min — completely dry skin — inside to outside',type:'device',skin:'dry',d:'COMPLETELY DRY skin with NO products yet — non-negotiable. Sweep from center of face outward, ~0.08 inches from skin. Tapping or sweeping motions 5 minutes. Slight burning smell is normal. Apply all serums immediately after — absorption boosted 432%.'};
+const NUD={t:'NuDerma High Frequency Wand',p:'Tongue attachment 2 min (11 lines) + mushroom 3 min (full face)',type:'device',skin:'dry',d:'Completely dry skin before serums.\n\nSTEP 1 — 11 LINES (2 min): Tongue attachment. Place between brows. Tiny infinity-sign or circular motions over glabellar area. Slow and thorough.\n\nSTEP 2 — FULL FACE (3 min): Mushroom head. Glide slowly in upward motions over cheeks, forehead, chin, jawline.\n\nStart lowest setting. Slight buzzing/tingling is normal. Rosacea caution: if skin looks flushed after, wait an extra rest day before next session.'};
+const LED={t:'LED Face Mask — red + NIR light',p:'10–15 min — after NuDerma, before serums',type:'device',skin:'dry',d:'Immediately after NuDerma — skin still dry, no products yet. 10–15 minutes red + near-infrared light. Red reduces inflammation from NuDerma and boosts collagen. NIR penetrates deepest for cellular repair. Thursday is your peak absorption night — NuDerma + LED together prepare skin maximally.'};
+const DRY_WAIT={t:'Dry skin completely',p:'Wait 30–60 sec after toner — then pick up device',skin:'dry',d:'Devices need completely dry skin. Pat with a clean cloth or simply wait 30–60 seconds. Do not pick up the Air Shot or NuDerma until skin is fully dry — this is critical for the device to work correctly.'};
+
+const YOGA=[
+  {t:'① Cheek Lifter',p:'Face yoga — 1 min · cheeks + mid-face',type:'yoga',d:'1. Open mouth into a big O shape.\n2. Fold upper lip over top teeth.\n3. Smile as wide as you can to push cheeks up.\n4. Place fingertips lightly on top of cheeks.\n5. Lower and lift cheeks 10x.\n6. Hold lifted for 20 seconds.\n\nFeel the burn in your cheek muscles — that means it\'s working.'},
+  {t:'② Jawline Definer',p:'Face yoga — 1 min · jaw + neck',type:'yoga',d:'1. Sit up straight.\n2. Tilt head back — look at the ceiling.\n3. Pucker lips like kissing the ceiling.\n4. Hold 5 seconds — feel the stretch in jaw and neck.\n5. Relax. Repeat 10x.\n\nStrengthens the platysma muscle running down the jaw and neck.'},
+  {t:'③ Happy Cheeks Sculpting',p:'Face yoga — 1 min · cheekbones',type:'yoga',d:'1. Smile without showing teeth.\n2. Purse lips together.\n3. Smile again — force cheeks upward.\n4. Place fingers at corners of mouth.\n5. Slide fingers up to top of cheeks.\n6. Hold 20 seconds. Repeat 3x.\n\nTargets zygomaticus muscles for lifted cheekbones.'},
+  {t:'④ Tongue Press Smile',p:'Face yoga — 1 min · jawline + chin',type:'yoga',d:'1. Press tongue firmly against roof of mouth.\n2. Smile as wide as possible while keeping tongue up.\n3. Hold 5 seconds.\n4. Release. Repeat 10–15x.\n\nDefines jawline and reduces double chin simultaneously.'},
+  {t:'⑤ Eyebrow Lifter',p:'Face yoga — 30 sec · brow + upper face',type:'yoga',d:'1. Place 3 fingertips under each eyebrow.\n2. Push eyes wide open with fingers.\n3. Try to push brows DOWN against your fingers.\n4. Close eyes and roll eyeballs upward.\n5. Hold 20 seconds. Repeat 3x.\n\nPrevents forehead lines while lifting the brow area.'},
+  {t:'⑥ Thumb Flick Relaxer',p:'11 lines — 1 min · glabellar relaxer',type:'yoga',d:'Specifically targets your 11 lines.\n\n1. Hold thumb upside down.\n2. Gently and rhythmically flick the pad of your thumb against the center of your brows — right where your 11 lines are.\n3. Continue for 1 full minute.\n\nSends signals to the procerus muscle to RELAX rather than contract. Goal is reprogramming the muscle, not strengthening it.'},
+  {t:'⑦ Pinch and Resist',p:'11 lines — 1 min · procerus muscle',type:'yoga',d:'Specifically targets your 11 lines.\n\n1. Pinch the skin between your eyebrows gently.\n2. Try to frown against the resistance of your fingers.\n3. Feel the resistance — hold 3 seconds.\n4. Release. Repeat for 1 minute.\n\nTrains the procerus muscle NOT to contract. Teaching your muscle to stay relaxed.'},
+  {t:'⑧ Upward Stroke Smoothing',p:'11 lines — 30 sec · smooth and lift',type:'yoga',d:'Specifically targets your 11 lines.\n\n1. Bend index finger into a hook.\n2. Using the flat side, stroke UPWARD from bridge of nose.\n3. Continue upward between brows to forehead.\n4. Light but firm pressure — think ironing out the line.\n5. Repeat continuously for 30 seconds.'},
+  {t:'⑨ Knuckle Slide',p:'11 lines + forehead — 1 min · full release',type:'yoga',d:'Targets 11 lines and horizontal forehead lines.\n\n1. Make loose fists with both hands.\n2. Place middle and index knuckles at center of forehead.\n3. Apply gentle pressure.\n4. Slowly slide fists outward toward temples.\n5. Return to center. Repeat 5x for 2–3 sets.\n\nReleases tension across entire forehead and glabellar region.'}
+];
+
+const AM=[
+  {t:'Cleanse',p:'Tatcha The Rice Wash',type:'cleanse',d:'Lather with lukewarm water, massage 30 seconds, rinse. Pat lightly — leave slightly warm. No oil cleanse needed in the morning.'},
+  {...T},
+  {t:'Pore refinement serum',p:'Be The Skin Pore Zero BHA Serum',skin:'damp',d:'Apply immediately on damp toner skin. 2–3 drops to full face. Willow Bark BHA gently exfoliates and tightens pores daily. Let absorb 60 seconds.'},
+  {t:'Vitamin C serum',p:'DE C-Luma (now) → Timeless 20% Vit C (restock)',skin:'dry',d:'C-Luma current: slightly damp skin is fine — gentler derivative formula.\n\nTimeless when restocked: FULLY DRY skin — L-ascorbic acid needs dry skin. 3–4 drops face and neck. Store Timeless in fridge.\n\nYour most important AM antioxidant step. Never skip.'},
+  {t:'Glass Skin serum',p:'Peach & Lily Glass Skin Refining Serum',skin:'damp',d:'After Vitamin C absorbs (60 sec), lightly re-spritz toner. Apply to damp skin for hydration and glow.'},
+  {t:'Eye treatment',p:'Dr. Jart+ Ceramidin Eye Cream or #OOTD Eye Serum',d:'Pat gently with ring finger around orbital bone. Never drag. Alternate between the two day to day.'},
+  {t:'Moisturize',p:'Purito Panthenol Cream (normal) or Saint Jane Rich Rescue (dry days)',skin:'damp',d:'Apply to slightly damp skin — seals in moisture already there. Purito everyday. Saint Jane on very dry or cold days.'},
+  {t:'SPF — always last, always',p:'BOJ Relief Sun SPF 50+ daily / Supergoop on makeup days',skin:'dry',d:'Fully dry skin — SPF needs to form a film on the surface.\n\nBeauty of Joseon Relief Sun: your everyday SPF. Gentler for rosacea-prone skin. Also contains niacinamide.\n\nSupergoop Dew Screen: makeup days only — better primer effect.\n\nTeaspoon for face AND neck. Wait 15–20 min before makeup. Reapply every 2 hours outdoors. Most important anti-aging step you take every day.'},
+  ...YOGA
+];
+
+const PM={
+  mon:[
+    {t:'Oil cleanse',p:'Anua Heartleaf Pore Control Cleansing Oil',type:'cleanse',d:'Massage onto DRY skin — binds to SPF and makeup. 60 seconds. Add water to emulsify (turns milky), 20 more seconds. Rinse completely. SPF does not come off without this.'},
+    {t:'Water cleanse',p:'Tatcha The Rice Wash',type:'cleanse',d:'Second cleanse removes oil residue. Lather 30 seconds, rinse. Pat lightly.'},
+    {...T,d:'Spritz 2–3 times. Leave damp. Then FULLY DRY before Air Shot.'},
+    {...DRY_WAIT},
+    {...AIR},
+    {...NB,d:'Re-spritz toner lightly after Air Shot for damp base. Full face layer first, then double layer on 11 lines. NAD+ and 50 peptides penetrate deeper tonight thanks to Air Shot channels.'},
+    {...GF},
+    {...NIA},
+    {...PEPS},
+    {...COP},
+    {t:'Eye treatment',p:'Dr. Jart+ Ceramidin Eye Cream',d:'Pat gently around orbital bone. Do not use Air Shot directly around eye area.'},
+    {t:'Face oil',p:'Loumi Rose Glow (Jojoba + Squalene)',skin:'damp',d:'2–3 drops after all water-based serums. Press in gently — this is your gua sha slip layer next.'},
+    {...GUA},
+    {t:'Seal with moisturizer',p:'Dr. Althea 345 Relief Cream',skin:'damp',d:'Final step after gua sha. Ceramide + Panthenol + PDRN seal and repair barrier overnight.'}
+  ],
+  tue:[
+    {t:'Oil cleanse',p:'Anua Heartleaf Pore Control Cleansing Oil',type:'cleanse',d:'Dry skin. Emulsify with water, rinse fully.'},
+    {t:'Water cleanse',p:'Tatcha The Rice Wash',type:'cleanse',d:'Second cleanse. Pat lightly.'},
+    {...T},
+    {...NB},
+    {...NIA,d:'On damp skin after Numbuzin. Always before retinol — buffers irritation. Also calms redness.'},
+    {t:'Celimax Retinal Shot',p:'Celimax Retinal Shot (Retinal 0.1% + Matrixyl 3000)',skin:'dry',d:'Let skin dry FULLY after niacinamide — 60–90 seconds. Retinol ALWAYS on dry skin. No devices on retinol nights.'},
+    {t:'Eye treatment',p:'Seoul 1988 Eye Cream (Retinal Liposome 4%)',d:'Pat gently. Retinol-specific eye treatment for retinol nights.'},
+    {t:'Face oil',p:'Replenix Rapid Repair Radiance Remedy',skin:'damp',d:'2–3 drops. Cloudberry + Borage antioxidants support overnight retinol repair.'},
+    {t:'Seal with moisturizer',p:'Dr. Althea 345 Relief Cream',skin:'damp',d:'PDRN actively supports the collagen repair process retinol triggers overnight.'},
+    {alert:'info',text:'No gua sha on retinol nights. Keep it simple and let retinol work undisturbed.'}
+  ],
+  wed:[
+    {t:'Oil cleanse',p:'Anua Heartleaf Pore Control Cleansing Oil',type:'cleanse',d:'Dry skin. Emulsify, rinse.'},
+    {t:'Exfoliating face wash',p:'Your exfoliating face wash',type:'cleanse',d:'Wednesday only as second cleanse. Light physical exfoliation as prep before the chemical exfoliant. Do not use on retinol nights.'},
+    {...T},
+    {t:'Anua 10% AHA/BHA Serum',p:'Anua Heartleaf 10% AHA/BHA Exfoliating Serum',type:'acid',skin:'dry',d:'FULLY DRY skin only — acids need correct pH and damp skin dilutes them. Wait 5 FULL minutes contact time before continuing. Set a timer. No retinol, no devices, no gua sha tonight.'},
+    {...NIA,d:'After 5-min acid wait, re-spritz toner lightly. Niacinamide calms post-acid sensitivity and helps your redness.'},
+    {t:'Eye treatment',p:'Dr. Jart+ Ceramidin Eye Cream',d:'Ceramide barrier support — especially important after acid nights.'},
+    {t:'Face oil',p:'Loumi Rose Glow',skin:'damp',d:'2–3 drops to calm and seal after exfoliation.'},
+    {t:'Seal with moisturizer',p:'Purito Mighty Bamboo Panthenol Cream',skin:'damp',d:'Panthenol is soothing and barrier-restoring — right choice after an acid night. Keep it simple.'},
+    {alert:'warn',text:'No Air Shot, no NuDerma, no retinol, no GF, no gua sha tonight. Anua 10% is plenty of active for one session.'}
+  ],
+  thu:[
+    {t:'Oil cleanse',p:'Anua Heartleaf Pore Control Cleansing Oil',type:'cleanse',d:'Dry skin. Emulsify, rinse fully.'},
+    {t:'Water cleanse',p:'Tatcha The Rice Wash',type:'cleanse',d:'Second cleanse. Pat lightly.'},
+    {...T,d:'Spritz 2–3 times. Leave damp. Then FULLY DRY before NuDerma.'},
+    {...DRY_WAIT},
+    {...NUD},
+    {...LED},
+    {...NB,d:'Re-spritz toner lightly after devices for damp base. Double layer Numbuzin — full face first, then extra layer on 11 lines. Tonight\'s absorption is your best of the week — NuDerma + LED have fully prepared your skin.'},
+    {...GF,d:'2–3 drops after Numbuzin on damp skin. Growth factors penetrate exceptionally well post-NuDerma + LED.'},
+    {...NIA},
+    {...PEPS},
+    {...COP},
+    {t:'Eye treatment',p:'#OOTD Intensive Eye Serum',d:'Alternate with Ceramidin. Pat gently around orbital bone.'},
+    {t:'Face oil',p:'Replenix Rapid Repair Radiance Remedy',skin:'damp',d:'2–3 drops — your gua sha slip layer tonight.'},
+    {...GUA},
+    {t:'Seal with moisturizer',p:'Dr. Althea 345 Relief Cream',skin:'damp',d:'Seal everything after gua sha. Thursday is your most powerful anti-aging night of the week.'}
+  ],
+  fri:[
+    {t:'Oil cleanse',p:'Anua Heartleaf Pore Control Cleansing Oil',type:'cleanse',d:'Dry skin. Emulsify, rinse.'},
+    {t:'Water cleanse',p:'Tatcha The Rice Wash',type:'cleanse',d:'Second cleanse. Pat lightly.'},
+    {...T},
+    {...NB},
+    {...NIA,d:'Damp skin. Buffer before retinol — always.'},
+    {t:'Dallas & James Overnight Retinol Oil',p:'Dallas & James Watermelon Dream Retinol Oil',skin:'dry',d:'Let skin dry FULLY after niacinamide — 60–90 seconds. Retinol always on dry skin. Alternate retinoid from Tuesday\'s Celimax. No devices on retinol nights.'},
+    {t:'Eye treatment',p:'Seoul 1988 Eye Cream',d:'Retinol eye cream on retinol nights.'},
+    {t:'Face oil',p:'Loumi Rose Glow',skin:'damp',d:'2–3 drops if skin feels comfortable. Skip if reactive.'},
+    {t:'Seal with moisturizer',p:'Dr. Althea 345 Relief Cream',skin:'damp',d:'PDRN overnight support for retinol-triggered repair.'},
+    {alert:'info',text:'No gua sha on retinol nights. Simple and clean tonight.'}
+  ],
+  sat:[
+    {t:'Oil cleanse',p:'Anua Heartleaf Pore Control Cleansing Oil',type:'cleanse',d:'Full oil cleanse. Saturday is your second biggest night.'},
+    {t:'Water cleanse',p:'Tatcha The Rice Wash',type:'cleanse',d:'Second cleanse. Pat lightly.'},
+    {...T,d:'Spritz 2–3 times. Leave damp. Then FULLY DRY before Air Shot.'},
+    {...DRY_WAIT},
+    {...AIR},
+    {...NB,d:'Re-spritz toner after Air Shot. Double layer — full face then extra on 11 lines. Post-Air Shot absorption tonight.'},
+    {...NIA,d:'After Numbuzin. Buffers retinol and calms redness.'},
+    {...PEPS,d:'Peptides before retinol tonight. Both penetrate deeply post-Air Shot.'},
+    {t:'Celimax Retinal Shot',p:'Celimax Retinal Shot Tightening Booster',skin:'dry',d:'Wait 60–90 sec after peptides — skin must be dry. One retinoid only tonight.'},
+    {t:'Eye treatment',p:'Seoul 1988 Eye Cream',d:'Retinol eye treatment.'},
+    {t:'Face oil',p:'Replenix Rapid Repair Radiance Remedy',skin:'damp',d:'2–3 drops antioxidant-rich finish.'},
+    {t:'Seal with moisturizer',p:'Medicube Deep Vita C Capsule Cream',skin:'damp',d:'Saturday brightening moisturizer — Vitamin C derivatives for overnight glow.'},
+    {alert:'info',text:'No gua sha on Air Shot + retinol nights — your skin has maximum stimulation already.'}
+  ],
+  sun:[
+    {t:'Oil cleanse',p:'Anua Heartleaf Pore Control Cleansing Oil',type:'cleanse',d:'Gentle full cleanse to start your recovery night.'},
+    {t:'Water cleanse',p:'Tatcha The Rice Wash',type:'cleanse',d:'Second cleanse. Pat lightly.'},
+    {...T},
+    {...NB,d:'Full face layer + double layer on 11 lines. Gentle enough for recovery nights. Keeps your 11 line treatment consistent every night.'},
+    {...NIA,d:'Gentle niacinamide. Consistent use is what shifts your redness over time — this is your most important rosacea ingredient.'},
+    {...PEPS,d:'Peptides are gentle enough for recovery nights. Great Sunday stack.'},
+    {t:'Eye treatment',p:'Dr. Jart+ Ceramidin Eye Cream',d:'Ceramide repair around eye area overnight.'},
+    {t:'Face oil',p:'Loumi Rose Glow',skin:'damp',d:'2–3 drops — your gua sha slip layer.'},
+    {...GUA},
+    {t:'Seal with moisturizer',p:'Dr. Althea 345 Relief Cream',skin:'damp',d:'PDRN + ceramides for full overnight recovery. Apply generously tonight.'},
+    {t:'Extended Facial Yoga — Sunday',p:'10 min full routine · all 9 exercises',type:'yoga',d:'Sunday is your longer, more intentional session. Same 9 exercises as every morning but slower:\n\n① Cheek Lifter — 1 min\n② Jawline Definer — 1 min\n③ Happy Cheeks Sculpting — 1 min\n④ Tongue Press Smile — 1 min\n⑤ Eyebrow Lifter — 30 sec\n⑥ Thumb Flick Relaxer — 1 min (11 lines)\n⑦ Pinch and Resist — 1 min (11 lines)\n⑧ Upward Stroke Smoothing — 30 sec (11 lines)\n⑨ Knuckle Slide — 1 min (11 lines + forehead)\n\nTap each exercise in the morning list for full instructions. Consistency over 20 weeks is where the real results show.'},
+    {alert:'success',text:'Sunday = no devices, no retinol, no acids. This recovery night is what makes every other night work. Protect it every week.'}
+  ]
+};
+
+let day='mon',session='am',checked={};
+function key(d,s,i){return d+'_'+s+'_'+i;}
+
+function setDay(d,btn){
+  day=d;
+  document.querySelectorAll('.day-pill').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('day-name').textContent=DAYS[d].name;
+  document.getElementById('day-sub').textContent=DAYS[d].sub;
+  render();
+}
+function setSession(s){
+  session=s;
+  document.getElementById('btn-am').classList.toggle('active',s==='am');
+  document.getElementById('btn-pm').classList.toggle('active',s==='pm');
+  render();
+}
+function getSteps(){
+  return session==='am'?AM:(PM[day]||PM.mon);
+}
+function toggleCheck(i,e){
+  e.stopPropagation();
+  const k=key(day,session,i);
+  checked[k]=!checked[k];
+  render();
+}
+function toggleDetail(id){
+  const el=document.getElementById(id);
+  if(el) el.classList.toggle('open');
+}
+function resetAll(){
+  getSteps().forEach((_,i)=>{checked[key(day,session,i)]=false;});
+  render();
+}
+
+function numClass(s,type){
+  if(type==='yoga') return 'num-yoga';
+  if(type==='gua') return 'num-gua';
+  if(type==='device') return 'num-device';
+  if(type==='cleanse') return 'num-cleanse';
+  return session==='am'?'num-am':'num-pm';
+}
+
+function render(){
+  const steps=getSteps();
+  const wrap=document.getElementById('steps-wrap');
+  const real=steps.filter(s=>!s.alert);
+  let done=0;
+  real.forEach(s=>{if(checked[key(day,session,steps.indexOf(s))])done++;});
+  const pct=real.length?Math.round(done/real.length*100):0;
+  document.getElementById('prog-label').textContent=done+' OF '+real.length+' STEPS';
+  document.getElementById('prog-pct').textContent=pct+'%';
+  document.getElementById('prog-fill').style.width=pct+'%';
+
+  let html='';
+  if(pct===100&&real.length>0){
+    html+=`<div class="done-banner">Routine complete ✨<small>Your skin is glowing already</small></div>`;
+  }
+
+  let idx=0;
+  steps.forEach((s,i)=>{
+    if(s.alert){
+      const cls={warn:'alert-warn',danger:'alert-danger',info:'alert-info',success:'alert-success'}[s.alert]||'alert-info';
+      html+=`<div class="alert ${cls}">${s.text}</div>`;
+      return;
+    }
+    const k=key(day,session,i);
+    const done=!!checked[k];
+    const did='d'+i;
+    idx++;
+    let badges='';
+    if(s.type==='device') badges+='<span class="badge b-device">device</span>';
+    else if(s.type==='acid') badges+='<span class="badge b-acid">acid night</span>';
+    else if(s.type==='cleanse') badges+='<span class="badge b-cleanse">cleanse</span>';
+    else if(s.type==='yoga') badges+='<span class="badge b-yoga">face yoga</span>';
+    else if(s.type==='gua') badges+='<span class="badge b-gua">gua sha</span>';
+    if(s.skin) badges+=sk(s.skin);
+    const nc=numClass(s.skin,s.type);
+    const det=(s.d||'').replace(/\n/g,'<br>');
+    html+=`<div class="step-card${done?' done-card':''}">
+      <div class="step-header" onclick="toggleDetail('${did}')">
+        <div class="step-num ${nc}">${idx}</div>
+        <div class="step-main">
+          <div class="step-title">${s.t}</div>
+          <div class="step-product">${s.p}</div>
+          ${badges?`<div class="step-badges">${badges}</div>`:''}
+        </div>
+        <div class="step-check${done?' done':''}" onclick="toggleCheck(${i},event)">
+          ${done?'<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}
+        </div>
+      </div>
+      <div class="step-detail" id="${did}">${det}</div>
+    </div>`;
+  });
+  wrap.innerHTML=html;
+}
+render();
+</script>
+</body>
+</html>
