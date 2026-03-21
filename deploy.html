@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Deploy ✨">
+<title>Routine Deployer</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f0e0d;
+  --surface: #1a1816;
+  --surface2: #232018;
+  --border: rgba(196,144,122,0.15);
+  --rose: #c4907a;
+  --deep-rose: #a06b58;
+  --gold: #b8965a;
+  --cream: #faf7f2;
+  --text: #e8e0d8;
+  --text-mid: #a89a90;
+  --text-dim: #6a5e58;
+  --green: #7a9c7a;
+  --red: #c47a7a;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;background:var(--bg);}
+body{
+  font-family:'DM Sans',sans-serif;
+  color:var(--text);
+  min-height:100vh;
+  max-width:480px;
+  margin:0 auto;
+  padding:0 0 40px;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* HEADER */
+.header{
+  padding:32px 24px 24px;
+  border-bottom:1px solid var(--border);
+}
+.header-eyebrow{
+  font-size:10px;letter-spacing:0.12em;
+  color:var(--rose);text-transform:uppercase;
+  margin-bottom:8px;font-weight:500;
+}
+.header-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:32px;font-weight:300;
+  color:var(--cream);line-height:1.1;
+  margin-bottom:6px;
+}
+.header-title span{font-style:italic;color:var(--rose);}
+.header-sub{
+  font-size:12px;color:var(--text-dim);
+  letter-spacing:0.03em;line-height:1.6;
+}
+
+/* REPO STATUS */
+.repo-status{
+  margin:20px 20px 0;
+  padding:14px 16px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:14px;
+  display:flex;align-items:center;gap:12px;
+}
+.repo-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--green);flex-shrink:0;
+  box-shadow:0 0 8px rgba(122,156,122,0.5);
+  animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse{
+  0%,100%{opacity:1;}
+  50%{opacity:0.5;}
+}
+.repo-info{}
+.repo-name{font-size:12px;font-weight:500;color:var(--text);letter-spacing:0.03em;}
+.repo-path{font-size:10px;color:var(--text-dim);margin-top:1px;letter-spacing:0.02em;}
+
+/* MAIN CARD */
+.card{
+  margin:16px 20px 0;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:18px;
+  overflow:hidden;
+}
+.card-header{
+  padding:16px 18px 12px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.card-title{
+  font-size:12px;font-weight:500;
+  color:var(--text-mid);letter-spacing:0.06em;
+  text-transform:uppercase;
+}
+.card-badge{
+  font-size:10px;padding:3px 10px;
+  border-radius:20px;
+  background:rgba(196,144,122,0.1);
+  color:var(--rose);letter-spacing:0.04em;
+  border:1px solid rgba(196,144,122,0.2);
+}
+
+/* TEXTAREA */
+.code-area{
+  width:100%;
+  min-height:180px;
+  background:var(--surface2);
+  border:none;outline:none;
+  color:var(--text);
+  font-family:'DM Sans',sans-serif;
+  font-size:11px;line-height:1.7;
+  padding:16px 18px;
+  resize:none;
+  -webkit-appearance:none;
+  letter-spacing:0.01em;
+}
+.code-area::placeholder{
+  color:var(--text-dim);
+  line-height:1.8;
+}
+
+/* COMMIT MESSAGE */
+.commit-row{
+  padding:12px 18px;
+  border-top:1px solid var(--border);
+  display:flex;align-items:center;gap:10px;
+}
+.commit-label{
+  font-size:10px;color:var(--text-dim);
+  letter-spacing:0.05em;white-space:nowrap;
+  text-transform:uppercase;
+}
+.commit-input{
+  flex:1;background:transparent;border:none;outline:none;
+  color:var(--text);font-family:'DM Sans',sans-serif;
+  font-size:12px;
+}
+.commit-input::placeholder{color:var(--text-dim);}
+
+/* DEPLOY BUTTON */
+.deploy-btn{
+  margin:16px 20px 0;
+  width:calc(100% - 40px);
+  padding:16px;
+  background:var(--rose);
+  color:#fff;border:none;
+  border-radius:14px;
+  font-family:'DM Sans',sans-serif;
+  font-size:14px;font-weight:500;
+  letter-spacing:0.05em;
+  cursor:pointer;
+  transition:all 0.2s cubic-bezier(0.34,1.56,0.64,1);
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  -webkit-tap-highlight-color:transparent;
+}
+.deploy-btn:active{transform:scale(0.97);}
+.deploy-btn:disabled{
+  background:var(--surface2);
+  color:var(--text-dim);
+  transform:none;
+  cursor:default;
+}
+.deploy-btn.loading{background:var(--deep-rose);}
+.deploy-btn.success{background:var(--green);}
+.deploy-btn.error{background:var(--red);}
+
+/* SPINNER */
+.spinner{
+  width:16px;height:16px;
+  border:2px solid rgba(255,255,255,0.3);
+  border-top-color:#fff;
+  border-radius:50%;
+  animation:spin 0.6s linear infinite;
+  display:none;
+}
+.deploy-btn.loading .spinner{display:block;}
+.deploy-btn.loading .btn-text{opacity:0.7;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* STATUS LOG */
+.status-card{
+  margin:14px 20px 0;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:14px;
+  overflow:hidden;
+  display:none;
+}
+.status-card.show{display:block;}
+.status-header{
+  padding:10px 16px;
+  border-bottom:1px solid var(--border);
+  font-size:10px;color:var(--text-dim);
+  letter-spacing:0.08em;text-transform:uppercase;
+}
+.status-log{
+  padding:12px 16px;
+  font-size:11px;line-height:1.9;
+  font-family:'DM Sans',sans-serif;
+}
+.log-line{display:flex;gap:8px;align-items:flex-start;}
+.log-icon{flex-shrink:0;margin-top:1px;}
+.log-text{color:var(--text-mid);}
+.log-line.success .log-text{color:var(--green);}
+.log-line.error .log-text{color:var(--red);}
+.log-line.active .log-text{color:var(--cream);}
+
+/* LIVE LINK */
+.live-link{
+  margin:12px 20px 0;
+  padding:14px 18px;
+  background:rgba(122,156,122,0.08);
+  border:1px solid rgba(122,156,122,0.2);
+  border-radius:14px;
+  display:none;
+  align-items:center;justify-content:space-between;
+  text-decoration:none;
+  transition:all 0.2s;
+}
+.live-link.show{display:flex;}
+.live-link:active{background:rgba(122,156,122,0.15);}
+.live-link-text{}
+.live-link-label{font-size:10px;color:var(--green);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:2px;}
+.live-link-url{font-size:11px;color:var(--text-mid);}
+.live-link-arrow{font-size:18px;color:var(--green);}
+
+/* TIPS */
+.tips{
+  margin:20px 20px 0;
+  padding:16px 18px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:14px;
+}
+.tips-title{
+  font-size:10px;color:var(--text-dim);
+  letter-spacing:0.08em;text-transform:uppercase;
+  margin-bottom:10px;
+}
+.tip{
+  font-size:11px;color:var(--text-dim);
+  line-height:1.7;padding:6px 0;
+  border-bottom:1px solid var(--border);
+  display:flex;gap:8px;
+}
+.tip:last-child{border:none;padding-bottom:0;}
+.tip-num{color:var(--rose);flex-shrink:0;font-weight:500;}
+
+/* TOKEN SETUP */
+.token-setup{
+  margin:16px 20px 0;
+  padding:16px 18px;
+  background:var(--surface);
+  border:1px solid rgba(184,150,90,0.2);
+  border-radius:14px;
+  display:none;
+}
+.token-setup.show{display:block;}
+.token-title{
+  font-size:12px;font-weight:500;color:var(--gold);
+  margin-bottom:8px;
+}
+.token-input{
+  width:100%;background:var(--surface2);
+  border:1px solid var(--border);border-radius:10px;
+  padding:10px 14px;color:var(--text);
+  font-family:'DM Sans',sans-serif;font-size:12px;
+  outline:none;margin-bottom:10px;
+  -webkit-appearance:none;
+}
+.token-input::placeholder{color:var(--text-dim);}
+.token-save-btn{
+  width:100%;padding:10px;
+  background:var(--gold);color:#1a1410;
+  border:none;border-radius:10px;
+  font-family:'DM Sans',sans-serif;
+  font-size:12px;font-weight:500;
+  cursor:pointer;
+  transition:all 0.15s;
+}
+.token-save-btn:active{transform:scale(0.97);}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-eyebrow">Skincare Routine</div>
+  <div class="header-title">Deploy <span>Tool</span></div>
+  <div class="header-sub">Paste new code from Claude → tap Deploy → live in 60 sec</div>
+</div>
+
+<div class="repo-status">
+  <div class="repo-dot" id="repo-dot"></div>
+  <div class="repo-info">
+    <div class="repo-name" id="repo-name">AIPixieAlchemist12 / my-routine</div>
+    <div class="repo-path" id="repo-path">github.com → GitHub Pages → your home screen</div>
+  </div>
+</div>
+
+<div class="token-setup" id="token-setup">
+  <div class="token-title">⚙️ Enter your GitHub token to get started</div>
+  <input class="token-input" type="password" id="token-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+  <button class="token-save-btn" onclick="saveToken()">Save Token</button>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">New Code</div>
+    <div class="card-badge">index.html</div>
+  </div>
+  <textarea
+    class="code-area"
+    id="code-input"
+    placeholder="Paste the full updated index.html code from Claude here...
+
+Claude will give you a complete file — select all, copy, paste here, then tap Deploy below."
+  ></textarea>
+  <div class="commit-row">
+    <div class="commit-label">Note</div>
+    <input class="commit-input" id="commit-msg" type="text" placeholder="what changed? (optional)">
+  </div>
+</div>
+
+<button class="deploy-btn" id="deploy-btn" onclick="deploy()">
+  <div class="spinner"></div>
+  <span class="btn-text">🚀 Deploy to Live App</span>
+</button>
+
+<div class="status-card" id="status-card">
+  <div class="status-header">Deploy Log</div>
+  <div class="status-log" id="status-log"></div>
+</div>
+
+<a class="live-link" id="live-link" href="https://aipixiealchemist12.github.io/my-routine/" target="_blank">
+  <div class="live-link-text">
+    <div class="live-link-label">✓ Live App</div>
+    <div class="live-link-url">aipixiealchemist12.github.io/my-routine</div>
+  </div>
+  <div class="live-link-arrow">→</div>
+</a>
+
+<div class="tips">
+  <div class="tips-title">How it works</div>
+  <div class="tip"><span class="tip-num">1</span>Claude gives you a complete updated index.html in chat</div>
+  <div class="tip"><span class="tip-num">2</span>Tap the copy button on the code block (or select all)</div>
+  <div class="tip"><span class="tip-num">3</span>Paste it into the box above</div>
+  <div class="tip"><span class="tip-num">4</span>Tap Deploy — GitHub Pages updates in ~60 seconds</div>
+  <div class="tip"><span class="tip-num">5</span>Open your routine app and pull to refresh</div>
+</div>
+
+<script>
+const REPO_OWNER = 'AIPixieAlchemist12';
+const REPO_NAME = 'my-routine';
+const FILE_PATH = 'index.html';
+const BRANCH = 'main';
+
+// Load saved token
+let token = localStorage.getItem('gh_deploy_token') || '';
+
+function init(){
+  if(!token){
+    document.getElementById('token-setup').classList.add('show');
+    document.getElementById('repo-dot').style.background = '#b8965a';
+    document.getElementById('repo-dot').style.boxShadow = '0 0 8px rgba(184,150,90,0.5)';
+  }
+}
+
+function saveToken(){
+  const val = document.getElementById('token-input').value.trim();
+  if(!val.startsWith('ghp_') && !val.startsWith('github_pat_')){
+    alert('Token should start with ghp_ or github_pat_');
+    return;
+  }
+  token = val;
+  localStorage.setItem('gh_deploy_token', token);
+  document.getElementById('token-setup').classList.remove('show');
+  document.getElementById('repo-dot').style.background = '';
+  document.getElementById('repo-dot').style.boxShadow = '';
+  addLog('✓ Token saved', 'success');
+  document.getElementById('status-card').classList.add('show');
+}
+
+function addLog(text, type=''){
+  const log = document.getElementById('status-log');
+  const icons = {success:'✓', error:'✗', active:'›', '':'·'};
+  const icon = icons[type] || '·';
+  const line = document.createElement('div');
+  line.className = `log-line ${type}`;
+  line.innerHTML = `<span class="log-icon">${icon}</span><span class="log-text">${text}</span>`;
+  log.appendChild(line);
+  log.scrollTop = log.scrollHeight;
+}
+
+async function deploy(){
+  const code = document.getElementById('code-input').value.trim();
+  const msg = document.getElementById('commit-msg').value.trim() || 'Update routine app';
+
+  if(!token){
+    document.getElementById('token-setup').classList.add('show');
+    return;
+  }
+  if(!code){
+    alert('Paste your code first!');
+    return;
+  }
+  if(!code.includes('<!DOCTYPE') && !code.includes('<html')){
+    if(!confirm('This doesn\'t look like a complete HTML file. Deploy anyway?')) return;
+  }
+
+  const btn = document.getElementById('deploy-btn');
+  const statusCard = document.getElementById('status-card');
+  const liveLink = document.getElementById('live-link');
+
+  btn.disabled = true;
+  btn.classList.add('loading');
+  btn.querySelector('.btn-text').textContent = 'Deploying...';
+  statusCard.classList.add('show');
+  document.getElementById('status-log').innerHTML = '';
+  liveLink.classList.remove('show');
+
+  try {
+    addLog('Connecting to GitHub...', 'active');
+
+    // Get current file SHA
+    const getRes = await fetch(
+      `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}?ref=${BRANCH}`,
+      { headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' } }
+    );
+
+    if(!getRes.ok){
+      const err = await getRes.json();
+      throw new Error(err.message || `GitHub API error ${getRes.status}`);
+    }
+
+    const fileData = await getRes.json();
+    const sha = fileData.sha;
+    addLog('Got current file ✓', 'success');
+    addLog('Encoding new code...', 'active');
+
+    // Encode content
+    const encoded = btoa(unescape(encodeURIComponent(code)));
+    addLog('Pushing to GitHub...', 'active');
+
+    // Push update
+    const pushRes = await fetch(
+      `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`,
+      {
+        method: 'PUT',
+        headers: {
+          Authorization: `token ${token}`,
+          Accept: 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          message: msg,
+          content: encoded,
+          sha: sha,
+          branch: BRANCH
+        })
+      }
+    );
+
+    if(!pushRes.ok){
+      const err = await pushRes.json();
+      throw new Error(err.message || `Push failed ${pushRes.status}`);
+    }
+
+    addLog('Committed to GitHub ✓', 'success');
+    addLog('GitHub Pages building (~60 sec)...', 'active');
+
+    btn.classList.remove('loading');
+    btn.classList.add('success');
+    btn.querySelector('.btn-text').textContent = '✓ Deployed!';
+    btn.disabled = false;
+
+    setTimeout(()=>{
+      addLog('Should be live now — open your app & refresh!', 'success');
+      liveLink.classList.add('show');
+      btn.classList.remove('success');
+      btn.querySelector('.btn-text').textContent = '🚀 Deploy to Live App';
+      document.getElementById('code-input').value = '';
+      document.getElementById('commit-msg').value = '';
+    }, 62000);
+
+  } catch(err) {
+    addLog(`Error: ${err.message}`, 'error');
+    btn.classList.remove('loading');
+    btn.classList.add('error');
+    btn.querySelector('.btn-text').textContent = '✗ Failed — tap to retry';
+    btn.disabled = false;
+    setTimeout(()=>{
+      btn.classList.remove('error');
+      btn.querySelector('.btn-text').textContent = '🚀 Deploy to Live App';
+    }, 3000);
+  }
+}
+
+init();
+</script>
+</body>
+</html>
