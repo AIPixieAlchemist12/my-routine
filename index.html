@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="My Routine ✨">
@@ -15,90 +15,127 @@
   --blush: #e8d5c4;
   --rose: #c4907a;
   --deep-rose: #a06b58;
-  --mauve: #8b6f6f;
   --sage: #7a8c7a;
-  --deep-sage: #556655;
-  --lavender: #9b8faa;
-  --deep-lav: #6b5f7a;
   --gold: #b8965a;
   --text-dark: #2c2420;
   --text-mid: #5a4a42;
   --text-light: #9a8a82;
-  --border: rgba(180,150,130,0.2);
-  --shadow: rgba(100,60,40,0.08);
+  --border: rgba(180,150,130,0.18);
+  --shadow: rgba(100,60,40,0.07);
+  --shadow-lg: rgba(100,60,40,0.12);
 }
 
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-html{height:100%;background:var(--cream);}
+/* RESET + BASE */
+*{box-sizing:border-box;margin:0;padding:0;
+  -webkit-tap-highlight-color:transparent;
+  -webkit-touch-callout:none;
+}
+html{
+  height:100%;
+  background:var(--cream);
+  /* kill rubber-band on html level */
+  overscroll-behavior:none;
+}
 body{
   font-family:'DM Sans',sans-serif;
   background:var(--cream);
   color:var(--text-dark);
-  min-height:100vh;
+  min-height:100%;
+  min-height:100dvh;
   max-width:480px;
   margin:0 auto;
-  padding-bottom:40px;
+  padding-bottom:48px;
   -webkit-font-smoothing:antialiased;
+  /* prevent overscroll bounce on body */
+  overscroll-behavior-y:none;
+  position:relative;
 }
 
 /* HEADER */
 .header{
   background:var(--text-dark);
   color:var(--cream);
-  padding:20px 20px 16px;
+  padding:env(safe-area-inset-top, 0px) 20px 16px;
+  padding-top:calc(env(safe-area-inset-top, 0px) + 16px);
   position:sticky;
   top:0;
   z-index:100;
+  /* subtle bottom shadow to float above content */
+  box-shadow:0 2px 20px rgba(0,0,0,0.25);
 }
-.header-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;}
-.app-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;letter-spacing:0.02em;line-height:1.1;}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.app-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:26px;font-weight:300;
+  letter-spacing:0.02em;line-height:1;
+}
 .app-title span{font-style:italic;color:var(--blush);}
 .header-btns{display:flex;gap:6px;align-items:center;}
 .reset-btn{
   font-size:11px;font-family:'DM Sans',sans-serif;
-  padding:5px 12px;border:1px solid rgba(255,255,255,0.2);
-  border-radius:20px;background:transparent;color:rgba(255,255,255,0.6);
+  padding:6px 13px;border:1px solid rgba(255,255,255,0.18);
+  border-radius:20px;background:transparent;color:rgba(255,255,255,0.55);
   cursor:pointer;letter-spacing:0.05em;white-space:nowrap;
-  transition:all 0.15s ease;
+  transition:background 0.15s,transform 0.1s;
 }
-.reset-btn:active{background:rgba(255,255,255,0.15);transform:scale(0.95);}
+.reset-btn:active{background:rgba(255,255,255,0.12);transform:scale(0.94);}
 .quick-btn{
   font-size:11px;font-family:'DM Sans',sans-serif;
-  padding:5px 12px;border:1px solid rgba(255,255,255,0.2);
-  border-radius:20px;background:transparent;color:rgba(255,255,255,0.6);
+  padding:6px 13px;border:1px solid rgba(255,255,255,0.18);
+  border-radius:20px;background:transparent;color:rgba(255,255,255,0.55);
   cursor:pointer;letter-spacing:0.05em;white-space:nowrap;
-  transition:all 0.2s ease;
+  transition:all 0.2s;
 }
 .quick-btn.active{background:var(--rose);border-color:var(--rose);color:#fff;}
-.quick-btn:active{transform:scale(0.95);}
+.quick-btn:active{transform:scale(0.94);}
 
-/* DAY SELECTOR */
-.day-scroll{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none;}
+/* DAY SCROLL */
+.day-scroll{
+  display:flex;gap:6px;
+  overflow-x:auto;padding-bottom:2px;
+  scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+  scroll-snap-type:x proximity;
+}
 .day-scroll::-webkit-scrollbar{display:none;}
 .day-pill{
-  flex-shrink:0;padding:6px 14px;border-radius:20px;
-  border:1px solid rgba(255,255,255,0.2);background:transparent;
-  color:rgba(255,255,255,0.5);cursor:pointer;font-size:12px;
+  flex-shrink:0;padding:6px 15px;border-radius:20px;
+  border:1px solid rgba(255,255,255,0.18);background:transparent;
+  color:rgba(255,255,255,0.45);cursor:pointer;font-size:12px;
   font-family:'DM Sans',sans-serif;letter-spacing:0.04em;
-  transition:all 0.2s ease;
+  transition:all 0.18s cubic-bezier(0.34,1.56,0.64,1);
+  scroll-snap-align:start;
 }
-.day-pill.active{background:var(--rose);border-color:var(--rose);color:#fff;font-weight:500;}
-.day-pill:active{transform:scale(0.93);}
+.day-pill.active{
+  background:var(--rose);border-color:var(--rose);
+  color:#fff;font-weight:500;
+  transform:scale(1.04);
+}
+.day-pill:active{transform:scale(0.92);}
 
-/* SESSION TOGGLE */
+/* SESSION BAR */
 .session-bar{
-  display:flex;margin:0;border-bottom:1px solid var(--border);
+  display:flex;
   background:var(--warm-white);
+  border-bottom:1px solid var(--border);
 }
 .session-btn{
-  flex:1;padding:13px;text-align:center;cursor:pointer;
+  flex:1;padding:14px;text-align:center;cursor:pointer;
   font-size:13px;font-family:'DM Sans',sans-serif;letter-spacing:0.04em;
   border:none;background:transparent;color:var(--text-light);
   border-bottom:2px solid transparent;margin-bottom:-1px;
   transition:all 0.2s ease;
+  position:relative;
 }
-.session-btn.active{color:var(--deep-rose);border-bottom-color:var(--rose);font-weight:500;}
-.session-btn:active{background:rgba(196,144,122,0.06);}
+.session-btn.active{
+  color:var(--deep-rose);
+  border-bottom-color:var(--rose);
+  font-weight:500;
+}
+.session-btn:active::after{
+  content:'';position:absolute;inset:0;
+  background:rgba(196,144,122,0.07);border-radius:4px;
+}
 
 /* SKIN CHECK-IN */
 .checkin-wrap{
@@ -106,6 +143,7 @@ body{
   border-bottom:1px solid var(--border);
   padding:14px 16px;
   display:none;
+  animation:slideDown 0.22s ease;
 }
 .checkin-wrap.show{display:block;}
 .checkin-title{
@@ -120,62 +158,87 @@ body{
   border:1px solid var(--border);background:#fff;
   color:var(--text-mid);cursor:pointer;font-size:12px;
   font-family:'DM Sans',sans-serif;letter-spacing:0.03em;
-  transition:all 0.2s ease;
+  transition:all 0.18s cubic-bezier(0.34,1.56,0.64,1);
 }
 .checkin-opt.selected{background:var(--rose);border-color:var(--rose);color:#fff;font-weight:500;}
-.checkin-opt:active{transform:scale(0.95);}
-.checkin-note{
-  font-size:11px;color:var(--text-light);margin-top:8px;
-  line-height:1.5;letter-spacing:0.02em;
-}
+.checkin-opt:active{transform:scale(0.93);}
+.checkin-note{font-size:11px;color:var(--text-light);margin-top:8px;line-height:1.5;}
 
-/* DAY SUBTITLE */
-.day-info{padding:14px 20px 0;background:var(--warm-white);}
-.day-name{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:var(--text-dark);}
-.day-sub{font-size:12px;color:var(--text-light);letter-spacing:0.04em;margin-top:2px;}
+/* DAY INFO */
+.day-info{
+  padding:16px 20px 4px;
+  background:var(--warm-white);
+}
+.day-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:24px;font-weight:400;color:var(--text-dark);
+  line-height:1.1;
+}
+.day-sub{font-size:11px;color:var(--text-light);letter-spacing:0.04em;margin-top:3px;}
 
 /* PROGRESS */
 .progress-wrap{padding:12px 20px 14px;background:var(--warm-white);}
-.progress-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
-.progress-label{font-size:11px;color:var(--text-light);letter-spacing:0.05em;}
-.progress-pct{font-size:11px;color:var(--rose);font-weight:500;}
-.progress-track{height:3px;background:var(--blush);border-radius:2px;overflow:hidden;}
-.progress-fill{height:100%;background:linear-gradient(90deg,var(--rose),var(--gold));border-radius:2px;transition:width 0.5s cubic-bezier(0.4,0,0.2,1);}
+.progress-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;}
+.progress-label{font-size:10px;color:var(--text-light);letter-spacing:0.06em;text-transform:uppercase;}
+.progress-pct{font-size:11px;color:var(--rose);font-weight:500;letter-spacing:0.02em;}
+.progress-track{height:2px;background:var(--blush);border-radius:2px;overflow:hidden;}
+.progress-fill{
+  height:100%;
+  background:linear-gradient(90deg,var(--rose),var(--gold));
+  border-radius:2px;
+  transition:width 0.55s cubic-bezier(0.4,0,0.2,1);
+}
 
 /* LEGEND */
 .legend{
-  display:flex;gap:8px;flex-wrap:wrap;
-  padding:10px 20px;background:var(--warm-white);
+  display:flex;gap:7px;flex-wrap:wrap;
+  padding:9px 20px 10px;background:var(--warm-white);
   border-bottom:1px solid var(--border);
 }
-.leg-item{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text-light);letter-spacing:0.03em;}
 
-/* STEPS */
-.steps-wrap{padding:16px 16px 0;}
-
-.step-card{
-  background:#fff;border:1px solid var(--border);
-  border-radius:16px;margin-bottom:10px;
-  overflow:hidden;
-  box-shadow:0 2px 10px var(--shadow), 0 1px 3px rgba(100,60,40,0.04);
-  transition:opacity 0.35s ease, transform 0.15s ease, box-shadow 0.15s ease;
-  will-change:transform;
+/* STEPS AREA — smooth fade transition */
+.steps-wrap{
+  padding:14px 14px 0;
+  animation:fadeIn 0.22s ease;
 }
-.step-card:active{transform:scale(0.985);box-shadow:0 1px 4px var(--shadow);}
-.step-card.done-card{opacity:0.45;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
+
+/* STEP CARD */
+.step-card{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:18px;
+  margin-bottom:9px;
+  overflow:hidden;
+  box-shadow:0 1px 6px var(--shadow), 0 4px 16px rgba(100,60,40,0.04);
+  transition:opacity 0.3s ease, box-shadow 0.15s ease;
+  /* GPU layer for smooth transforms */
+  will-change:transform;
+  transform:translateZ(0);
+}
+.step-card:active{
+  box-shadow:0 1px 3px var(--shadow);
+}
+.step-card.done-card{opacity:0.42;}
 
 .step-header{
   display:flex;align-items:center;gap:12px;
-  padding:14px 14px;cursor:pointer;
+  padding:13px 13px;
+  cursor:pointer;
+  /* active state via pseudo */
+  position:relative;
+  transition:background 0.12s;
 }
+.step-header:active{background:rgba(250,247,242,0.8);}
+
 .step-num{
-  width:32px;height:32px;border-radius:50%;
+  width:30px;height:30px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;
   font-size:11px;font-weight:500;flex-shrink:0;
   font-family:'DM Sans',sans-serif;
-  transition:transform 0.2s ease;
+  letter-spacing:0;
 }
-.step-card:active .step-num{transform:scale(0.92);}
 .num-am{background:#fff3e0;color:#c47c2a;}
 .num-pm{background:#fce4ec;color:#c2185b;}
 .num-yoga{background:#fce7f3;color:#9d174d;}
@@ -184,13 +247,26 @@ body{
 .num-cleanse{background:#f1f8e9;color:#33691e;}
 
 .step-main{flex:1;min-width:0;}
-.step-title{font-size:13px;font-weight:500;color:var(--text-dark);margin-bottom:3px;line-height:1.3;}
-.step-product{font-size:11px;color:var(--text-light);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.step-title{
+  font-size:13px;font-weight:500;
+  color:var(--text-dark);
+  margin-bottom:2px;line-height:1.3;
+  letter-spacing:-0.01em;
+}
+.step-product{
+  font-size:11px;color:var(--text-light);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  letter-spacing:0.01em;
+}
 
+/* quick mode */
 .quick-mode .step-product{display:none;}
 .quick-mode .step-badges{display:none!important;}
 .quick-mode .step-detail{display:none!important;}
 .quick-mode .step-header{cursor:default;}
+.quick-mode .step-card{border-radius:14px;margin-bottom:7px;}
+.quick-mode .step-num{width:26px;height:26px;font-size:10px;}
+.quick-mode .step-title{font-size:13px;}
 
 .step-badges{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px;}
 .badge{
@@ -209,177 +285,210 @@ body{
 .b-dry{background:#fafafa;color:#757575;border:1px solid #e0e0e0;}
 .b-refresh{background:#fff3e0;color:#e65100;}
 
+/* CHECK BUTTON — spring bounce */
 .step-check{
   width:28px;height:28px;border-radius:50%;
   border:1.5px solid var(--blush);
   display:flex;align-items:center;justify-content:center;
   flex-shrink:0;cursor:pointer;
-  transition:all 0.25s cubic-bezier(0.34,1.56,0.64,1);
+  transition:all 0.28s cubic-bezier(0.34,1.56,0.64,1);
   position:relative;
+  background:#fff;
 }
-.step-check.done{background:var(--sage);border-color:var(--sage);transform:scale(1.05);}
-.step-check:active{transform:scale(0.85)!important;}
+.step-check.done{
+  background:var(--sage);
+  border-color:var(--sage);
+  transform:scale(1.08);
+  box-shadow:0 2px 8px rgba(122,140,122,0.3);
+}
+.step-check:active{transform:scale(0.82)!important;}
+
+/* ripple on check */
 .step-check::after{
   content:'';position:absolute;
   width:100%;height:100%;border-radius:50%;
-  background:var(--sage);opacity:0;transform:scale(1);transition:none;
+  background:var(--sage);opacity:0;transform:scale(1);
 }
-.step-check.just-checked::after{animation:ripple-out 0.4s ease-out forwards;}
-@keyframes ripple-out{
-  0%{opacity:0.4;transform:scale(1);}
-  100%{opacity:0;transform:scale(2.2);}
+.step-check.just-checked::after{animation:ripple 0.45s ease-out forwards;}
+@keyframes ripple{
+  0%{opacity:0.35;transform:scale(1);}
+  100%{opacity:0;transform:scale(2.4);}
 }
 .check-svg{
-  opacity:0;transform:scale(0.5);
-  transition:all 0.2s cubic-bezier(0.34,1.56,0.64,1);
+  opacity:0;transform:scale(0.4) rotate(-20deg);
+  transition:all 0.22s cubic-bezier(0.34,1.56,0.64,1);
 }
-.step-check.done .check-svg{opacity:1;transform:scale(1);}
+.step-check.done .check-svg{opacity:1;transform:scale(1) rotate(0deg);}
 
+/* STEP DETAIL */
 .step-detail{
   display:none;
-  padding:12px 14px 14px;
-  font-size:12px;color:var(--text-mid);
-  line-height:1.8;
+  padding:11px 13px 14px;
+  font-size:11.5px;color:var(--text-mid);
+  line-height:1.85;
   border-top:1px solid var(--border);
-  animation:slideDown 0.2s ease;
+  letter-spacing:0.01em;
 }
-.step-detail.open{display:block;}
-@keyframes slideDown{
-  from{opacity:0;transform:translateY(-6px);}
-  to{opacity:1;transform:translateY(0);}
+.step-detail.open{
+  display:block;
+  animation:slideDown 0.18s ease;
 }
 
+/* ALERTS */
 .alert{
-  border-radius:14px;padding:12px 14px;
-  font-size:12px;line-height:1.6;margin-bottom:10px;
-  font-family:'DM Sans',sans-serif;
+  border-radius:14px;padding:11px 14px;
+  font-size:12px;line-height:1.65;margin-bottom:9px;
+  font-family:'DM Sans',sans-serif;letter-spacing:0.01em;
 }
 .alert-warn{background:#fff8e1;color:#856404;border:1px solid #ffe08a;}
 .alert-info{background:#e8f4fd;color:#0c5460;border:1px solid #bee5eb;}
 .alert-success{background:#e8f5e9;color:#155724;border:1px solid #c3e6cb;}
 .alert-danger{background:#fde8e8;color:#721c24;border:1px solid #f5c6cb;}
 .alert-skin{
-  border-radius:14px;padding:12px 14px;
-  font-size:12px;line-height:1.6;margin-bottom:10px;
+  border-radius:14px;padding:11px 14px;
+  font-size:12px;line-height:1.65;margin-bottom:9px;
   background:#fdf4ff;color:#6b21a8;border:1px solid #e9d5ff;
 }
 
+/* DONE BANNER */
 .done-banner{
-  text-align:center;padding:28px 20px;
+  text-align:center;padding:32px 20px;
   font-family:'Cormorant Garamond',serif;
-  font-size:24px;font-weight:300;font-style:italic;
+  font-size:26px;font-weight:300;font-style:italic;
   color:var(--deep-rose);
-  animation:fadeInUp 0.5s ease;
+  animation:fadeIn 0.5s ease;
 }
-.done-banner small{display:block;font-family:'DM Sans',sans-serif;font-style:normal;font-size:12px;color:var(--text-light);margin-top:6px;letter-spacing:0.05em;}
-@keyframes fadeInUp{
-  from{opacity:0;transform:translateY(12px);}
-  to{opacity:1;transform:translateY(0);}
+.done-banner small{
+  display:block;font-family:'DM Sans',sans-serif;
+  font-style:normal;font-size:11px;
+  color:var(--text-light);margin-top:6px;letter-spacing:0.06em;
+  text-transform:uppercase;
 }
 
-/* MODAL */
+/* MODAL — native sheet */
 .modal-overlay{
   position:fixed;inset:0;
-  background:rgba(44,36,32,0.6);
-  backdrop-filter:blur(6px);
-  -webkit-backdrop-filter:blur(6px);
+  background:rgba(44,36,32,0.55);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
   z-index:500;
   display:flex;align-items:flex-end;
   opacity:0;pointer-events:none;
-  transition:opacity 0.3s ease;
+  transition:opacity 0.28s ease;
 }
 .modal-overlay.open{opacity:1;pointer-events:all;}
+
 .modal-sheet{
   width:100%;max-width:480px;margin:0 auto;
   background:var(--cream);
-  border-radius:24px 24px 0 0;
-  max-height:88vh;
+  border-radius:26px 26px 0 0;
+  max-height:90vh;
   overflow:hidden;
   display:flex;flex-direction:column;
   transform:translateY(100%);
-  transition:transform 0.35s cubic-bezier(0.32,0.72,0,1);
-  box-shadow:0 -8px 40px rgba(0,0,0,0.2);
+  transition:transform 0.38s cubic-bezier(0.32,0.72,0,1);
+  box-shadow:0 -4px 40px rgba(0,0,0,0.18);
+  padding-bottom:env(safe-area-inset-bottom, 0px);
 }
 .modal-overlay.open .modal-sheet{transform:translateY(0);}
+
 .modal-handle{
-  width:36px;height:4px;border-radius:2px;
+  width:40px;height:4px;border-radius:2px;
   background:var(--blush);margin:12px auto 0;flex-shrink:0;
 }
 .modal-header{
-  padding:16px 20px 12px;
+  padding:14px 20px 12px;
   display:flex;align-items:center;justify-content:space-between;
   border-bottom:1px solid var(--border);flex-shrink:0;
 }
-.modal-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;color:var(--text-dark);}
+.modal-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:21px;font-weight:400;color:var(--text-dark);
+}
 .modal-title span{font-style:italic;color:var(--rose);}
 .modal-close{
-  width:32px;height:32px;border-radius:50%;
-  background:var(--blush);border:none;
+  width:30px;height:30px;border-radius:50%;
+  background:rgba(232,213,196,0.5);border:none;
   display:flex;align-items:center;justify-content:center;
-  cursor:pointer;font-size:14px;color:var(--text-mid);
-  transition:all 0.15s ease;flex-shrink:0;
+  cursor:pointer;font-size:13px;color:var(--text-mid);
+  transition:all 0.15s;flex-shrink:0;
 }
-.modal-close:active{transform:scale(0.9);background:var(--rose);color:#fff;}
+.modal-close:active{background:var(--rose);color:#fff;transform:scale(0.9);}
+
 .modal-nav{
   display:flex;padding:0 16px;
   overflow-x:auto;scrollbar-width:none;
   border-bottom:1px solid var(--border);flex-shrink:0;
+  -webkit-overflow-scrolling:touch;
 }
 .modal-nav::-webkit-scrollbar{display:none;}
 .modal-nav-btn{
-  flex-shrink:0;padding:10px 14px;
+  flex-shrink:0;padding:10px 13px;
   font-size:11px;font-family:'DM Sans',sans-serif;
   color:var(--text-light);border:none;background:transparent;
   border-bottom:2px solid transparent;margin-bottom:-1px;
   cursor:pointer;white-space:nowrap;letter-spacing:0.03em;
-  transition:all 0.2s ease;
+  transition:all 0.18s ease;
 }
 .modal-nav-btn.active{color:var(--deep-rose);border-bottom-color:var(--rose);font-weight:500;}
+.modal-nav-btn:active{opacity:0.7;}
+
 .modal-body{
   flex:1;overflow-y:auto;
   -webkit-overflow-scrolling:touch;
-  padding:20px 16px 32px;
+  padding:18px 14px 32px;
+  overscroll-behavior:contain;
 }
+
 .move-card{
-  background:#fff;border-radius:18px;
+  background:#fff;border-radius:20px;
   border:1px solid var(--border);
   overflow:hidden;
-  box-shadow:0 3px 12px var(--shadow);
+  box-shadow:0 2px 16px var(--shadow-lg);
 }
 .move-visual{
-  width:100%;height:180px;
-  background:var(--warm-white);
+  width:100%;height:176px;
+  background:linear-gradient(135deg,var(--warm-white) 0%,var(--blush) 100%);
   display:flex;align-items:center;justify-content:center;
 }
 .move-visual-fallback{
   display:flex;flex-direction:column;align-items:center;gap:10px;
-  color:var(--text-light);
 }
-.move-visual-fallback .icon{font-size:56px;line-height:1;}
-.move-visual-fallback p{font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-light);}
-.move-info{padding:16px;}
+.move-visual-fallback .icon{font-size:60px;line-height:1;}
+.move-visual-fallback p{
+  font-size:10px;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--text-light);font-family:'DM Sans',sans-serif;
+}
+.move-info{padding:16px 16px 18px;}
 .move-name{
   font-family:'Cormorant Garamond',serif;
-  font-size:20px;font-weight:400;color:var(--text-dark);margin-bottom:2px;
+  font-size:21px;font-weight:400;color:var(--text-dark);margin-bottom:2px;
 }
-.move-target{font-size:11px;color:var(--rose);letter-spacing:0.05em;margin-bottom:12px;font-weight:500;text-transform:uppercase;}
-.move-steps{font-size:12px;color:var(--text-mid);line-height:1.85;}
+.move-target{
+  font-size:10px;color:var(--rose);
+  letter-spacing:0.07em;margin-bottom:14px;
+  font-weight:500;text-transform:uppercase;
+}
+.move-steps{font-size:12px;color:var(--text-mid);line-height:1.9;}
 .move-steps strong{color:var(--text-dark);font-weight:500;}
 .move-tip{
-  margin-top:12px;padding:10px 12px;
-  background:var(--warm-white);border-radius:10px;
-  font-size:11px;color:var(--text-mid);line-height:1.6;
+  margin-top:13px;padding:10px 13px;
+  background:var(--warm-white);border-radius:12px;
+  font-size:11px;color:var(--text-mid);line-height:1.65;
   border-left:2px solid var(--rose);
 }
-.move-nav{display:flex;gap:10px;margin-top:16px;}
+.move-nav{display:flex;gap:9px;margin-top:14px;}
 .move-nav-btn{
-  flex:1;padding:11px;border-radius:12px;
+  flex:1;padding:12px;border-radius:13px;
   border:1px solid var(--border);background:#fff;
   font-size:12px;font-family:'DM Sans',sans-serif;
-  color:var(--text-mid);cursor:pointer;transition:all 0.15s ease;
+  color:var(--text-mid);cursor:pointer;
+  transition:all 0.15s;letter-spacing:0.02em;
 }
 .move-nav-btn:active{background:var(--warm-white);transform:scale(0.97);}
-.move-nav-btn.primary{background:var(--text-dark);color:#fff;border-color:var(--text-dark);}
+.move-nav-btn.primary{
+  background:var(--text-dark);color:#fff;border-color:var(--text-dark);
+}
 .move-nav-btn.primary:active{background:var(--deep-rose);border-color:var(--deep-rose);}
 </style>
 </head>
@@ -482,45 +591,45 @@ const MOVES=[
   {id:'happy-cheeks',name:'Happy Cheeks Sculpting',target:'Cheekbones · Zygomaticus',emoji:'🍎',steps:`<strong>1.</strong> Smile without showing teeth.<br><strong>2.</strong> Purse lips together.<br><strong>3.</strong> Smile again — force cheeks upward.<br><strong>4.</strong> Place fingers at corners of mouth.<br><strong>5.</strong> Slide fingers up to top of cheeks.<br><strong>6.</strong> Hold 20 seconds. Repeat 3×.`,tip:'Targets zygomaticus muscles for lifted cheekbones.',duration:'1 min'},
   {id:'tongue-press',name:'Tongue Press Smile',target:'Jawline · Chin',emoji:'😄',steps:`<strong>1.</strong> Press tongue firmly against roof of mouth.<br><strong>2.</strong> Smile as wide as possible while keeping tongue up.<br><strong>3.</strong> Hold 5 seconds.<br><strong>4.</strong> Release. Repeat 10–15×.`,tip:'Defines jawline and reduces double chin simultaneously.',duration:'1 min'},
   {id:'eyebrow-lifter',name:'Eyebrow Lifter',target:'Brow · Upper face',emoji:'👁️',steps:`<strong>1.</strong> Place 3 fingertips under each eyebrow.<br><strong>2.</strong> Push eyes wide open with fingers.<br><strong>3.</strong> Try to push brows DOWN against your fingers.<br><strong>4.</strong> Close eyes and roll eyeballs upward.<br><strong>5.</strong> Hold 20 seconds. Repeat 3×.`,tip:'Prevents forehead lines while lifting the brow area.',duration:'30 sec'},
-  {id:'thumb-flick',name:'Thumb Flick Relaxer',target:'11 Lines · Procerus',emoji:'👍',steps:`<strong>1.</strong> Hold thumb upside down.<br><strong>2.</strong> Gently and rhythmically flick the pad of your thumb against the center of your brows — right where your 11 lines are.<br><strong>3.</strong> Continue for 1 full minute.`,tip:'Sends signals to the procerus muscle to RELAX rather than contract.',duration:'1 min'},
+  {id:'thumb-flick',name:'Thumb Flick Relaxer',target:'11 Lines · Procerus',emoji:'👍',steps:`<strong>1.</strong> Hold thumb upside down.<br><strong>2.</strong> Gently and rhythmically flick the pad of your thumb against the center of your brows.<br><strong>3.</strong> Continue for 1 full minute.`,tip:'Sends signals to the procerus muscle to RELAX rather than contract.',duration:'1 min'},
   {id:'pinch-resist',name:'Pinch and Resist',target:'11 Lines · Procerus',emoji:'🤏',steps:`<strong>1.</strong> Pinch the skin between your eyebrows gently.<br><strong>2.</strong> Try to frown against the resistance of your fingers.<br><strong>3.</strong> Feel the resistance — hold 3 seconds.<br><strong>4.</strong> Release. Repeat for 1 minute.`,tip:'Trains the procerus muscle NOT to contract.',duration:'1 min'},
-  {id:'upward-stroke',name:'Upward Stroke Smoothing',target:'11 Lines · Smoothing',emoji:'☝️',steps:`<strong>1.</strong> Bend index finger into a hook.<br><strong>2.</strong> Using the flat side, stroke UPWARD from bridge of nose.<br><strong>3.</strong> Continue upward between brows to forehead.<br><strong>4.</strong> Light but firm pressure — think ironing out the line.<br><strong>5.</strong> Repeat continuously for 30 seconds.`,tip:'Always stroke upward, never downward.',duration:'30 sec'},
-  {id:'knuckle-slide',name:'Knuckle Slide',target:'11 Lines · Full Forehead',emoji:'✊',steps:`<strong>1.</strong> Make loose fists with both hands.<br><strong>2.</strong> Place middle and index knuckles at center of forehead.<br><strong>3.</strong> Apply gentle pressure.<br><strong>4.</strong> Slowly slide fists outward toward temples.<br><strong>5.</strong> Return to center. Repeat 5× for 2–3 sets.`,tip:'Releases tension across entire forehead and glabellar region.',duration:'1 min'}
+  {id:'upward-stroke',name:'Upward Stroke Smoothing',target:'11 Lines · Smoothing',emoji:'☝️',steps:`<strong>1.</strong> Bend index finger into a hook.<br><strong>2.</strong> Using the flat side, stroke UPWARD from bridge of nose between brows to forehead.<br><strong>3.</strong> Light but firm pressure.<br><strong>4.</strong> Repeat continuously for 30 seconds.`,tip:'Always stroke upward, never downward.',duration:'30 sec'},
+  {id:'knuckle-slide',name:'Knuckle Slide',target:'11 Lines · Full Forehead',emoji:'✊',steps:`<strong>1.</strong> Make loose fists with both hands.<br><strong>2.</strong> Place knuckles at center of forehead.<br><strong>3.</strong> Apply gentle pressure.<br><strong>4.</strong> Slowly slide fists outward toward temples.<br><strong>5.</strong> Return to center. Repeat 5× for 2–3 sets.`,tip:'Releases tension across entire forehead and glabellar region.',duration:'1 min'}
 ];
 
 const GUA_STEPS={id:'gua-sha',name:'Gua Sha',target:'Lymphatic drainage · Jawline · Full face',emoji:'🪨',steps:`<strong>1. NECK FIRST</strong> — stroke downward from jaw to collarbone, 5× each side.<br><br><strong>2. JAWLINE</strong> — stone at 45°, stroke chin to earlobe, 5× each side.<br><br><strong>3. CHEEKS</strong> — stroke nose outward to ear, 5× each side.<br><br><strong>4. UNDER EYES</strong> — smallest edge, very light pressure, inner corner to temple, 3× each side.<br><br><strong>5. FOREHEAD</strong> — stroke brow upward to hairline, 5×.<br><br><strong>6. FINISH</strong> — press stone flat on each cheek 5 sec to cool and calm.`,tip:'Always UPWARD and OUTWARD. Skip if skin looks very flushed — rosacea caution. Always after face oil.',duration:'5 min'};
 
 const T={t:'Spray toner',p:'Anua Heartleaf 77% Soothing Toner',type:'cleanse',skin:'wet',d:'Spritz 2–3 times from 6–8 inches away. Leave skin visibly wet — do NOT pat dry. Rebalances pH and creates the damp base your serums need.'};
 const NB={t:'Numbuzin No. 9 Serum',p:'Full face + double layer on 11 lines between brows',skin:'go',d:'Apply a full layer all over face on still-tacky skin. Then immediately go back and apply a SECOND layer specifically between your eyebrows on your 11 lines. Contains NAD+ and 50 peptides. First serum every PM.'};
-const GF={t:'Growth Factor serum',p:'The Ordinary GF 15% Solution',skin:'go',d:'2–3 drops pressed gently into skin while still tacky from Numbuzin. Growth factors are proteins — they need a clean, non-acidic surface. Never same night as Vitamin C or AHA/BHA.'};
+const GF={t:'Growth Factor serum',p:'The Ordinary GF 15% Solution',skin:'go',d:'2–3 drops pressed gently into skin while still tacky from Numbuzin. Never same night as Vitamin C or AHA/BHA.'};
 const NIA={t:'Niacinamide serum',p:'Medicube Pore Zero / Be The Skin BHA Serum',skin:'go',d:'After GF while skin still tacky. Consistently calms your redness-prone skin over time — one of your most important ingredients for rosacea.'};
 const PEPS={t:'Argireline 10% + Volufiline 92%',p:'The Ordinary peptide serums',skin:'go',d:'Apply Argireline first (targets expression lines including 11 lines), then Volufiline (plumps and volumizes). 30 seconds between each.'};
 const COP={t:'Copper Peptide Firming Serum',p:'Peach & Lily Copper Peptide Pro',skin:'go',d:'Layer after peptides while skin still tacky. Supports collagen synthesis and firming. Do not use same night as retinol.'};
-const GUA={t:'Gua sha — 5 min',p:'After face oil — lift + drain + jawline',type:'gua',skin:'go',d:'Always after face oil. Never dry skin.\n\n1. NECK FIRST — stroke downward from jaw to collarbone, 5x each side.\n2. JAWLINE — stone at 45°, stroke chin to earlobe, 5x each side.\n3. CHEEKS — stroke nose outward to ear, 5x each side.\n4. UNDER EYES — smallest edge, very light pressure, 3x each side.\n5. FOREHEAD — stroke brow upward to hairline, 5x.\n6. FINISH — press stone flat on each cheek 5 sec.\n\nAlways UPWARD and OUTWARD. Skip if skin looks very flushed.'};
-const AIR={t:'Medicube Age-R Air Shot',p:'5 min — completely dry skin — inside to outside',type:'device',skin:'dry',d:'COMPLETELY DRY skin with NO products yet — non-negotiable. Sweep from center of face outward, ~0.08 inches from skin. 5 minutes. Absorption boosted 432%.'};
-const NUD={t:'NuDerma High Frequency Wand',p:'Tongue attachment 2 min (11 lines) + mushroom 3 min (full face)',type:'device',skin:'dry',d:'Completely dry skin before serums.\n\nSTEP 1 — 11 LINES (2 min): Tongue attachment. Tiny infinity-sign or circular motions over glabellar area.\n\nSTEP 2 — FULL FACE (3 min): Mushroom head. Glide slowly in upward motions.\n\nRosacea caution: if skin looks flushed after, wait an extra rest day.'};
+const GUA={t:'Gua sha — 5 min',p:'After face oil — lift + drain + jawline',type:'gua',skin:'go',d:'Always after face oil. Never dry skin.\n\n1. NECK FIRST — 5x each side.\n2. JAWLINE — stone at 45°, chin to earlobe, 5x each side.\n3. CHEEKS — nose outward to ear, 5x each side.\n4. UNDER EYES — very light pressure, 3x each side.\n5. FOREHEAD — brow upward to hairline, 5x.\n6. FINISH — press stone flat on each cheek 5 sec.\n\nAlways UPWARD and OUTWARD. Skip if skin looks very flushed.'};
+const AIR={t:'Medicube Age-R Air Shot',p:'5 min — completely dry skin — inside to outside',type:'device',skin:'dry',d:'COMPLETELY DRY skin — non-negotiable. Sweep from center of face outward. 5 minutes. Absorption boosted 432%.'};
+const NUD={t:'NuDerma High Frequency Wand',p:'Tongue attachment 2 min (11 lines) + mushroom 3 min (full face)',type:'device',skin:'dry',d:'Completely dry skin.\n\nSTEP 1 — 11 LINES (2 min): Tongue attachment. Tiny infinity-sign motions over glabellar area.\n\nSTEP 2 — FULL FACE (3 min): Mushroom head. Glide slowly upward.\n\nRosacea caution: if flushed after, wait an extra rest day.'};
 const LED={t:'LED Face Mask — red + NIR light',p:'10–15 min — after NuDerma, before serums',type:'device',skin:'dry',d:'Immediately after NuDerma — skin still dry. 10–15 minutes red + near-infrared light. Thursday is your peak absorption night.'};
-const DRY_WAIT={t:'Dry skin completely',p:'Wait 30–60 sec after toner — then pick up device',skin:'dry',d:'Devices need completely dry skin. Pat with a clean cloth or simply wait 30–60 seconds. Critical for device to work correctly.'};
+const DRY_WAIT={t:'Dry skin completely',p:'Wait 30–60 sec after toner — then pick up device',skin:'dry',d:'Devices need completely dry skin. Wait 30–60 seconds. Critical for device to work correctly.'};
 
 const YOGA=[
   {t:'① Cheek Lifter',p:'Face yoga — 1 min · cheeks + mid-face',type:'yoga',yogaId:'cheek-lifter',d:'1. Open mouth into a big O shape.\n2. Fold upper lip over top teeth.\n3. Smile as wide as you can to push cheeks up.\n4. Place fingertips lightly on top of cheeks.\n5. Lower and lift cheeks 10x.\n6. Hold lifted for 20 seconds.'},
   {t:'② Jawline Definer',p:'Face yoga — 1 min · jaw + neck',type:'yoga',yogaId:'jawline-definer',d:'1. Sit up straight.\n2. Tilt head back — look at the ceiling.\n3. Pucker lips like kissing the ceiling.\n4. Hold 5 seconds.\n5. Relax. Repeat 10x.'},
-  {t:'③ Happy Cheeks Sculpting',p:'Face yoga — 1 min · cheekbones',type:'yoga',yogaId:'happy-cheeks',d:'1. Smile without showing teeth.\n2. Purse lips together.\n3. Smile again — force cheeks upward.\n4. Place fingers at corners of mouth.\n5. Slide fingers up to top of cheeks.\n6. Hold 20 seconds. Repeat 3x.'},
+  {t:'③ Happy Cheeks Sculpting',p:'Face yoga — 1 min · cheekbones',type:'yoga',yogaId:'happy-cheeks',d:'1. Smile without showing teeth.\n2. Purse lips together.\n3. Smile again — force cheeks upward.\n4. Slide fingers up to top of cheeks.\n5. Hold 20 seconds. Repeat 3x.'},
   {t:'④ Tongue Press Smile',p:'Face yoga — 1 min · jawline + chin',type:'yoga',yogaId:'tongue-press',d:'1. Press tongue firmly against roof of mouth.\n2. Smile as wide as possible while keeping tongue up.\n3. Hold 5 seconds.\n4. Release. Repeat 10–15x.'},
-  {t:'⑤ Eyebrow Lifter',p:'Face yoga — 30 sec · brow + upper face',type:'yoga',yogaId:'eyebrow-lifter',d:'1. Place 3 fingertips under each eyebrow.\n2. Push eyes wide open with fingers.\n3. Try to push brows DOWN against your fingers.\n4. Close eyes and roll eyeballs upward.\n5. Hold 20 seconds. Repeat 3x.'},
-  {t:'⑥ Thumb Flick Relaxer',p:'11 lines — 1 min · glabellar relaxer',type:'yoga',yogaId:'thumb-flick',d:'1. Hold thumb upside down.\n2. Gently flick the pad of your thumb against the center of your brows.\n3. Continue for 1 full minute.\n\nGoal: reprogram the muscle to relax.'},
+  {t:'⑤ Eyebrow Lifter',p:'Face yoga — 30 sec · brow + upper face',type:'yoga',yogaId:'eyebrow-lifter',d:'1. Place 3 fingertips under each eyebrow.\n2. Push eyes wide open.\n3. Try to push brows DOWN against your fingers.\n4. Close eyes and roll eyeballs upward.\n5. Hold 20 seconds. Repeat 3x.'},
+  {t:'⑥ Thumb Flick Relaxer',p:'11 lines — 1 min · glabellar relaxer',type:'yoga',yogaId:'thumb-flick',d:'1. Hold thumb upside down.\n2. Gently flick the pad of your thumb against your 11 lines.\n3. Continue for 1 full minute.\n\nGoal: reprogram the muscle to relax.'},
   {t:'⑦ Pinch and Resist',p:'11 lines — 1 min · procerus muscle',type:'yoga',yogaId:'pinch-resist',d:'1. Pinch the skin between your eyebrows gently.\n2. Try to frown against the resistance of your fingers.\n3. Hold 3 seconds.\n4. Release. Repeat for 1 minute.'},
-  {t:'⑧ Upward Stroke Smoothing',p:'11 lines — 30 sec · smooth and lift',type:'yoga',yogaId:'upward-stroke',d:'1. Bend index finger into a hook.\n2. Stroke UPWARD from bridge of nose between brows to forehead.\n3. Light but firm pressure.\n4. Repeat continuously for 30 seconds.'},
+  {t:'⑧ Upward Stroke Smoothing',p:'11 lines — 30 sec · smooth and lift',type:'yoga',yogaId:'upward-stroke',d:'1. Bend index finger into a hook.\n2. Stroke UPWARD from bridge of nose between brows to forehead.\n3. Light but firm pressure.\n4. Repeat for 30 seconds.'},
   {t:'⑨ Knuckle Slide',p:'11 lines + forehead — 1 min · full release',type:'yoga',yogaId:'knuckle-slide',d:'1. Make loose fists with both hands.\n2. Place knuckles at center of forehead.\n3. Apply gentle pressure.\n4. Slowly slide fists outward toward temples.\n5. Return to center. Repeat 5x for 2–3 sets.'}
 ];
 
 const AM=[
-  {t:'Cleanse',p:'Tatcha The Rice Wash',type:'cleanse',d:'Lather with lukewarm water, massage 30 seconds, rinse. Pat lightly — leave slightly warm.'},
+  {t:'Cleanse',p:'Tatcha The Rice Wash',type:'cleanse',d:'Lather with lukewarm water, massage 30 seconds, rinse. Pat lightly.'},
   {...T},
   {t:'Anua Rice 70+ Ceramide Milky Toner',p:'Anua Rice 70+ Glow Milky Toner',skin:'wet',d:'Apply immediately while skin is still wet from Heartleaf spray. Pat in gently. Adds ceramides and brightening rice extract before your BHA serum.'},
-  {t:'Pore refinement serum',p:'Be The Skin Pore Zero BHA Serum',skin:'wet',d:'Apply on still-wet skin right after Rice Milky Toner absorbs. 2–3 drops to full face. Willow Bark BHA gently exfoliates and tightens pores daily.'},
-  {t:'Vitamin C serum',p:'DE C-Luma (now) → Timeless 20% Vit C (restock)',skin:'dry',d:'C-Luma: slightly damp skin is fine.\n\nTimeless when restocked: FULLY DRY skin. 3–4 drops face and neck. Store Timeless in fridge.\n\nYour most important AM antioxidant step. Never skip.'},
-  {t:'Glass Skin serum',p:'Peach & Lily Glass Skin Refining Serum',skin:'refresh',d:'After Vitamin C absorbs (60 sec), spritz toner 1–2 times to refresh. Apply on the refresh.'},
+  {t:'Pore refinement serum',p:'Be The Skin Pore Zero BHA Serum',skin:'wet',d:'Apply on still-wet skin right after Rice Milky Toner absorbs. 2–3 drops to full face.'},
+  {t:'Vitamin C serum',p:'DE C-Luma (now) → Timeless 20% Vit C (restock)',skin:'dry',d:'C-Luma: slightly damp skin is fine.\n\nTimeless when restocked: FULLY DRY skin. 3–4 drops face and neck. Store in fridge.\n\nYour most important AM antioxidant step. Never skip.'},
+  {t:'Glass Skin serum',p:'Peach & Lily Glass Skin Refining Serum',skin:'refresh',d:'After Vitamin C absorbs (60 sec), spritz toner 1–2 times. Apply on the refresh.'},
   {t:'Eye treatment',p:'Dr. Jart+ Ceramidin Eye Cream or #OOTD Eye Serum',d:'Pat gently with ring finger around orbital bone. Never drag. Alternate day to day.'},
   {t:'Moisturize',p:'Purito Panthenol Cream (normal) or Saint Jane Rich Rescue (dry days)',skin:'go',d:'Apply while skin is still slightly tacky. Purito everyday. Saint Jane on very dry or cold days.'},
   {t:'SPF — always last, always',p:'BOJ Relief Sun SPF 50+ daily / Supergoop on makeup days',skin:'dry',d:'Fully dry skin.\n\nBeauty of Joseon Relief Sun: everyday SPF. Gentler for rosacea-prone skin.\n\nSupergoop Dew Screen: makeup days only.\n\nTeaspoon for face AND neck. Wait 15–20 min before makeup. Reapply every 2 hours outdoors.'},
@@ -552,7 +661,7 @@ const PM={
     {...NB},
     {...NIA,d:'On tacky skin after Numbuzin. Always before retinol — buffers irritation.'},
     {t:'Celimax Retinal Shot',p:'Celimax Retinal Shot (Retinal 0.1% + Matrixyl 3000)',skin:'dry',d:'Let skin dry FULLY — 60–90 seconds. Retinol ALWAYS on dry skin. No devices on retinol nights.'},
-    {t:'Eye treatment',p:'Seoul 1988 Eye Cream (Retinal Liposome 4%) — skip if using patches tonight',d:'Pat gently. Skip if you used the Mediheal patches on your eye area tonight.'},
+    {t:'Eye treatment',p:'Seoul 1988 Eye Cream (Retinal Liposome 4%) — skip if using patches tonight',d:'Skip if you used the Mediheal patches on your eye area tonight.'},
     {t:'Face oil',p:'Replenix Rapid Repair Radiance Remedy',skin:'go',d:'2–3 drops. Cloudberry + Borage antioxidants support overnight retinol repair.'},
     {t:'Seal with moisturizer',p:'Dr. Reju-All PDRN Rejuvenating Cream',skin:'go',d:'1200ppm salmon PDRN + niacinamide + panthenol + collagen. Fragrance-free, 0.00 irritation certified.'},
     {alert:'info',text:'No gua sha on retinol nights. Keep it simple and let retinol work undisturbed.'}
@@ -561,9 +670,9 @@ const PM={
     {t:'Oil cleanse',p:'Anua Heartleaf Pore Control Cleansing Oil',type:'cleanse',d:'Dry skin. Emulsify, rinse.'},
     {t:'Exfoliating face wash',p:'Your exfoliating face wash',type:'cleanse',d:'Wednesday only as second cleanse. Light physical exfoliation as prep.'},
     {...T},
-    {t:'Anua 10% AHA/BHA Serum',p:'Anua Heartleaf 10% AHA/BHA Exfoliating Serum',type:'acid',skin:'dry',d:'FULLY DRY skin only. Wait 5 FULL minutes contact time before continuing. Set a timer. No retinol, no devices, no gua sha tonight.'},
+    {t:'Anua 10% AHA/BHA Serum',p:'Anua Heartleaf 10% AHA/BHA Exfoliating Serum',type:'acid',skin:'dry',d:'FULLY DRY skin only. Wait 5 FULL minutes contact time. No retinol, no devices, no gua sha tonight.'},
     {...NIA,d:'After 5-min acid wait, spritz toner 1–2 times to refresh. Niacinamide calms post-acid sensitivity.'},
-    {t:'Eye treatment',p:'Dr. Jart+ Ceramidin Eye Cream',d:'Ceramide barrier support — especially important after acid nights.'},
+    {t:'Eye treatment',p:'Dr. Jart+ Ceramidin Eye Cream',d:'Ceramide barrier support after acid nights.'},
     {t:'Face oil',p:'Loumi Rose Glow',skin:'go',d:'2–3 drops to calm and seal after exfoliation.'},
     {t:'Seal with moisturizer',p:'Purito Mighty Bamboo Panthenol Cream',skin:'go',d:'Panthenol is soothing and barrier-restoring after an acid night.'},
     {alert:'warn',text:'No Air Shot, no NuDerma, no retinol, no GF, no gua sha tonight.'}
@@ -576,7 +685,7 @@ const PM={
     {...NUD},
     {...LED},
     {...NB,d:'Re-spritz toner lightly after devices. Double layer Numbuzin. Tonight\'s absorption is your best of the week.'},
-    {...GF,d:'2–3 drops after Numbuzin. Growth factors penetrate exceptionally well post-NuDerma + LED.'},
+    {...GF,d:'2–3 drops after Numbuzin. Penetrate exceptionally well post-NuDerma + LED.'},
     {...NIA},
     {...PEPS},
     {...COP},
@@ -591,7 +700,7 @@ const PM={
     {...T},
     {...NB},
     {...NIA,d:'Tacky skin. Buffer before retinol — always.'},
-    {t:'Dallas & James Overnight Retinol Oil',p:'Dallas & James Watermelon Dream Retinol Oil',skin:'dry',d:'Let skin dry FULLY — 60–90 seconds. Retinol always on dry skin. No devices on retinol nights.'},
+    {t:'Dallas & James Overnight Retinol Oil',p:'Dallas & James Watermelon Dream Retinol Oil',skin:'dry',d:'Let skin dry FULLY — 60–90 seconds. No devices on retinol nights.'},
     {t:'Eye treatment',p:'Seoul 1988 Eye Cream',d:'Retinol eye cream on retinol nights.'},
     {t:'Face oil',p:'Loumi Rose Glow',skin:'go',d:'2–3 drops if skin feels comfortable. Skip if reactive.'},
     {t:'Seal with moisturizer',p:'Dr. Reju-All PDRN Rejuvenating Cream',skin:'go',d:'1200ppm salmon PDRN overnight support. Fragrance-free, 0.00 irritation certified.'},
@@ -603,23 +712,23 @@ const PM={
     {...T,d:'Spritz 2–3 times. Leave skin wet. Then FULLY DRY before Air Shot.'},
     {...DRY_WAIT},
     {...AIR},
-    {t:'Mediheal Retinol Collagen Eye Patches (optional)',p:'Under eyes + nasolabial folds — 20–30 min',skin:'wet',d:'Apply right after Air Shot while skin is still wet from re-spritz. Leave 20–30 min, pat in remaining essence.\n\nDo NOT use Seoul 1988 Eye Cream same night as these patches.'},
+    {t:'Mediheal Retinol Collagen Eye Patches (optional)',p:'Under eyes + nasolabial folds — 20–30 min',skin:'wet',d:'Apply right after Air Shot re-spritz. Leave 20–30 min, pat in remaining essence.\n\nDo NOT use Seoul 1988 Eye Cream same night.'},
     {...NB,d:'Re-spritz toner after patches. Double layer — full face then extra on 11 lines.'},
     {...NIA,d:'After Numbuzin. Buffers retinol and calms redness.'},
-    {...PEPS,d:'Peptides before retinol tonight. Both penetrate deeply post-Air Shot.'},
+    {...PEPS,d:'Peptides before retinol tonight.'},
     {t:'Celimax Retinal Shot',p:'Celimax Retinal Shot Tightening Booster',skin:'dry',d:'Wait 60–90 sec after peptides — skin must be dry.'},
     {t:'Eye treatment',p:'Seoul 1988 Eye Cream — skip if using patches tonight',d:'Skip if you used Mediheal patches on eye area.'},
     {t:'Face oil',p:'Replenix Rapid Repair Radiance Remedy',skin:'go',d:'2–3 drops antioxidant-rich finish.'},
-    {t:'Seal with moisturizer',p:'VT PDRN Capsule Cream 100',skin:'go',d:'VT PDRN seals and supports overnight repair after a big active night.'},
+    {t:'Seal with moisturizer',p:'VT PDRN Capsule Cream 100',skin:'go',d:'VT PDRN seals and supports overnight repair.'},
     {alert:'info',text:'No gua sha on Air Shot + retinol nights.'}
   ],
   sun:[
     {t:'Oil cleanse',p:'Anua Heartleaf Pore Control Cleansing Oil',type:'cleanse',d:'Gentle full cleanse to start your recovery night.'},
     {t:'Water cleanse',p:'Tatcha The Rice Wash',type:'cleanse',d:'Second cleanse. Pat lightly.'},
     {...T},
-    {t:'Medik8 Press & Glow PHA Toner',p:'Medik8 Press & Glow Daily Exfoliating PHA Toner',skin:'wet',d:'Sunday only. Apply right after Heartleaf spray while skin is still wet. PHA is the gentlest acid — anti-inflammatory and suitable for rosacea-prone skin.\n\nPat in gently, don\'t rub. Wait 60 seconds before next step.'},
+    {t:'Medik8 Press & Glow PHA Toner',p:'Medik8 Press & Glow Daily Exfoliating PHA Toner',skin:'wet',d:'Sunday only. Apply right after Heartleaf spray on wet skin. PHA is the gentlest acid — anti-inflammatory and suitable for rosacea-prone skin.\n\nPat in gently. Wait 60 seconds before next step.'},
     {...NB,d:'Full face layer + double layer on 11 lines.'},
-    {...NIA,d:'Consistent use is what shifts your redness over time — your most important rosacea ingredient.'},
+    {...NIA,d:'Consistent use is what shifts your redness over time.'},
     {...PEPS,d:'Peptides are gentle enough for recovery nights.'},
     {t:'Eye treatment',p:'Dr. Jart+ Ceramidin Eye Cream',d:'Ceramide repair around eye area overnight.'},
     {t:'Face oil',p:'Loumi Rose Glow',skin:'go',d:'2–3 drops — your gua sha slip layer.'},
@@ -630,22 +739,19 @@ const PM={
   ]
 };
 
-let day='mon',session='am',checked={},quickMode=false,skinState=null;
-let modalMoveIndex=0,modalType='yoga';
+let day='mon',session='am',checked={},quickMode=false,skinState=null,modalMoveIndex=0;
 
 const SKIN_NOTES={
   calm:'All clear — carry on with your full routine tonight.',
-  flushed:'Skip gua sha tonight. Use a lighter touch with serums and focus on soothing ingredients.',
-  dry:'Consider layering an extra pump of moisturizer tonight. Re-spritz toner more generously between steps.',
+  flushed:'Skip gua sha tonight. Use a lighter touch and focus on soothing ingredients.',
+  dry:'Consider layering an extra pump of moisturizer. Re-spritz toner more generously between steps.',
   sensitive:'Skip retinol if your skin is feeling reactive. Focus on barrier support — niacinamide, ceramides, and PDRN only tonight.'
 };
 
-function setSkinState(state){
-  skinState=state;
-  document.querySelectorAll('.checkin-opt').forEach(b=>{
-    b.classList.toggle('selected',b.getAttribute('onclick').includes(`'${state}'`));
-  });
-  document.getElementById('checkin-note').textContent=SKIN_NOTES[state]||'';
+function setSkinState(s){
+  skinState=s;
+  document.querySelectorAll('.checkin-opt').forEach(b=>b.classList.toggle('selected',b.getAttribute('onclick').includes(`'${s}'`)));
+  document.getElementById('checkin-note').textContent=SKIN_NOTES[s]||'';
 }
 
 function toggleQuickMode(){
@@ -669,8 +775,7 @@ function setSession(s){
   session=s;
   document.getElementById('btn-am').classList.toggle('active',s==='am');
   document.getElementById('btn-pm').classList.toggle('active',s==='pm');
-  const ci=document.getElementById('checkin-wrap');
-  if(s==='pm'){ci.classList.add('show');}else{ci.classList.remove('show');}
+  document.getElementById('checkin-wrap').classList.toggle('show',s==='pm');
   render();
 }
 
@@ -685,15 +790,15 @@ function toggleCheck(i,e){
   if(!wasChecked){
     btn.classList.add('just-checked');
     setTimeout(()=>btn.classList.remove('just-checked'),500);
-    if(navigator.vibrate) navigator.vibrate(12);
+    if(navigator.vibrate) navigator.vibrate(10);
   }
   render();
 }
 
 function toggleDetail(id){
-  if(quickMode) return;
+  if(quickMode)return;
   const el=document.getElementById(id);
-  if(el) el.classList.toggle('open');
+  if(el)el.classList.toggle('open');
 }
 
 function resetAll(){
@@ -702,15 +807,14 @@ function resetAll(){
 }
 
 function numClass(s,type){
-  if(type==='yoga') return 'num-yoga';
-  if(type==='gua') return 'num-gua';
-  if(type==='device') return 'num-device';
-  if(type==='cleanse') return 'num-cleanse';
+  if(type==='yoga')return 'num-yoga';
+  if(type==='gua')return 'num-gua';
+  if(type==='device')return 'num-device';
+  if(type==='cleanse')return 'num-cleanse';
   return session==='am'?'num-am':'num-pm';
 }
 
 function openYogaModal(startId){
-  modalType='yoga';
   const idx=MOVES.findIndex(m=>m.id===startId);
   modalMoveIndex=idx>=0?idx:0;
   document.getElementById('modal-title').innerHTML='Face <span>Yoga</span>';
@@ -721,7 +825,6 @@ function openYogaModal(startId){
 }
 
 function openGuaModal(){
-  modalType='gua';
   document.getElementById('modal-title').innerHTML='Gua <span>Sha</span>';
   document.getElementById('modal-nav').innerHTML='';
   renderModalMove(GUA_STEPS,true);
@@ -735,12 +838,11 @@ function closeModal(){
 }
 
 function handleModalTap(e){
-  if(e.target===document.getElementById('yoga-modal')) closeModal();
+  if(e.target===document.getElementById('yoga-modal'))closeModal();
 }
 
 function buildModalNav(moves,activeIdx){
-  const nav=document.getElementById('modal-nav');
-  nav.innerHTML=moves.map((m,i)=>`<button class="modal-nav-btn${i===activeIdx?' active':''}" onclick="navToMove(${i})">${m.name.split(' ')[0]}</button>`).join('');
+  document.getElementById('modal-nav').innerHTML=moves.map((m,i)=>`<button class="modal-nav-btn${i===activeIdx?' active':''}" onclick="navToMove(${i})">${m.name.split(' ')[0]}</button>`).join('');
 }
 
 function navToMove(idx){
@@ -748,21 +850,15 @@ function navToMove(idx){
   buildModalNav(MOVES,idx);
   renderModalMove(MOVES[idx]);
   const btns=document.querySelectorAll('.modal-nav-btn');
-  if(btns[idx]) btns[idx].scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+  if(btns[idx])btns[idx].scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
 }
 
 function renderModalMove(move,isGua=false){
-  const body=document.getElementById('modal-body');
-  const prevBtn=!isGua&&modalMoveIndex>0?`<button class="move-nav-btn" onclick="navToMove(${modalMoveIndex-1})">← ${MOVES[modalMoveIndex-1].name.split(' ')[0]}</button>`:'<div></div>';
-  const nextBtn=!isGua&&modalMoveIndex<MOVES.length-1?`<button class="move-nav-btn primary" onclick="navToMove(${modalMoveIndex+1})">${MOVES[modalMoveIndex+1].name.split(' ')[0]} →</button>`:'<div></div>';
-  body.innerHTML=`
+  const prev=!isGua&&modalMoveIndex>0?`<button class="move-nav-btn" onclick="navToMove(${modalMoveIndex-1})">← ${MOVES[modalMoveIndex-1].name.split(' ')[0]}</button>`:'<div></div>';
+  const next=!isGua&&modalMoveIndex<MOVES.length-1?`<button class="move-nav-btn primary" onclick="navToMove(${modalMoveIndex+1})">${MOVES[modalMoveIndex+1].name.split(' ')[0]} →</button>`:'<div></div>';
+  document.getElementById('modal-body').innerHTML=`
     <div class="move-card">
-      <div class="move-visual">
-        <div class="move-visual-fallback">
-          <div class="icon">${move.emoji}</div>
-          <p>${move.duration}</p>
-        </div>
-      </div>
+      <div class="move-visual"><div class="move-visual-fallback"><div class="icon">${move.emoji}</div><p>${move.duration}</p></div></div>
       <div class="move-info">
         <div class="move-name">${move.name}</div>
         <div class="move-target">${move.target}</div>
@@ -770,13 +866,11 @@ function renderModalMove(move,isGua=false){
         <div class="move-tip">💡 ${move.tip}</div>
       </div>
     </div>
-    ${!isGua?`<div class="move-nav">${prevBtn}${nextBtn}</div>`:''}
-  `;
+    ${!isGua?`<div class="move-nav">${prev}${next}</div>`:''}`;
 }
 
 function render(){
   const steps=getSteps();
-  const wrap=document.getElementById('steps-wrap');
   const real=steps.filter(s=>!s.alert);
   let done=0;
   real.forEach(s=>{if(checked[key(day,session,steps.indexOf(s))])done++;});
@@ -786,32 +880,29 @@ function render(){
   document.getElementById('prog-fill').style.width=pct+'%';
 
   let html='';
-  if(session==='pm'&&skinState) html+=`<div class="alert alert-skin">✨ ${SKIN_NOTES[skinState]}</div>`;
-  if(pct===100&&real.length>0) html+=`<div class="done-banner">Routine complete ✨<small>Your skin is glowing already</small></div>`;
+  if(session==='pm'&&skinState)html+=`<div class="alert alert-skin">✨ ${SKIN_NOTES[skinState]}</div>`;
+  if(pct===100&&real.length>0)html+=`<div class="done-banner">Routine complete ✨<small>your skin is glowing</small></div>`;
 
   let idx=0;
   steps.forEach((s,i)=>{
     if(s.alert){
       const cls={warn:'alert-warn',danger:'alert-danger',info:'alert-info',success:'alert-success'}[s.alert]||'alert-info';
-      html+=`<div class="alert ${cls}">${s.text}</div>`;
-      return;
+      html+=`<div class="alert ${cls}">${s.text}</div>`;return;
     }
     const k=key(day,session,i);
     const isDone=!!checked[k];
-    const did='d'+i;
-    idx++;
+    const did='d'+i;idx++;
     let badges='';
-    if(s.type==='device') badges+='<span class="badge b-device">device</span>';
-    else if(s.type==='acid') badges+='<span class="badge b-acid">acid night</span>';
-    else if(s.type==='cleanse') badges+='<span class="badge b-cleanse">cleanse</span>';
-    else if(s.type==='yoga') badges+=`<span class="badge b-yoga" onclick="event.stopPropagation();openYogaModal('${s.yogaId||'cheek-lifter'}')">✨ face yoga — tap to open</span>`;
-    else if(s.type==='gua') badges+=`<span class="badge b-gua" onclick="event.stopPropagation();openGuaModal()">💜 gua sha — tap to open</span>`;
-    if(s.skin) badges+=sk(s.skin);
-    const nc=numClass(s.skin,s.type);
+    if(s.type==='device')badges+='<span class="badge b-device">device</span>';
+    else if(s.type==='acid')badges+='<span class="badge b-acid">acid night</span>';
+    else if(s.type==='cleanse')badges+='<span class="badge b-cleanse">cleanse</span>';
+    else if(s.type==='yoga')badges+=`<span class="badge b-yoga" onclick="event.stopPropagation();openYogaModal('${s.yogaId||'cheek-lifter'}')">✨ face yoga — tap to open</span>`;
+    else if(s.type==='gua')badges+=`<span class="badge b-gua" onclick="event.stopPropagation();openGuaModal()">💜 gua sha — tap to open</span>`;
+    if(s.skin)badges+=sk(s.skin);
     const det=(s.d||'').replace(/\n/g,'<br>');
     html+=`<div class="step-card${isDone?' done-card':''}">
       <div class="step-header" onclick="toggleDetail('${did}')">
-        <div class="step-num ${nc}">${idx}</div>
+        <div class="step-num ${numClass(s.skin,s.type)}">${idx}</div>
         <div class="step-main">
           <div class="step-title">${s.t}</div>
           <div class="step-product">${s.p}</div>
@@ -824,7 +915,7 @@ function render(){
       <div class="step-detail" id="${did}">${det}</div>
     </div>`;
   });
-  wrap.innerHTML=html;
+  document.getElementById('steps-wrap').innerHTML=html;
 }
 
 render();
