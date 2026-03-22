@@ -17,13 +17,13 @@
   --deep-rose: #a06b58;
   --sage: #7a8c7a;
   --gold: #b8965a;
+  --gold-light: #d4b07a;
   --text-dark: #2c2420;
   --text-mid: #5a4a42;
   --text-light: #9a8a82;
   --border: rgba(180,150,130,0.18);
   --shadow: rgba(100,60,40,0.07);
   --shadow-lg: rgba(100,60,40,0.14);
-  /* new */
   --done-bg: #f9e8e3;
   --done-color: #c4907a;
   --skip-bg: #fef9e7;
@@ -31,53 +31,48 @@
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;}
 html{height:100%;background:var(--cream);overscroll-behavior:none;}
-body{
-  font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text-dark);
-  height:100%;height:100dvh;max-width:480px;margin:0 auto;
-  display:flex;flex-direction:column;overflow:hidden;
-  -webkit-font-smoothing:antialiased;overscroll-behavior:none;
-}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text-dark);height:100%;height:100dvh;max-width:480px;margin:0 auto;display:flex;flex-direction:column;overflow:hidden;-webkit-font-smoothing:antialiased;overscroll-behavior:none;}
 
-/* HEADER */
+/* ===== GOLD HEADER ===== */
 .header{
-  background:var(--text-dark);color:var(--cream);
-  padding:calc(env(safe-area-inset-top,0px) + 14px) 20px 14px;
-  flex-shrink:0;box-shadow:0 2px 20px rgba(0,0,0,0.25);z-index:100;
+  background:linear-gradient(135deg,#2a2218 0%,#3a2f1a 50%,#2e2516 100%);
+  color:var(--cream);
+  padding:calc(env(safe-area-inset-top,0px) + 14px) 16px 16px;
+  flex-shrink:0;
+  border-radius:0 0 22px 22px;
+  box-shadow:0 4px 24px rgba(0,0,0,0.3),0 1px 0 rgba(196,164,90,0.3);
+  z-index:100;position:relative;
 }
+.header::after{content:'';position:absolute;bottom:0;left:20px;right:20px;height:1px;background:linear-gradient(90deg,transparent,rgba(196,164,90,0.5),rgba(196,164,90,0.8),rgba(196,164,90,0.5),transparent);border-radius:1px;}
 .header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
-.app-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:300;letter-spacing:0.02em;line-height:1;}
-.app-title span{font-style:italic;color:var(--blush);}
-.header-btns{display:flex;gap:6px;align-items:center;}
-.hdr-btn{
-  font-size:11px;font-family:'DM Sans',sans-serif;
-  padding:5px 12px;border:1px solid rgba(255,255,255,0.18);
-  border-radius:20px;background:transparent;color:rgba(255,255,255,0.5);
-  cursor:pointer;letter-spacing:0.05em;transition:all 0.15s;
-}
-.hdr-btn:active{background:rgba(255,255,255,0.12);transform:scale(0.94);}
-.hdr-btn.active{background:var(--rose);border-color:var(--rose);color:#fff;}
+.app-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;letter-spacing:0.02em;line-height:1;}
+.app-title span{font-style:italic;color:var(--gold-light);}
 
-.day-scroll{display:flex;gap:6px;overflow-x:auto;padding-bottom:1px;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
-.day-scroll::-webkit-scrollbar{display:none;}
-.day-pill{
-  flex-shrink:0;padding:5px 13px;border-radius:20px;
-  border:1px solid rgba(255,255,255,0.18);background:transparent;
-  color:rgba(255,255,255,0.4);cursor:pointer;font-size:11px;
-  font-family:'DM Sans',sans-serif;letter-spacing:0.04em;
-  transition:all 0.2s cubic-bezier(0.34,1.56,0.64,1);
+/* BOTTOM TAB BAR */
+.tab-bar{display:flex;gap:4px;background:rgba(0,0,0,0.2);border-radius:12px;padding:3px;}
+.tab-btn{
+  flex:1;padding:6px 8px;border-radius:9px;border:none;background:transparent;
+  color:rgba(212,176,122,0.55);font-size:10px;font-family:'DM Sans',sans-serif;
+  letter-spacing:0.04em;cursor:pointer;transition:all 0.18s;white-space:nowrap;
+  display:flex;flex-direction:column;align-items:center;gap:2px;
 }
-.day-pill.active{background:var(--rose);border-color:var(--rose);color:#fff;font-weight:500;transform:scale(1.04);}
+.tab-btn .tab-icon{font-size:14px;line-height:1;}
+.tab-btn.active{background:var(--gold);color:#2a1f0e;font-weight:500;}
+.tab-btn:active{transform:scale(0.94);}
+
+.day-scroll{display:flex;gap:6px;overflow-x:auto;padding-bottom:1px;scrollbar-width:none;-webkit-overflow-scrolling:touch;margin-top:10px;}
+.day-scroll::-webkit-scrollbar{display:none;}
+.day-pill{flex-shrink:0;padding:5px 13px;border-radius:20px;border:1px solid rgba(196,164,90,0.2);background:transparent;color:rgba(212,176,122,0.5);cursor:pointer;font-size:11px;font-family:'DM Sans',sans-serif;letter-spacing:0.04em;transition:all 0.2s cubic-bezier(0.34,1.56,0.64,1);}
+.day-pill.active{background:var(--gold);border-color:var(--gold);color:#2a1f0e;font-weight:500;transform:scale(1.04);}
 .day-pill:active{transform:scale(0.92);}
+.day-scroll-wrap{display:none;}
+.day-scroll-wrap.show{display:block;}
 
 /* SUB HEADER */
-.sub-header{background:var(--warm-white);border-bottom:1px solid var(--border);flex-shrink:0;}
+.sub-header{background:var(--warm-white);border-bottom:1px solid var(--border);flex-shrink:0;margin-top:2px;display:none;}
+.sub-header.show{display:block;}
 .session-bar{display:flex;}
-.session-btn{
-  flex:1;padding:12px;text-align:center;cursor:pointer;
-  font-size:13px;font-family:'DM Sans',sans-serif;letter-spacing:0.04em;
-  border:none;background:transparent;color:var(--text-light);
-  border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.2s;
-}
+.session-btn{flex:1;padding:12px;text-align:center;cursor:pointer;font-size:13px;font-family:'DM Sans',sans-serif;letter-spacing:0.04em;border:none;background:transparent;color:var(--text-light);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.2s;}
 .session-btn.active{color:var(--deep-rose);border-bottom-color:var(--rose);font-weight:500;}
 .session-btn:active{background:rgba(196,144,122,0.06);}
 .progress-row{display:flex;align-items:center;gap:12px;padding:10px 20px 12px;}
@@ -91,251 +86,216 @@ body{
 .checkin-title{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:400;color:var(--text-dark);margin-bottom:8px;}
 .checkin-title span{font-style:italic;color:var(--rose);}
 .checkin-options{display:flex;gap:6px;flex-wrap:wrap;}
-.checkin-opt{
-  padding:6px 13px;border-radius:20px;border:1px solid var(--border);
-  background:#fff;color:var(--text-mid);cursor:pointer;font-size:11px;
-  font-family:'DM Sans',sans-serif;transition:all 0.18s cubic-bezier(0.34,1.56,0.64,1);
-}
+.checkin-opt{padding:6px 13px;border-radius:20px;border:1px solid var(--border);background:#fff;color:var(--text-mid);cursor:pointer;font-size:11px;font-family:'DM Sans',sans-serif;transition:all 0.18s cubic-bezier(0.34,1.56,0.64,1);}
 .checkin-opt.selected{background:var(--rose);border-color:var(--rose);color:#fff;font-weight:500;}
 .checkin-opt:active{transform:scale(0.93);}
 .checkin-note{font-size:11px;color:var(--text-light);margin-top:7px;line-height:1.5;}
+
+/* SKIN PHOTO BUTTON */
+.skin-photo-btn{
+  display:flex;align-items:center;gap:8px;
+  margin:10px 0 0;padding:10px 14px;
+  background:linear-gradient(135deg,#fdf4ff,#f5f0ff);
+  border:1px solid rgba(155,143,170,0.3);border-radius:12px;
+  cursor:pointer;transition:all 0.18s;width:100%;
+  font-family:'DM Sans',sans-serif;
+}
+.skin-photo-btn:active{transform:scale(0.98);}
+.skin-photo-icon{font-size:18px;}
+.skin-photo-text{text-align:left;}
+.skin-photo-title{font-size:12px;font-weight:500;color:#6b21a8;}
+.skin-photo-sub{font-size:10px;color:var(--text-light);margin-top:1px;}
+
+/* SKIN ANALYSIS RESULT */
+.skin-analysis{margin:8px 0 0;padding:12px 14px;background:#fff;border:1px solid rgba(155,143,170,0.25);border-radius:12px;font-size:12px;color:var(--text-mid);line-height:1.7;display:none;}
+.skin-analysis.show{display:block;animation:slideDown 0.2s ease;}
+.skin-analysis-label{font-size:10px;color:#9b8faa;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:6px;font-weight:500;}
 
 /* STACK AREA */
 .stack-area{flex:1;overflow:hidden;padding:14px 14px 0;display:flex;flex-direction:column;gap:10px;position:relative;}
 
 /* STEP CARDS */
-.step-card{
-  background:#fff;border:1px solid var(--border);border-radius:22px;
-  overflow:hidden;box-shadow:0 4px 20px var(--shadow-lg);
-  transition:all 0.32s cubic-bezier(0.4,0,0.2,1);flex-shrink:0;
-}
+.step-card{background:#fff;border:1px solid var(--border);border-radius:22px;overflow:hidden;box-shadow:0 4px 20px var(--shadow-lg);transition:all 0.32s cubic-bezier(0.4,0,0.2,1);flex-shrink:0;}
 .step-card.current{box-shadow:0 8px 32px rgba(100,60,40,0.16);border-color:rgba(196,144,122,0.3);}
 .step-card.next-1{opacity:0.75;transform:scale(0.97);box-shadow:0 2px 10px var(--shadow);}
 .step-card.next-2{opacity:0.45;transform:scale(0.94);box-shadow:0 1px 6px var(--shadow);}
 .next-1 .card-badges,.next-2 .card-badges{display:none;}
 .next-1 .card-action,.next-2 .card-action{display:none;}
 .next-1 .card-product,.next-2 .card-product{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-
-.done-banner{
-  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  text-align:center;padding:32px 20px;animation:fadeInUp 0.5s ease;
-}
+.done-banner{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px 20px;animation:fadeInUp 0.5s ease;}
 .done-banner-title{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;font-style:italic;color:var(--deep-rose);margin-bottom:8px;}
 .done-banner-sub{font-size:11px;color:var(--text-light);letter-spacing:0.08em;text-transform:uppercase;}
-
 .card-top{padding:18px 18px 14px;display:flex;align-items:flex-start;gap:14px;cursor:pointer;transition:background 0.12s;}
 .card-top:active{background:rgba(250,247,242,0.8);}
 .step-num{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0;font-family:'DM Sans',sans-serif;margin-top:2px;}
-.num-am{background:#fff3e0;color:#c47c2a;}
-.num-pm{background:#fce4ec;color:#c2185b;}
-.num-yoga{background:#fce7f3;color:#9d174d;}
-.num-gua{background:#ede9fe;color:#5b21b6;}
-.num-device{background:#e3f2fd;color:#1565c0;}
-.num-cleanse{background:#f1f8e9;color:#33691e;}
+.num-am{background:#fff3e0;color:#c47c2a;}.num-pm{background:#fce4ec;color:#c2185b;}.num-yoga{background:#fce7f3;color:#9d174d;}.num-gua{background:#ede9fe;color:#5b21b6;}.num-device{background:#e3f2fd;color:#1565c0;}.num-cleanse{background:#f1f8e9;color:#33691e;}
 .card-main{flex:1;min-width:0;}
 .card-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;color:var(--text-dark);line-height:1.2;margin-bottom:3px;letter-spacing:0.01em;}
 .current .card-title{font-size:22px;}
 .card-product{font-size:11px;color:var(--text-light);line-height:1.4;letter-spacing:0.01em;}
 .card-badges{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px;}
 .badge{display:inline-block;padding:2px 8px;border-radius:8px;font-size:9px;font-weight:500;letter-spacing:0.04em;}
-.b-device{background:#e3f2fd;color:#1565c0;}
-.b-cleanse{background:#f1f8e9;color:#33691e;}
-.b-acid{background:#fff8e1;color:#f57f17;}
-.b-yoga{background:#fce7f3;color:#9d174d;cursor:pointer;}
-.b-gua{background:#ede9fe;color:#5b21b6;cursor:pointer;}
-.b-wet{background:#e0f7fa;color:#00695c;}
-.b-go{background:#e8f5e9;color:#2e7d32;}
-.b-dry{background:#fafafa;color:#757575;border:1px solid #e0e0e0;}
-.b-refresh{background:#fff3e0;color:#e65100;}
-
-/* ACTION BUTTONS */
+.b-device{background:#e3f2fd;color:#1565c0;}.b-cleanse{background:#f1f8e9;color:#33691e;}.b-acid{background:#fff8e1;color:#f57f17;}.b-yoga{background:#fce7f3;color:#9d174d;cursor:pointer;}.b-gua{background:#ede9fe;color:#5b21b6;cursor:pointer;}.b-wet{background:#e0f7fa;color:#00695c;}.b-go{background:#e8f5e9;color:#2e7d32;}.b-dry{background:#fafafa;color:#757575;border:1px solid #e0e0e0;}.b-refresh{background:#fff3e0;color:#e65100;}
 .card-action{padding:0 16px 16px;display:flex;align-items:center;gap:8px;}
-
-.complete-btn{
-  flex:1;padding:13px 16px;
-  background:var(--done-bg);
-  color:var(--done-color);
-  border:1.5px solid rgba(196,144,122,0.3);
-  border-radius:14px;
-  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;
-  letter-spacing:0.04em;cursor:pointer;
-  transition:all 0.2s cubic-bezier(0.34,1.56,0.64,1);
-  display:flex;align-items:center;justify-content:center;gap:7px;
-}
+.complete-btn{flex:1;padding:13px 16px;background:var(--done-bg);color:var(--done-color);border:1.5px solid rgba(196,144,122,0.3);border-radius:14px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;letter-spacing:0.04em;cursor:pointer;transition:all 0.2s cubic-bezier(0.34,1.56,0.64,1);display:flex;align-items:center;justify-content:center;gap:7px;}
 .complete-btn:active{transform:scale(0.96);background:#f5d5cc;}
-
-.skip-btn{
-  padding:13px 16px;
-  background:var(--skip-bg);
-  color:var(--skip-color);
-  border:1.5px solid rgba(184,150,90,0.3);
-  border-radius:14px;
-  font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;
-  cursor:pointer;transition:all 0.15s;white-space:nowrap;
-  letter-spacing:0.03em;
-}
+.skip-btn{padding:13px 16px;background:var(--skip-bg);color:var(--skip-color);border:1.5px solid rgba(184,150,90,0.3);border-radius:14px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:all 0.15s;white-space:nowrap;letter-spacing:0.03em;}
 .skip-btn:active{background:#fdf0c0;transform:scale(0.96);}
-
-/* CARD DETAIL */
-.card-detail{
-  display:none;padding:0 18px 16px;
-  font-size:12px;color:var(--text-mid);line-height:1.85;
-  letter-spacing:0.01em;border-top:1px solid var(--border);
-  padding-top:14px;animation:slideDown 0.18s ease;
-}
+.card-detail{display:none;padding:0 18px 16px;font-size:12px;color:var(--text-mid);line-height:1.85;letter-spacing:0.01em;border-top:1px solid var(--border);padding-top:14px;animation:slideDown 0.18s ease;}
 .card-detail.open{display:block;}
-
-/* ALERT CARDS */
 .alert-card{border-radius:16px;padding:13px 16px;font-size:12px;line-height:1.65;font-family:'DM Sans',sans-serif;flex-shrink:0;}
-.alert-warn{background:#fff8e1;color:#856404;border:1px solid #ffe08a;}
-.alert-info{background:#e8f4fd;color:#0c5460;border:1px solid #bee5eb;}
-.alert-success{background:#e8f5e9;color:#155724;border:1px solid #c3e6cb;}
-.alert-skin{background:#fdf4ff;color:#6b21a8;border:1px solid #e9d5ff;border-radius:16px;padding:13px 16px;font-size:12px;line-height:1.65;flex-shrink:0;}
+.alert-warn{background:#fff8e1;color:#856404;border:1px solid #ffe08a;}.alert-info{background:#e8f4fd;color:#0c5460;border:1px solid #bee5eb;}.alert-success{background:#e8f5e9;color:#155724;border:1px solid #c3e6cb;}.alert-skin{background:#fdf4ff;color:#6b21a8;border:1px solid #e9d5ff;border-radius:16px;padding:13px 16px;font-size:12px;line-height:1.65;flex-shrink:0;}
 
 /* BOTTOM NAV */
-.bottom-nav{
-  padding:10px 20px calc(env(safe-area-inset-bottom,0px) + 14px);
-  background:var(--warm-white);border-top:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
-}
+.bottom-nav{padding:10px 20px calc(env(safe-area-inset-bottom,0px) + 14px);background:var(--warm-white);border-top:1px solid var(--border);display:none;align-items:center;justify-content:space-between;flex-shrink:0;}
+.bottom-nav.show{display:flex;}
 .nav-step-info{font-size:11px;color:var(--text-light);letter-spacing:0.04em;}
 .nav-step-info strong{color:var(--text-dark);font-weight:500;}
 .legend-mini{display:flex;gap:5px;flex-wrap:wrap;}
 
-/* ===================== SKIP REASON SHEET ===================== */
-.skip-overlay{
-  position:fixed;inset:0;background:rgba(44,36,32,0.5);
-  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
-  z-index:600;display:flex;align-items:flex-end;
-  opacity:0;pointer-events:none;transition:opacity 0.25s ease;
-}
+/* ===== WEEK / INSIGHTS VIEW ===== */
+.week-view{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 16px 32px;display:none;overscroll-behavior:contain;}
+.week-view.show{display:block;}
+.week-section{margin-bottom:24px;}
+.week-section-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:400;color:var(--text-dark);margin-bottom:12px;padding:0 4px;}
+.week-section-title span{font-style:italic;color:var(--rose);}
+.day-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:8px;}
+.day-cell{aspect-ratio:1;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:9px;font-family:'DM Sans',sans-serif;letter-spacing:0.04em;font-weight:500;border:1px solid var(--border);background:var(--warm-white);color:var(--text-light);text-transform:uppercase;gap:2px;}
+.day-cell.has-data{border-color:transparent;}
+.day-cell.perfect{background:#e8f5e9;color:#2e7d32;}.day-cell.skipped-some{background:#fff8e1;color:#b8965a;}.day-cell.skipped-lots{background:#fde8e8;color:#c47a7a;}
+.day-cell .day-label{font-size:8px;opacity:0.7;}.day-cell .day-pct{font-size:11px;font-weight:500;}
+.skip-log-item{background:#fff;border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:8px;}
+.skip-log-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;}
+.skip-log-step{font-size:12px;font-weight:500;color:var(--text-dark);}
+.skip-log-date{font-size:10px;color:var(--text-light);letter-spacing:0.03em;}
+.skip-log-reason{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--text-mid);background:var(--warm-white);padding:3px 10px;border-radius:20px;margin-top:4px;}
+.insight-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:14px 16px;margin-bottom:10px;}
+.insight-label{font-size:10px;color:var(--rose);letter-spacing:0.07em;text-transform:uppercase;margin-bottom:4px;font-weight:500;}
+.insight-text{font-size:13px;color:var(--text-dark);line-height:1.5;}
+.insight-text strong{font-weight:500;}
+.insight-suggestion{font-size:11px;color:var(--text-mid);margin-top:6px;line-height:1.6;padding-top:6px;border-top:1px solid var(--border);}
+.send-claude-btn{width:100%;padding:14px;background:var(--text-dark);color:var(--cream);border:none;border-radius:16px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;letter-spacing:0.04em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.18s;margin-top:4px;}
+.send-claude-btn:active{background:var(--deep-rose);transform:scale(0.98);}
+.empty-state{text-align:center;padding:32px 20px;color:var(--text-light);}
+.empty-state .empty-icon{font-size:36px;margin-bottom:10px;}
+.empty-state p{font-size:12px;line-height:1.7;}
+
+/* ===== PANTRY VIEW ===== */
+.pantry-view{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 0 32px;display:none;overscroll-behavior:contain;}
+.pantry-view.show{display:block;}
+.pantry-search-wrap{padding:12px 16px;background:var(--warm-white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10;}
+.pantry-search{width:100%;padding:9px 14px;background:#fff;border:1px solid var(--border);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text-dark);outline:none;-webkit-appearance:none;}
+.pantry-search::placeholder{color:var(--text-light);}
+.pantry-filter{display:flex;gap:6px;padding:10px 16px;overflow-x:auto;scrollbar-width:none;background:var(--warm-white);border-bottom:1px solid var(--border);}
+.pantry-filter::-webkit-scrollbar{display:none;}
+.filter-pill{flex-shrink:0;padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:#fff;color:var(--text-mid);font-size:11px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all 0.15s;white-space:nowrap;}
+.filter-pill.active{background:var(--text-dark);color:#fff;border-color:var(--text-dark);}
+.filter-pill:active{transform:scale(0.95);}
+.pantry-section{padding:14px 16px 0;}
+.pantry-section-title{font-size:10px;color:var(--text-light);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px;padding:0 2px;}
+.product-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:13px 14px;margin-bottom:8px;display:flex;align-items:flex-start;gap:12px;transition:all 0.15s;cursor:pointer;}
+.product-card:active{background:var(--warm-white);}
+.product-status-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+.s-using{background:#7a8c7a;}.s-low{background:#b8965a;}.s-out{background:#c47a7a;}.s-unused{background:#9b8faa;}.s-next{background:#c4907a;}.s-wish{background:#9a8a82;opacity:0.5;}
+.product-info{flex:1;min-width:0;}
+.product-name{font-size:13px;font-weight:500;color:var(--text-dark);margin-bottom:2px;line-height:1.3;}
+.product-step{font-size:10px;color:var(--text-light);letter-spacing:0.04em;margin-bottom:5px;}
+.product-status-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:2px 9px;border-radius:20px;font-family:'DM Sans',sans-serif;font-weight:500;letter-spacing:0.03em;}
+.sb-using{background:#e8f5e9;color:#2e7d32;}.sb-low{background:#fff8e1;color:#b8965a;}.sb-out{background:#fde8e8;color:#c47a7a;}.sb-unused{background:#ede9fe;color:#6b21a8;}.sb-next{background:#fce4ec;color:#c2185b;}.sb-wish{background:#f5f0e8;color:#9a8a82;}
+.product-edit-btn{width:28px;height:28px;border-radius:50%;background:var(--warm-white);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;color:var(--text-light);flex-shrink:0;}
+.add-product-btn{margin:16px 16px 0;width:calc(100% - 32px);padding:13px;background:linear-gradient(135deg,#2a2218,#3a2f1a);color:var(--gold-light);border:1px solid rgba(196,164,90,0.3);border-radius:14px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;letter-spacing:0.05em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.18s;}
+.add-product-btn:active{transform:scale(0.97);}
+
+/* ===== CLAUDETTE CHAT ===== */
+.chat-view{flex:1;display:none;flex-direction:column;overflow:hidden;}
+.chat-view.show{display:flex;}
+.chat-messages{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 14px;display:flex;flex-direction:column;gap:12px;overscroll-behavior:contain;}
+.msg{max-width:85%;animation:fadeInUp 0.2s ease;}
+.msg.user{align-self:flex-end;}
+.msg.assistant{align-self:flex-start;}
+.msg-bubble{padding:11px 14px;border-radius:18px;font-size:13px;line-height:1.7;letter-spacing:0.01em;}
+.msg.user .msg-bubble{background:linear-gradient(135deg,#2a2218,#3a2f1a);color:var(--gold-light);border-radius:18px 18px 4px 18px;}
+.msg.assistant .msg-bubble{background:#fff;color:var(--text-dark);border:1px solid var(--border);border-radius:18px 18px 18px 4px;box-shadow:0 2px 8px var(--shadow);}
+.msg.assistant .msg-bubble.thinking{color:var(--text-light);font-style:italic;}
+.chat-suggestions{display:flex;gap:6px;flex-wrap:wrap;padding:0 14px 10px;}
+.chat-suggestion{padding:6px 12px;background:#fff;border:1px solid var(--border);border-radius:20px;font-size:11px;color:var(--text-mid);cursor:pointer;transition:all 0.15s;font-family:'DM Sans',sans-serif;white-space:nowrap;}
+.chat-suggestion:active{background:var(--warm-white);transform:scale(0.96);}
+.chat-input-area{padding:10px 14px calc(env(safe-area-inset-bottom,0px) + 12px);background:var(--warm-white);border-top:1px solid var(--border);display:flex;gap:8px;align-items:flex-end;}
+.chat-input{flex:1;padding:10px 14px;background:#fff;border:1px solid var(--border);border-radius:20px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text-dark);outline:none;resize:none;max-height:100px;-webkit-appearance:none;line-height:1.5;}
+.chat-input::placeholder{color:var(--text-light);}
+.chat-send-btn{width:38px;height:38px;border-radius:50%;background:var(--gold);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all 0.18s;}
+.chat-send-btn:active{transform:scale(0.9);background:var(--deep-rose);}
+.chat-photo-btn{width:38px;height:38px;border-radius:50%;background:var(--warm-white);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:16px;transition:all 0.15s;}
+.chat-photo-btn:active{transform:scale(0.9);}
+
+/* ===== SKIP SHEET ===== */
+.skip-overlay{position:fixed;inset:0;background:rgba(44,36,32,0.5);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:600;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity 0.25s ease;}
 .skip-overlay.open{opacity:1;pointer-events:all;}
-.skip-sheet{
-  width:100%;max-width:480px;margin:0 auto;
-  background:var(--cream);border-radius:24px 24px 0 0;
-  padding:0 0 calc(env(safe-area-inset-bottom,0px) + 24px);
-  transform:translateY(100%);
-  transition:transform 0.32s cubic-bezier(0.32,0.72,0,1);
-  box-shadow:0 -4px 30px rgba(0,0,0,0.15);
-}
+.skip-sheet{width:100%;max-width:480px;margin:0 auto;background:var(--cream);border-radius:24px 24px 0 0;padding:0 0 calc(env(safe-area-inset-bottom,0px) + 24px);transform:translateY(100%);transition:transform 0.32s cubic-bezier(0.32,0.72,0,1);box-shadow:0 -4px 30px rgba(0,0,0,0.15);}
 .skip-overlay.open .skip-sheet{transform:translateY(0);}
 .skip-handle{width:40px;height:4px;border-radius:2px;background:var(--blush);margin:12px auto 0;}
 .skip-header{padding:16px 20px 4px;}
 .skip-title{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:400;color:var(--text-dark);}
 .skip-title span{font-style:italic;color:var(--rose);}
 .skip-step-name{font-size:11px;color:var(--text-light);margin-top:3px;letter-spacing:0.02em;}
+.sub-suggestion{margin:0 16px 12px;padding:14px 16px;background:linear-gradient(135deg,#fffbf0,#fff8e8);border:1px solid rgba(184,150,90,0.3);border-radius:16px;}
+.sub-label{font-size:10px;color:var(--gold);letter-spacing:0.08em;text-transform:uppercase;font-weight:500;margin-bottom:8px;}
+.sub-option{background:#fff;border:1px solid var(--border);border-radius:12px;padding:10px 13px;margin-bottom:7px;}
+.sub-option:last-child{margin-bottom:0;}
+.sub-option-title{font-size:12px;font-weight:500;color:var(--text-dark);margin-bottom:2px;}
+.sub-option.buy{border-color:rgba(196,144,122,0.3);background:#fff8f5;}
+.sub-option.buy .sub-option-title{color:var(--deep-rose);}
 .skip-reasons{padding:14px 16px;display:flex;flex-direction:column;gap:8px;}
-.skip-reason-btn{
-  width:100%;padding:14px 18px;
-  background:#fff;border:1px solid var(--border);border-radius:14px;
-  font-family:'DM Sans',sans-serif;font-size:13px;
-  color:var(--text-mid);cursor:pointer;text-align:left;
-  display:flex;align-items:center;gap:12px;
-  transition:all 0.18s cubic-bezier(0.34,1.56,0.64,1);
-}
+.skip-reason-btn{width:100%;padding:14px 18px;background:#fff;border:1px solid var(--border);border-radius:14px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text-mid);cursor:pointer;text-align:left;display:flex;align-items:center;gap:12px;transition:all 0.18s cubic-bezier(0.34,1.56,0.64,1);}
 .skip-reason-btn:active{transform:scale(0.97);background:var(--warm-white);}
 .skip-reason-btn .reason-emoji{font-size:18px;width:24px;text-align:center;flex-shrink:0;}
-.skip-cancel{
-  margin:4px 16px 0;width:calc(100% - 32px);
-  padding:13px;background:transparent;
-  border:1px solid var(--border);border-radius:14px;
-  font-family:'DM Sans',sans-serif;font-size:12px;
-  color:var(--text-light);cursor:pointer;
-  transition:all 0.15s;
-}
+.skip-cancel{margin:4px 16px 0;width:calc(100% - 32px);padding:13px;background:transparent;border:1px solid var(--border);border-radius:14px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text-light);cursor:pointer;transition:all 0.15s;}
 .skip-cancel:active{background:var(--warm-white);}
 
-/* ===================== WEEK TAB ===================== */
-.week-view{
-  flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;
-  padding:16px 16px 32px;display:none;
-  overscroll-behavior:contain;
-}
-.week-view.show{display:block;}
+/* STATUS SHEET */
+.status-overlay{position:fixed;inset:0;background:rgba(44,36,32,0.5);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:700;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity 0.25s ease;}
+.status-overlay.open{opacity:1;pointer-events:all;}
+.status-sheet{width:100%;max-width:480px;margin:0 auto;background:var(--cream);border-radius:24px 24px 0 0;padding:0 0 calc(env(safe-area-inset-bottom,0px) + 24px);transform:translateY(100%);transition:transform 0.32s cubic-bezier(0.32,0.72,0,1);box-shadow:0 -4px 30px rgba(0,0,0,0.15);}
+.status-overlay.open .status-sheet{transform:translateY(0);}
+.status-handle{width:40px;height:4px;border-radius:2px;background:var(--blush);margin:12px auto 0;}
+.status-header{padding:16px 20px 8px;}
+.status-title{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:400;color:var(--text-dark);}
+.status-title span{font-style:italic;color:var(--gold);}
+.status-product-name{font-size:11px;color:var(--text-light);margin-top:3px;}
+.status-options{padding:8px 16px;display:flex;flex-direction:column;gap:7px;}
+.status-option-btn{width:100%;padding:13px 18px;background:#fff;border:1px solid var(--border);border-radius:14px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text-mid);cursor:pointer;text-align:left;display:flex;align-items:center;gap:12px;transition:all 0.15s;}
+.status-option-btn:active{transform:scale(0.97);background:var(--warm-white);}
+.status-option-btn.current-status{border-color:var(--rose);color:var(--deep-rose);font-weight:500;}
+.status-cancel{margin:4px 16px 0;width:calc(100% - 32px);padding:13px;background:transparent;border:1px solid var(--border);border-radius:14px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text-light);cursor:pointer;transition:all 0.15s;}
+.status-cancel:active{background:var(--warm-white);}
 
-.week-section{margin-bottom:24px;}
-.week-section-title{
-  font-family:'Cormorant Garamond',serif;
-  font-size:18px;font-weight:400;color:var(--text-dark);
-  margin-bottom:12px;padding:0 4px;
-}
-.week-section-title span{font-style:italic;color:var(--rose);}
+/* ADD PRODUCT SHEET */
+.add-overlay{position:fixed;inset:0;background:rgba(44,36,32,0.5);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:700;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity 0.25s ease;}
+.add-overlay.open{opacity:1;pointer-events:all;}
+.add-sheet{width:100%;max-width:480px;margin:0 auto;background:var(--cream);border-radius:24px 24px 0 0;padding:0 0 calc(env(safe-area-inset-bottom,0px) + 24px);transform:translateY(100%);transition:transform 0.32s cubic-bezier(0.32,0.72,0,1);box-shadow:0 -4px 30px rgba(0,0,0,0.15);}
+.add-overlay.open .add-sheet{transform:translateY(0);}
+.add-handle{width:40px;height:4px;border-radius:2px;background:var(--blush);margin:12px auto 0;}
+.add-header{padding:16px 20px 8px;}
+.add-title{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:400;color:var(--text-dark);}
+.add-title span{font-style:italic;color:var(--gold);}
+.add-body{padding:8px 16px;}
+.add-input{width:100%;padding:12px 14px;background:#fff;border:1px solid var(--border);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text-dark);outline:none;-webkit-appearance:none;margin-bottom:10px;}
+.add-input::placeholder{color:var(--text-light);}
+.add-lookup-btn{width:100%;padding:13px;background:linear-gradient(135deg,#2a2218,#3a2f1a);color:var(--gold-light);border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;letter-spacing:0.04em;transition:all 0.18s;margin-bottom:12px;}
+.add-lookup-btn:active{transform:scale(0.97);}
+.add-result{background:#fff;border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;display:none;animation:slideDown 0.2s ease;}
+.add-result.show{display:block;}
+.add-result-name{font-size:13px;font-weight:500;color:var(--text-dark);margin-bottom:4px;}
+.add-result-step{font-size:11px;color:var(--text-light);margin-bottom:10px;}
+.add-result-note{font-size:12px;color:var(--text-mid);line-height:1.6;margin-bottom:12px;}
+.add-confirm-btn{width:100%;padding:13px;background:var(--sage);color:#fff;border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.18s;}
+.add-confirm-btn:active{transform:scale(0.97);}
+.add-cancel{margin:8px 0 0;width:100%;padding:12px;background:transparent;border:1px solid var(--border);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text-light);cursor:pointer;}
 
-/* DAY HEATMAP */
-.day-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:8px;}
-.day-cell{
-  aspect-ratio:1;border-radius:10px;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  font-size:9px;font-family:'DM Sans',sans-serif;
-  letter-spacing:0.04em;font-weight:500;
-  border:1px solid var(--border);
-  background:var(--warm-white);color:var(--text-light);
-  text-transform:uppercase;gap:2px;
-}
-.day-cell.has-data{border-color:transparent;}
-.day-cell.perfect{background:#e8f5e9;color:#2e7d32;}
-.day-cell.skipped-some{background:#fff8e1;color:#b8965a;}
-.day-cell.skipped-lots{background:#fde8e8;color:#c47a7a;}
-.day-cell .day-label{font-size:8px;opacity:0.7;}
-.day-cell .day-pct{font-size:11px;font-weight:500;}
-
-/* SKIP LOG */
-.skip-log-item{
-  background:#fff;border:1px solid var(--border);
-  border-radius:14px;padding:12px 14px;
-  margin-bottom:8px;
-}
-.skip-log-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;}
-.skip-log-step{font-size:12px;font-weight:500;color:var(--text-dark);}
-.skip-log-date{font-size:10px;color:var(--text-light);letter-spacing:0.03em;}
-.skip-log-reason{
-  display:inline-flex;align-items:center;gap:5px;
-  font-size:11px;color:var(--text-mid);
-  background:var(--warm-white);padding:3px 10px;
-  border-radius:20px;margin-top:4px;
-}
-
-/* INSIGHTS */
-.insight-card{
-  background:#fff;border:1px solid var(--border);
-  border-radius:16px;padding:14px 16px;margin-bottom:10px;
-}
-.insight-label{font-size:10px;color:var(--rose);letter-spacing:0.07em;text-transform:uppercase;margin-bottom:4px;font-weight:500;}
-.insight-text{font-size:13px;color:var(--text-dark);line-height:1.5;}
-.insight-text strong{font-weight:500;}
-
-/* SEND TO CLAUDE BTN */
-.send-claude-btn{
-  width:100%;padding:14px;
-  background:var(--text-dark);color:var(--cream);
-  border:none;border-radius:16px;
-  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;
-  letter-spacing:0.04em;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  transition:all 0.18s;margin-top:4px;
-}
-.send-claude-btn:active{background:var(--deep-rose);transform:scale(0.98);}
-
-.empty-state{text-align:center;padding:32px 20px;color:var(--text-light);}
-.empty-state .empty-icon{font-size:36px;margin-bottom:10px;}
-.empty-state p{font-size:12px;line-height:1.7;letter-spacing:0.02em;}
-
-/* ===================== YOGA MODAL ===================== */
-.modal-overlay{
-  position:fixed;inset:0;background:rgba(44,36,32,0.55);
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-  z-index:500;display:flex;align-items:flex-end;
-  opacity:0;pointer-events:none;transition:opacity 0.28s ease;
-}
+/* YOGA MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(44,36,32,0.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:500;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity 0.28s ease;}
 .modal-overlay.open{opacity:1;pointer-events:all;}
-.modal-sheet{
-  width:100%;max-width:480px;margin:0 auto;
-  background:var(--cream);border-radius:26px 26px 0 0;
-  max-height:90vh;overflow:hidden;display:flex;flex-direction:column;
-  transform:translateY(100%);transition:transform 0.38s cubic-bezier(0.32,0.72,0,1);
-  box-shadow:0 -4px 40px rgba(0,0,0,0.18);
-  padding-bottom:env(safe-area-inset-bottom,0px);
-}
+.modal-sheet{width:100%;max-width:480px;margin:0 auto;background:var(--cream);border-radius:26px 26px 0 0;max-height:90vh;overflow:hidden;display:flex;flex-direction:column;transform:translateY(100%);transition:transform 0.38s cubic-bezier(0.32,0.72,0,1);box-shadow:0 -4px 40px rgba(0,0,0,0.18);padding-bottom:env(safe-area-inset-bottom,0px);}
 .modal-overlay.open .modal-sheet{transform:translateY(0);}
 .modal-handle{width:40px;height:4px;border-radius:2px;background:var(--blush);margin:12px auto 0;flex-shrink:0;}
 .modal-header{padding:14px 20px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);flex-shrink:0;}
@@ -374,23 +334,35 @@ body{
 <div class="header">
   <div class="header-top">
     <div class="app-title">My <span>Skin</span> Routine</div>
-    <div class="header-btns">
-      <button class="hdr-btn" id="week-tab-btn" onclick="toggleWeekView()">Week</button>
-      <button class="hdr-btn" onclick="resetAll()">Reset ↺</button>
+    <div class="tab-bar">
+      <button class="tab-btn active" id="tab-routine" onclick="showTab('routine')">
+        <span class="tab-icon">🌿</span>Routine
+      </button>
+      <button class="tab-btn" id="tab-week" onclick="showTab('week')">
+        <span class="tab-icon">📊</span>Week
+      </button>
+      <button class="tab-btn" id="tab-pantry" onclick="showTab('pantry')">
+        <span class="tab-icon">🧴</span>Pantry
+      </button>
+      <button class="tab-btn" id="tab-chat" onclick="showTab('chat')">
+        <span class="tab-icon">✨</span>Ask
+      </button>
     </div>
   </div>
-  <div class="day-scroll">
-    <button class="day-pill active" onclick="setDay('mon',this)">Mon</button>
-    <button class="day-pill" onclick="setDay('tue',this)">Tue</button>
-    <button class="day-pill" onclick="setDay('wed',this)">Wed</button>
-    <button class="day-pill" onclick="setDay('thu',this)">Thu</button>
-    <button class="day-pill" onclick="setDay('fri',this)">Fri</button>
-    <button class="day-pill" onclick="setDay('sat',this)">Sat</button>
-    <button class="day-pill" onclick="setDay('sun',this)">Sun</button>
+  <div class="day-scroll-wrap show" id="day-scroll-wrap">
+    <div class="day-scroll">
+      <button class="day-pill active" onclick="setDay('mon',this)">Mon</button>
+      <button class="day-pill" onclick="setDay('tue',this)">Tue</button>
+      <button class="day-pill" onclick="setDay('wed',this)">Wed</button>
+      <button class="day-pill" onclick="setDay('thu',this)">Thu</button>
+      <button class="day-pill" onclick="setDay('fri',this)">Fri</button>
+      <button class="day-pill" onclick="setDay('sat',this)">Sat</button>
+      <button class="day-pill" onclick="setDay('sun',this)">Sun</button>
+    </div>
   </div>
 </div>
 
-<div class="sub-header">
+<div class="sub-header show" id="sub-header">
   <div class="session-bar">
     <button class="session-btn active" id="btn-am" onclick="setSession('am')">☀️ Morning</button>
     <button class="session-btn" id="btn-pm" onclick="setSession('pm')">🌙 Evening</button>
@@ -410,13 +382,65 @@ body{
     <button class="checkin-opt" onclick="setSkinState('dry')">🏜️ Dry</button>
     <button class="checkin-opt" onclick="setSkinState('sensitive')">🌸 Sensitive</button>
   </div>
+  <button class="skin-photo-btn" onclick="openSkinPhotoInput()">
+    <span class="skin-photo-icon">📸</span>
+    <div class="skin-photo-text">
+      <div class="skin-photo-title">Analyze my skin tonight</div>
+      <div class="skin-photo-sub">Take or upload a photo — Claudette will recommend your routine</div>
+    </div>
+  </button>
+  <input type="file" id="skin-photo-input" accept="image/*" capture="user" style="display:none" onchange="analyzeSkinPhoto(this)">
+  <div class="skin-analysis" id="skin-analysis">
+    <div class="skin-analysis-label">✨ Claudette's read</div>
+    <div id="skin-analysis-text"></div>
+  </div>
   <div class="checkin-note" id="checkin-note"></div>
 </div>
 
 <div class="stack-area" id="stack-area"></div>
+
 <div class="week-view" id="week-view"></div>
 
-<div class="bottom-nav">
+<div class="pantry-view" id="pantry-view">
+  <div class="pantry-search-wrap">
+    <input class="pantry-search" type="text" placeholder="Search products..." oninput="renderPantry(this.value)" id="pantry-search">
+  </div>
+  <div class="pantry-filter">
+    <button class="filter-pill active" onclick="setPantryFilter('all',this)">All</button>
+    <button class="filter-pill" onclick="setPantryFilter('using',this)">✅ Using</button>
+    <button class="filter-pill" onclick="setPantryFilter('low',this)">⚠️ Low</button>
+    <button class="filter-pill" onclick="setPantryFilter('out',this)">❌ Out</button>
+    <button class="filter-pill" onclick="setPantryFilter('unused',this)">📦 Not Using</button>
+    <button class="filter-pill" onclick="setPantryFilter('next',this)">⭐ Up Next</button>
+    <button class="filter-pill" onclick="setPantryFilter('wish',this)">💭 Wishlist</button>
+  </div>
+  <button class="add-product-btn" onclick="openAddSheet()">✦ Add New Product</button>
+  <div id="pantry-list"></div>
+</div>
+
+<div class="chat-view" id="chat-view">
+  <div class="chat-messages" id="chat-messages">
+    <div class="msg assistant">
+      <div class="msg-bubble">Hi Elena! I'm Claudette 🌸 I know your full routine, your rosacea triggers, your products, and your skip patterns. Ask me anything — whether to add something new, what to do on a flare night, or why a product isn't working. What's on your mind?</div>
+    </div>
+  </div>
+  <div class="chat-suggestions" id="chat-suggestions">
+    <button class="chat-suggestion" onclick="sendSuggestion(this)">Is my routine safe tonight?</button>
+    <button class="chat-suggestion" onclick="sendSuggestion(this)">Can I add a new product?</button>
+    <button class="chat-suggestion" onclick="sendSuggestion(this)">My skin is flushed — what do I skip?</button>
+    <button class="chat-suggestion" onclick="sendSuggestion(this)">What's my most skipped step?</button>
+  </div>
+  <div class="chat-input-area">
+    <button class="chat-photo-btn" onclick="openChatPhotoInput()" title="Attach skin photo">📸</button>
+    <input type="file" id="chat-photo-input" accept="image/*" capture="user" style="display:none" onchange="attachChatPhoto(this)">
+    <textarea class="chat-input" id="chat-input" placeholder="Ask Claudette anything..." rows="1" onkeydown="handleChatKey(event)" oninput="autoResize(this)"></textarea>
+    <button class="chat-send-btn" onclick="sendChat()">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8l12-6-5 6 5 6-12-6z" fill="#2a1f0e"/></svg>
+    </button>
+  </div>
+</div>
+
+<div class="bottom-nav show" id="bottom-nav">
   <div class="nav-step-info" id="nav-step-info">Step <strong>1</strong></div>
   <div class="legend-mini">
     <span class="badge b-wet">💧 wet</span>
@@ -426,7 +450,7 @@ body{
   </div>
 </div>
 
-<!-- SKIP REASON SHEET -->
+<!-- SKIP SHEET -->
 <div class="skip-overlay" id="skip-overlay" onclick="handleSkipOverlayTap(event)">
   <div class="skip-sheet">
     <div class="skip-handle"></div>
@@ -434,6 +458,7 @@ body{
       <div class="skip-title">Why are you <span>skipping?</span></div>
       <div class="skip-step-name" id="skip-step-name"></div>
     </div>
+    <div id="sub-suggestion-area"></div>
     <div class="skip-reasons">
       <button class="skip-reason-btn" onclick="confirmSkip('tired')"><span class="reason-emoji">😴</span> Too tired</button>
       <button class="skip-reason-btn" onclick="confirmSkip('sensitive')"><span class="reason-emoji">🌸</span> Skin too sensitive</button>
@@ -441,6 +466,40 @@ body{
       <button class="skip-reason-btn" onclick="confirmSkip('forgot')"><span class="reason-emoji">💭</span> Forgot</button>
     </div>
     <button class="skip-cancel" onclick="closeSkipSheet()">Cancel</button>
+  </div>
+</div>
+
+<!-- STATUS SHEET -->
+<div class="status-overlay" id="status-overlay" onclick="handleStatusOverlayTap(event)">
+  <div class="status-sheet">
+    <div class="status-handle"></div>
+    <div class="status-header">
+      <div class="status-title">Update <span>Status</span></div>
+      <div class="status-product-name" id="status-product-name"></div>
+    </div>
+    <div class="status-options" id="status-options"></div>
+    <button class="status-cancel" onclick="closeStatusSheet()">Cancel</button>
+  </div>
+</div>
+
+<!-- ADD PRODUCT SHEET -->
+<div class="add-overlay" id="add-overlay" onclick="handleAddOverlayTap(event)">
+  <div class="add-sheet">
+    <div class="add-handle"></div>
+    <div class="add-header">
+      <div class="add-title">Add <span>New Product</span></div>
+    </div>
+    <div class="add-body">
+      <input class="add-input" type="text" id="add-input" placeholder="Type product name (e.g. 'Torriden Dive-In Serum')">
+      <button class="add-lookup-btn" onclick="lookupProduct()">✨ Look up with Claudette</button>
+      <div class="add-result" id="add-result">
+        <div class="add-result-name" id="add-result-name"></div>
+        <div class="add-result-step" id="add-result-step"></div>
+        <div class="add-result-note" id="add-result-note"></div>
+        <button class="add-confirm-btn" onclick="confirmAddProduct()">✓ Add to Pantry</button>
+      </div>
+      <button class="add-cancel" onclick="closeAddSheet()">Cancel</button>
+    </div>
   </div>
 </div>
 
@@ -458,34 +517,99 @@ body{
 </div>
 
 <script>
-// ===================== DATA =====================
-const DAYS={
-  mon:{name:'Monday',sub:'Air Shot · Peptide · GF · Gua Sha'},
-  tue:{name:'Tuesday',sub:'Retinol night — Celimax'},
-  wed:{name:'Wednesday',sub:'Acid exfoliant night'},
-  thu:{name:'Thursday',sub:'NuDerma · LED · Peptide · GF · Gua Sha'},
-  fri:{name:'Friday',sub:'Retinol night — Dallas & James'},
-  sat:{name:'Saturday',sub:'Air Shot · Retinol · Full routine'},
-  sun:{name:'Sunday',sub:'Rest · Recovery · Extended Yoga · Gua Sha'}
-};
+// ===== CONSTANTS =====
 const DAY_KEYS=['mon','tue','wed','thu','fri','sat','sun'];
 const DAY_LABELS={mon:'Mon',tue:'Tue',wed:'Wed',thu:'Thu',fri:'Fri',sat:'Sat',sun:'Sun'};
-
-const SKIP_REASONS={
-  tired:{emoji:'😴',label:'Too tired'},
-  sensitive:{emoji:'🌸',label:'Skin sensitive'},
-  product:{emoji:'📦',label:'Out of product'},
-  forgot:{emoji:'💭',label:'Forgot'}
+const SKIP_REASONS={tired:{emoji:'😴',label:'Too tired'},sensitive:{emoji:'🌸',label:'Skin sensitive'},product:{emoji:'📦',label:'Out of product'},forgot:{emoji:'💭',label:'Forgot'}};
+const STATUS_META={
+  using:{label:'Using it',emoji:'✅',badgeClass:'sb-using',dotClass:'s-using'},
+  low:{label:'Running low',emoji:'⚠️',badgeClass:'sb-low',dotClass:'s-low'},
+  out:{label:'Out — need to reorder',emoji:'❌',badgeClass:'sb-out',dotClass:'s-out'},
+  unused:{label:'Have it, not using',emoji:'📦',badgeClass:'sb-unused',dotClass:'s-unused'},
+  next:{label:'Up next to replace',emoji:'⭐',badgeClass:'sb-next',dotClass:'s-next'},
+  wish:{label:'Wishlist',emoji:'💭',badgeClass:'sb-wish',dotClass:'s-wish'}
 };
 
-const sk=(s)=>{
-  if(s==='wet') return '<span class="badge b-wet">💧 wet</span>';
-  if(s==='go')  return '<span class="badge b-go">✅ go</span>';
-  if(s==='dry') return '<span class="badge b-dry">○ dry</span>';
-  if(s==='refresh') return '<span class="badge b-refresh">🔄 refresh</span>';
-  return '';
+const STEP_SUBS={
+  'Spray toner':{sub:'Klairs Supple Preparation Toner (fragrance-free)',buy:'Anua Heartleaf 77% Soothing Toner — reorder'},
+  'Cleanse':{sub:'Any gentle low-pH cleanser',buy:'Tatcha The Rice Wash — reorder'},
+  'Vitamin C serum':{sub:'DE C-Luma or skip — SPF still covers you',buy:'Timeless 20% Vit C + E + Ferulic — best L-ascorbic upgrade'},
+  'Glass Skin serum':{sub:'Skip and moisturize directly after Vitamin C',buy:'Peach & Lily Glass Skin Refining Serum — reorder'},
+  'Pore refinement serum':{sub:'Medicube Pore Zero Niacinamide doubles as BHA alternative',buy:'Be The Skin Pore Zero BHA Serum — reorder'},
+  'Moisturize':{sub:'Saint Jane Rich Rescue Cream (you have this)',buy:'Purito Panthenol Cream — reorder'},
+  'SPF — always last, always':{sub:'Supergoop Dew Screen SPF 40 (you have this)',buy:'Beauty of Joseon Relief Sun SPF 50+ — reorder'},
+  'Numbuzin No. 9 Serum':{sub:'Use Argireline + Volufiline as first serum instead',buy:'Numbuzin No. 9 Skin Softening Serum — reorder'},
+  'Growth Factor serum':{sub:'Skip GF tonight — use extra peptide layer',buy:'The Ordinary GF 15% Solution — reorder'},
+  'Niacinamide serum':{sub:'Be The Skin BHA Serum has niacinamide in it',buy:'Medicube Pore Zero Niacinamide — reorder'},
+  'Argireline 10% + Volufiline 92%':{sub:'Skip — Numbuzin already has 50 peptides',buy:'The Ordinary Argireline 10% + Volufiline — reorder both'},
+  'Copper Peptide Firming Serum':{sub:'Skip copper peptide tonight — not essential every PM',buy:'Peach & Lily Copper Peptide Pro — reorder'},
+  'Celimax Retinal Shot':{sub:'Use Dallas & James Retinol Oil instead',buy:'Celimax Retinal Shot — reorder'},
+  'Dallas & James Overnight Retinol Oil':{sub:'Use Celimax Retinal Shot instead',buy:'Dallas & James Watermelon Dream Retinol Oil — reorder'},
+  'Anua 10% AHA/BHA Serum':{sub:'Skip active exfoliation — just cleanse + moisturize',buy:'Anua Heartleaf 10% AHA/BHA Exfoliating Serum — reorder'},
+  'Medik8 Press & Glow PHA Toner':{sub:'Skip Sunday exfoliation — your skin rests anyway',buy:'Medik8 Press & Glow PHA Toner — reorder'},
+  'Eye treatment':{sub:'Use whichever eye product you have — Ceramidin, #OOTD, or Seoul 1988',buy:'Dr. Jart+ Ceramidin Eye Cream — most versatile to reorder'},
+  'Face oil':{sub:'Use whichever face oil you have — Loumi or Replenix',buy:'Loumi Rose Glow Face Oil — reorder'},
+  'Seal with moisturizer':{sub:'VT PDRN or Dr. Reju-All — use whichever you have',buy:'VT PDRN Capsule Cream 100 — reorder'},
+  'Anua Rice 70+ Ceramide Milky Toner':{sub:'Skip — go straight to BHA serum on wet skin',buy:'Anua Rice 70+ Ceramide Milky Toner — reorder'},
+  'Gua sha — 5 min':{sub:'Skip gua sha — everything else still works',buy:'Your gua sha stone — no reorder, just find it!'},
 };
 
+const DEFAULT_PRODUCTS=[
+  {id:'tatcha-rice',name:'Tatcha The Rice Wash',step:'Cleanse',status:'using',sub:'Any gentle low-pH cleanser',buy:'Tatcha The Rice Wash — reorder'},
+  {id:'anua-oil',name:'Anua Heartleaf Pore Control Cleansing Oil',step:'Oil cleanse',status:'using'},
+  {id:'anua-toner',name:'Anua Heartleaf 77% Soothing Toner',step:'Spray toner',status:'using'},
+  {id:'anua-rice-toner',name:'Anua Rice 70+ Ceramide Milky Toner',step:'Rice Milky Toner',status:'using'},
+  {id:'medik8-pha',name:'Medik8 Press & Glow PHA Toner',step:'Sunday exfoliant',status:'using'},
+  {id:'cluma',name:'DE C-Luma Vitamin C Serum',step:'Vitamin C serum',status:'using'},
+  {id:'timeless-vitc',name:'Timeless 20% Vit C + E + Ferulic',step:'Vitamin C serum (restock)',status:'next'},
+  {id:'glass-skin',name:'Peach & Lily Glass Skin Serum',step:'Glass Skin serum',status:'using'},
+  {id:'bha-serum',name:'Be The Skin Pore Zero BHA Serum',step:'Pore refinement serum',status:'using'},
+  {id:'numbuzin',name:'Numbuzin No. 9 Serum',step:'PM first serum',status:'using'},
+  {id:'gf-serum',name:'The Ordinary GF 15% Solution',step:'Growth Factor serum',status:'using'},
+  {id:'nia-medicube',name:'Medicube Pore Zero Niacinamide',step:'Niacinamide serum',status:'using'},
+  {id:'argireline',name:'The Ordinary Argireline 10%',step:'Peptide serums',status:'using'},
+  {id:'volufiline',name:'The Ordinary Volufiline 92%',step:'Peptide serums',status:'using'},
+  {id:'copper-peptide',name:'Peach & Lily Copper Peptide Pro',step:'Copper Peptide serum',status:'using'},
+  {id:'celimax-retinal',name:'Celimax Retinal Shot',step:'Retinal (Tue/Sat)',status:'using'},
+  {id:'dallas-retinol',name:'Dallas & James Retinol Oil',step:'Retinol (Fri)',status:'using'},
+  {id:'anua-acid',name:'Anua 10% AHA/BHA Serum',step:'Wednesday acid exfoliant',status:'using'},
+  {id:'ceramidin-eye',name:'Dr. Jart+ Ceramidin Eye Cream',step:'Eye treatment',status:'using'},
+  {id:'ootd-eye',name:'#OOTD Intensive Eye Serum',step:'Eye treatment',status:'using'},
+  {id:'seoul-eye',name:'Seoul 1988 Retinal Eye Cream',step:'Eye treatment (retinol nights)',status:'using'},
+  {id:'mediheal-patches',name:'Mediheal Retinol Collagen Eye Patches',step:'Eye patches (optional)',status:'using'},
+  {id:'purito-panthenol',name:'Purito Panthenol Cream',step:'Moisturize AM',status:'using'},
+  {id:'saint-jane',name:'Saint Jane Rich Rescue Cream',step:'Moisturize AM (dry days)',status:'using'},
+  {id:'vt-pdrn',name:'VT PDRN Capsule Cream 100',step:'Seal PM (most nights)',status:'using'},
+  {id:'rejuall',name:'Dr. Reju-All PDRN Rejuvenating Cream',step:'Seal PM (retinol nights)',status:'using'},
+  {id:'loumi-oil',name:'Loumi Rose Glow Face Oil',step:'Face oil (gua sha nights)',status:'using'},
+  {id:'replenix-oil',name:'Replenix Rapid Repair Radiance Remedy',step:'Face oil (retinol nights)',status:'using'},
+  {id:'boj-spf',name:'Beauty of Joseon Relief Sun SPF 50+',step:'SPF',status:'using'},
+  {id:'supergoop',name:'Supergoop Dew Screen SPF 40',step:'SPF (makeup days)',status:'using'},
+  {id:'airshot',name:'Medicube Age-R Air Shot',step:'Device (Mon/Sat)',status:'using'},
+  {id:'nuderma',name:'NuDerma High Frequency Wand',step:'Device (Thu)',status:'using'},
+  {id:'led-mask',name:'LED Face Mask',step:'Device (Thu)',status:'using'},
+  {id:'mighty-bamboo',name:'Purito Mighty Bamboo Panthenol',step:'Moisturize (Wed acid nights)',status:'unused'},
+];
+
+// ===== STATE =====
+let day='mon',session='am',checked={},skinState=null,modalMoveIndex=0;
+let activeTab='routine';
+let pendingSkipIndex=null,pendingSkipName='';
+let pantryFilter='all';
+let editingProductId=null;
+let pendingAddProduct=null;
+let chatPhotoData=null;
+let chatHistory=[];
+
+function loadSkipLog(){try{return JSON.parse(localStorage.getItem('routine_skip_log')||'[]');}catch(e){return[];}}
+function saveSkipLog(log){try{localStorage.setItem('routine_skip_log',JSON.stringify(log));}catch(e){}}
+function loadProducts(){try{const s=JSON.parse(localStorage.getItem('routine_products')||'null');if(s)return s;}catch(e){}return DEFAULT_PRODUCTS.map(p=>({...p}));}
+function saveProducts(p){try{localStorage.setItem('routine_products',JSON.stringify(p));}catch(e){}}
+
+const SKIN_NOTES={calm:'All clear — carry on with your full routine tonight.',flushed:'Skip gua sha tonight. Use a lighter touch and focus on soothing ingredients.',dry:'Consider layering an extra pump of moisturizer. Re-spritz toner more generously.',sensitive:'Skip retinol if your skin is feeling reactive. Focus on barrier support — niacinamide, ceramides, and PDRN only tonight.'};
+const sk=(s)=>{if(s==='wet')return'<span class="badge b-wet">💧 wet</span>';if(s==='go')return'<span class="badge b-go">✅ go</span>';if(s==='dry')return'<span class="badge b-dry">○ dry</span>';if(s==='refresh')return'<span class="badge b-refresh">🔄 refresh</span>';return'';};
+
+// ===== MOVES =====
 const MOVES=[
   {id:'cheek-lifter',name:'Cheek Lifter',target:'Cheeks · Mid-face',emoji:'😮',steps:`<strong>1.</strong> Open mouth into a big O shape.<br><strong>2.</strong> Fold upper lip over top teeth.<br><strong>3.</strong> Smile as wide as you can to push cheeks up.<br><strong>4.</strong> Place fingertips lightly on top of cheeks.<br><strong>5.</strong> Lower and lift cheeks 10×.<br><strong>6.</strong> Hold lifted for 20 seconds.`,tip:'Feel the burn in your cheek muscles — that means it\'s working.',duration:'1 min'},
   {id:'jawline-definer',name:'Jawline Definer',target:'Jaw · Neck · Platysma',emoji:'🦷',steps:`<strong>1.</strong> Sit up straight.<br><strong>2.</strong> Tilt head back — look at the ceiling.<br><strong>3.</strong> Pucker lips like kissing the ceiling.<br><strong>4.</strong> Hold 5 seconds.<br><strong>5.</strong> Relax. Repeat 10×.`,tip:'Strengthens the platysma muscle running down the jaw and neck.',duration:'1 min'},
@@ -497,24 +621,23 @@ const MOVES=[
   {id:'upward-stroke',name:'Upward Stroke Smoothing',target:'11 Lines · Smoothing',emoji:'☝️',steps:`<strong>1.</strong> Bend index finger into a hook.<br><strong>2.</strong> Stroke UPWARD from bridge of nose to forehead.<br><strong>3.</strong> Light but firm pressure.<br><strong>4.</strong> Repeat for 30 seconds.`,tip:'Always stroke upward, never downward.',duration:'30 sec'},
   {id:'knuckle-slide',name:'Knuckle Slide',target:'11 Lines · Full Forehead',emoji:'✊',steps:`<strong>1.</strong> Make loose fists with both hands.<br><strong>2.</strong> Place knuckles at center of forehead.<br><strong>3.</strong> Apply gentle pressure.<br><strong>4.</strong> Slowly slide fists outward toward temples.<br><strong>5.</strong> Return to center. Repeat 5× for 2–3 sets.`,tip:'Releases tension across entire forehead.',duration:'1 min'}
 ];
-
 const GUA_STEPS={id:'gua-sha',name:'Gua Sha',target:'Lymphatic drainage · Jawline · Full face',emoji:'🪨',steps:`<strong>1. NECK FIRST</strong> — stroke downward from jaw to collarbone, 5× each side.<br><br><strong>2. JAWLINE</strong> — stone at 45°, stroke chin to earlobe, 5× each side.<br><br><strong>3. CHEEKS</strong> — stroke nose outward to ear, 5× each side.<br><br><strong>4. UNDER EYES</strong> — smallest edge, very light pressure, 3× each side.<br><br><strong>5. FOREHEAD</strong> — stroke brow upward to hairline, 5×.<br><br><strong>6. FINISH</strong> — press stone flat on each cheek 5 sec.`,tip:'Always UPWARD and OUTWARD. Skip if skin looks very flushed. Always after face oil.',duration:'5 min'};
 
+// ===== ROUTINE DATA =====
 const T={t:'Spray toner',p:'Anua Heartleaf 77% Soothing Toner',type:'cleanse',skin:'wet',d:'Spritz 2–3 times from 6–8 inches away. Leave skin visibly wet — do NOT pat dry.'};
 const NB={t:'Numbuzin No. 9 Serum',p:'Full face + double layer on 11 lines',skin:'go',d:'Apply a full layer all over face on still-tacky skin. Then immediately go back and apply a SECOND layer specifically between your eyebrows on your 11 lines. Contains NAD+ and 50 peptides.'};
 const GF={t:'Growth Factor serum',p:'The Ordinary GF 15% Solution',skin:'go',d:'2–3 drops pressed gently into skin while still tacky from Numbuzin. Never same night as Vitamin C or AHA/BHA.'};
 const NIA={t:'Niacinamide serum',p:'Medicube Pore Zero / Be The Skin BHA Serum',skin:'go',d:'After GF while skin still tacky. Consistently calms your redness-prone skin over time — one of your most important ingredients for rosacea.'};
 const PEPS={t:'Argireline 10% + Volufiline 92%',p:'The Ordinary peptide serums',skin:'go',d:'Apply Argireline first (targets expression lines), then Volufiline (plumps). 30 seconds between each.'};
-const COP={t:'Copper Peptide Firming Serum',p:'Peach & Lily Copper Peptide Pro',skin:'go',d:'Layer after peptides while skin still tacky. Supports collagen synthesis. Do not use same night as retinol.'};
+const COP={t:'Copper Peptide Firming Serum',p:'Peach & Lily Copper Peptide Pro',skin:'go',d:'Layer after peptides while skin still tacky. Do not use same night as retinol.'};
 const GUA={t:'Gua sha — 5 min',p:'After face oil — lift + drain + jawline',type:'gua',skin:'go',d:'Always after face oil. Never dry skin.\n\n1. NECK FIRST — 5x each side.\n2. JAWLINE — stone at 45°, 5x each side.\n3. CHEEKS — 5x each side.\n4. UNDER EYES — light pressure, 3x each side.\n5. FOREHEAD — brow upward, 5x.\n6. FINISH — press stone flat.\n\nAlways UPWARD and OUTWARD. Skip if flushed.'};
-const AIR={t:'Medicube Age-R Air Shot',p:'5 min — completely dry skin',type:'device',skin:'dry',d:'COMPLETELY DRY skin — non-negotiable. Sweep from center of face outward. 5 minutes. Absorption boosted 432%.'};
+const AIR={t:'Medicube Age-R Air Shot',p:'5 min — completely dry skin',type:'device',skin:'dry',d:'COMPLETELY DRY skin — non-negotiable. 5 minutes. Absorption boosted 432%.'};
 const NUD={t:'NuDerma High Frequency Wand',p:'Tongue 2 min (11 lines) + mushroom 3 min (full face)',type:'device',skin:'dry',d:'Completely dry skin.\n\nSTEP 1 — 11 LINES (2 min): Tongue attachment. Tiny infinity-sign motions.\n\nSTEP 2 — FULL FACE (3 min): Mushroom head. Glide slowly upward.\n\nRosacea caution: if flushed after, wait an extra rest day.'};
 const LED={t:'LED Face Mask — red + NIR light',p:'10–15 min — after NuDerma, before serums',type:'device',skin:'dry',d:'Immediately after NuDerma — skin still dry. 10–15 minutes red + near-infrared light.'};
 const DRY_WAIT={t:'Dry skin completely',p:'Wait 30–60 sec after toner — then pick up device',skin:'dry',d:'Devices need completely dry skin. Wait 30–60 seconds. Critical.'};
-
 const YOGA=[
   {t:'① Cheek Lifter',p:'Face yoga — 1 min · cheeks + mid-face',type:'yoga',yogaId:'cheek-lifter',d:'1. Open mouth into a big O shape.\n2. Fold upper lip over top teeth.\n3. Smile as wide as you can.\n4. Place fingertips lightly on top of cheeks.\n5. Lower and lift cheeks 10x.\n6. Hold lifted for 20 seconds.'},
-  {t:'② Jawline Definer',p:'Face yoga — 1 min · jaw + neck',type:'yoga',yogaId:'jawline-definer',d:'1. Sit up straight.\n2. Tilt head back — look at the ceiling.\n3. Pucker lips like kissing the ceiling.\n4. Hold 5 seconds.\n5. Relax. Repeat 10x.'},
+  {t:'② Jawline Definer',p:'Face yoga — 1 min · jaw + neck',type:'yoga',yogaId:'jawline-definer',d:'1. Sit up straight.\n2. Tilt head back — look at the ceiling.\n3. Pucker lips like kissing the ceiling.\n4. Hold 5 seconds. Relax. Repeat 10x.'},
   {t:'③ Happy Cheeks Sculpting',p:'Face yoga — 1 min · cheekbones',type:'yoga',yogaId:'happy-cheeks',d:'1. Smile without showing teeth.\n2. Purse lips together.\n3. Smile again — force cheeks upward.\n4. Slide fingers up to top of cheeks.\n5. Hold 20 seconds. Repeat 3x.'},
   {t:'④ Tongue Press Smile',p:'Face yoga — 1 min · jawline + chin',type:'yoga',yogaId:'tongue-press',d:'1. Press tongue firmly against roof of mouth.\n2. Smile as wide as possible.\n3. Hold 5 seconds. Release. Repeat 10–15x.'},
   {t:'⑤ Eyebrow Lifter',p:'Face yoga — 30 sec · brow + upper face',type:'yoga',yogaId:'eyebrow-lifter',d:'1. Place 3 fingertips under each eyebrow.\n2. Push eyes wide open.\n3. Try to push brows DOWN against your fingers.\n4. Close eyes and roll eyeballs upward.\n5. Hold 20 seconds. Repeat 3x.'},
@@ -601,7 +724,7 @@ const PM={
     {...T,d:'Spritz 2–3 times. Leave skin wet. Then FULLY DRY before Air Shot.'},
     {...DRY_WAIT},{...AIR},
     {t:'Mediheal Retinol Collagen Eye Patches (optional)',p:'Under eyes + nasolabial folds — 20–30 min',skin:'wet',d:'Apply right after Air Shot re-spritz. Leave 20–30 min.\nDo NOT use Seoul 1988 Eye Cream same night.'},
-    {...NB,d:'Re-spritz toner after patches. Double layer.'},{...NIA},{...PEPS},
+    {...NB},{...NIA},{...PEPS},
     {t:'Celimax Retinal Shot',p:'Celimax Retinal Shot Tightening Booster',skin:'dry',d:'Wait 60–90 sec after peptides — skin must be dry.'},
     {t:'Eye treatment',p:'Seoul 1988 Eye Cream — skip if using patches tonight',d:'Skip if you used Mediheal patches on eye area.'},
     {t:'Face oil',p:'Replenix Rapid Repair Radiance Remedy',skin:'go',d:'2–3 drops.'},
@@ -623,273 +746,446 @@ const PM={
   ]
 };
 
-// ===================== STATE =====================
-let day='mon', session='am', checked={}, skinState=null, modalMoveIndex=0;
-let weekViewOpen=false;
-let pendingSkipIndex=null;
-let pendingSkipName='';
-
-// PERSISTENT SKIP LOG
-function loadSkipLog(){
-  try{ return JSON.parse(localStorage.getItem('routine_skip_log')||'[]'); }
-  catch(e){ return []; }
-}
-function saveSkipLog(log){
-  try{ localStorage.setItem('routine_skip_log', JSON.stringify(log)); }
-  catch(e){}
-}
-
-const SKIN_NOTES={
-  calm:'All clear — carry on with your full routine tonight.',
-  flushed:'Skip gua sha tonight. Use a lighter touch and focus on soothing ingredients.',
-  dry:'Consider layering an extra pump of moisturizer. Re-spritz toner more generously between steps.',
-  sensitive:'Skip retinol if your skin is feeling reactive. Focus on barrier support — niacinamide, ceramides, and PDRN only tonight.'
-};
-
-// ===================== ACTIONS =====================
-function setSkinState(s){
-  skinState=s;
-  document.querySelectorAll('.checkin-opt').forEach(b=>b.classList.toggle('selected',b.getAttribute('onclick').includes(`'${s}'`)));
-  document.getElementById('checkin-note').textContent=SKIN_NOTES[s]||'';
-  render();
-}
-
+// ===== ROUTINE ACTIONS =====
 function key(d,s,i){return d+'_'+s+'_'+i;}
-function setDay(d,btn){
-  day=d;
-  document.querySelectorAll('.day-pill').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  render();
-}
-function setSession(s){
-  session=s;
-  document.getElementById('btn-am').classList.toggle('active',s==='am');
-  document.getElementById('btn-pm').classList.toggle('active',s==='pm');
-  document.getElementById('checkin-wrap').classList.toggle('show',s==='pm');
-  render();
-}
 function getSteps(){return session==='am'?AM:(PM[day]||PM.mon);}
 function getRealSteps(){return getSteps().filter(s=>!s.alert);}
-function getCurrentIndex(){
-  const steps=getSteps();
-  for(let i=0;i<steps.length;i++){
-    if(steps[i].alert)continue;
-    if(!checked[key(day,session,i)])return i;
+function getCurrentIndex(){const steps=getSteps();for(let i=0;i<steps.length;i++){if(steps[i].alert)continue;if(!checked[key(day,session,i)])return i;}return -1;}
+function setSkinState(s){skinState=s;document.querySelectorAll('.checkin-opt').forEach(b=>b.classList.toggle('selected',b.getAttribute('onclick').includes(`'${s}'`)));document.getElementById('checkin-note').textContent=SKIN_NOTES[s]||'';render();}
+function setDay(d,btn){day=d;document.querySelectorAll('.day-pill').forEach(b=>b.classList.remove('active'));btn.classList.add('active');render();}
+function setSession(s){session=s;document.getElementById('btn-am').classList.toggle('active',s==='am');document.getElementById('btn-pm').classList.toggle('active',s==='pm');document.getElementById('checkin-wrap').classList.toggle('show',s==='pm'&&activeTab==='routine');render();}
+function completeStep(i){checked[key(day,session,i)]=true;if(navigator.vibrate)navigator.vibrate(12);render();}
+function toggleDetail(id){const el=document.getElementById(id);if(el)el.classList.toggle('open');}
+function numClass(s,type){if(type==='yoga')return'num-yoga';if(type==='gua')return'num-gua';if(type==='device')return'num-device';if(type==='cleanse')return'num-cleanse';return session==='am'?'num-am':'num-pm';}
+
+// ===== SKIN PHOTO ANALYSIS =====
+function openSkinPhotoInput(){document.getElementById('skin-photo-input').click();}
+function openChatPhotoInput(){document.getElementById('chat-photo-input').click();}
+
+async function analyzeSkinPhoto(input){
+  if(!input.files[0])return;
+  const file=input.files[0];
+  const reader=new FileReader();
+  reader.onload=async(e)=>{
+    const base64=e.target.result.split(',')[1];
+    const mediaType=file.type;
+    const analysisEl=document.getElementById('skin-analysis');
+    const textEl=document.getElementById('skin-analysis-text');
+    analysisEl.classList.add('show');
+    textEl.textContent='Analyzing your skin...';
+
+    try{
+      const resp=await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          model:'claude-sonnet-4-20250514',
+          max_tokens:1000,
+          system:`You are Claudette, a skincare AI assistant for Elena who has vascular rosacea. You know her routine deeply. She uses Anua toners, retinoids 3x/week, gua sha, NuDerma wand, and many K-beauty products. Her triggers are fragrance, witch hazel, strong acids, and fragrant essential oils. Analyze her skin photo and give a concise evening routine recommendation in 3-4 sentences. Be warm, specific, and rosacea-aware. Focus on: visible redness level, hydration, whether she should do retinol/gua sha/devices tonight, and one key thing to prioritize.`,
+          messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:mediaType,data:base64}},{type:'text',text:'This is my skin right now, tonight. What should I do for my PM routine?'}]}]
+        })
+      });
+      const data=await resp.json();
+      textEl.textContent=data.content[0].text;
+    }catch(err){
+      textEl.textContent='Unable to analyze right now — check your connection and try again.';
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+async function attachChatPhoto(input){
+  if(!input.files[0])return;
+  const file=input.files[0];
+  const reader=new FileReader();
+  reader.onload=(e)=>{
+    chatPhotoData={base64:e.target.result.split(',')[1],mediaType:file.type};
+    document.getElementById('chat-input').placeholder='Photo attached — ask your question...';
+  };
+  reader.readAsDataURL(file);
+}
+
+// ===== CLAUDETTE CHAT =====
+function buildSystemPrompt(){
+  const log=loadSkipLog();
+  const products=loadProducts();
+  const outProducts=products.filter(p=>p.status==='out').map(p=>p.name).join(', ')||'none';
+  const lowProducts=products.filter(p=>p.status==='low').map(p=>p.name).join(', ')||'none';
+  const skipSummary=log.slice(0,20).map(l=>`${l.date}: skipped ${l.step} (${l.reason})`).join('\n')||'No skips recorded yet';
+
+  return `You are Claudette, Elena's personal skincare AI assistant inside her routine app. You know everything about her routine.
+
+ELENA'S PROFILE:
+- Skin type: Vascular rosacea
+- Triggers: Fragrance, witch hazel, strong glycolic acid, fragrant essential oils (orange, mandarin, lavender, bergamot)
+- Current day: ${DAY_LABELS[day]}, ${session==='am'?'Morning':'Evening'} routine
+
+HER ROUTINE OVERVIEW:
+- AM: Cleanse → Anua Heartleaf toner → Rice Milky Toner → BHA serum → Vitamin C → Glass Skin → Eye → Moisturize → SPF → Face yoga (9 exercises)
+- Mon PM: Oil cleanse → Air Shot device → full serum stack → face oil → Gua sha → PDRN cream
+- Tue PM: Retinol night (Celimax Retinal) — no gua sha, no devices
+- Wed PM: Acid night (Anua 10% AHA/BHA) — no devices, no retinol, no gua sha
+- Thu PM: NuDerma + LED devices → full serum stack → gua sha → PDRN cream (best absorption night)
+- Fri PM: Retinol night (Dallas & James) — no gua sha, no devices
+- Sat PM: Air Shot + Celimax Retinal — big active night
+- Sun PM: Recovery night — gentle PHA only, gua sha, no devices, no retinol
+
+KEY PRODUCTS:
+- Retinoids: Celimax Retinal (Tue/Sat), Dallas & James Retinol Oil (Fri) = 3x/week total
+- PDRN moisturizers: VT PDRN (most nights), Dr. Reju-All (retinol nights — buy from songofskin.com only)
+- Devices: Medicube Age-R Air Shot (Mon/Sat), NuDerma + LED (Thu)
+- SPF: Beauty of Joseon daily, Supergoop on makeup days
+- Face oil: Loumi Rose Glow (gua sha nights), Replenix Rapid Repair (retinol nights)
+
+OUT OF PRODUCT: ${outProducts}
+RUNNING LOW: ${lowProducts}
+
+RECENT SKIP PATTERNS:
+${skipSummary}
+
+RULES FOR RECOMMENDATIONS:
+- Never suggest fragrance, witch hazel, or fragrant essential oils for rosacea
+- Always check ingredient compatibility before recommending new products
+- Retinol and AHA/BHA should never be on the same night
+- Devices (Air Shot, NuDerma) never on retinol nights
+- Gua sha always needs face oil as slip layer first
+- When skin is flushed: skip gua sha, go gentler on everything
+
+Respond warmly and concisely. You are Elena's trusted skincare advisor. Use her name occasionally. Keep responses focused and practical — not overly long.`;
+}
+
+async function sendChat(){
+  const input=document.getElementById('chat-input');
+  const text=input.value.trim();
+  if(!text&&!chatPhotoData)return;
+
+  const userMsg=text||(chatPhotoData?'[photo attached]':'');
+  addChatMsg(userMsg,'user');
+  input.value='';
+  input.style.height='auto';
+  input.placeholder='Ask Claudette anything...';
+
+  const thinkingEl=addChatMsg('Thinking...','assistant',true);
+  document.getElementById('chat-suggestions').style.display='none';
+
+  const userContent=[];
+  if(chatPhotoData){
+    userContent.push({type:'image',source:{type:'base64',media_type:chatPhotoData.mediaType,data:chatPhotoData.base64}});
+    chatPhotoData=null;
   }
-  return -1;
+  if(text) userContent.push({type:'text',text});
+  else userContent.push({type:'text',text:'Please analyze this photo of my skin.'});
+
+  chatHistory.push({role:'user',content:userContent});
+
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        system:buildSystemPrompt(),
+        messages:chatHistory
+      })
+    });
+    const data=await resp.json();
+    const reply=data.content[0].text;
+    thinkingEl.querySelector('.msg-bubble').textContent=reply;
+    thinkingEl.querySelector('.msg-bubble').classList.remove('thinking');
+    chatHistory.push({role:'assistant',content:reply});
+    // keep history manageable
+    if(chatHistory.length>20)chatHistory=chatHistory.slice(-16);
+  }catch(err){
+    thinkingEl.querySelector('.msg-bubble').textContent='Sorry, I had trouble connecting. Check your internet and try again.';
+  }
+
+  scrollChat();
 }
-function completeStep(i){
-  checked[key(day,session,i)]=true;
-  if(navigator.vibrate)navigator.vibrate(12);
-  render();
+
+function addChatMsg(text,role,thinking=false){
+  const msgs=document.getElementById('chat-messages');
+  const div=document.createElement('div');
+  div.className=`msg ${role}`;
+  div.innerHTML=`<div class="msg-bubble${thinking?' thinking':''}">${text}</div>`;
+  msgs.appendChild(div);
+  scrollChat();
+  return div;
 }
+
+function scrollChat(){
+  const msgs=document.getElementById('chat-messages');
+  setTimeout(()=>msgs.scrollTop=msgs.scrollHeight,50);
+}
+
+function sendSuggestion(btn){
+  document.getElementById('chat-input').value=btn.textContent;
+  sendChat();
+}
+
+function handleChatKey(e){
+  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}
+}
+
+function autoResize(el){
+  el.style.height='auto';
+  el.style.height=Math.min(el.scrollHeight,100)+'px';
+}
+
+// ===== SKIP SHEET =====
 function openSkipSheet(i,name){
-  pendingSkipIndex=i;
-  pendingSkipName=name;
+  pendingSkipIndex=i;pendingSkipName=name;
   document.getElementById('skip-step-name').textContent=name;
+  const sub=STEP_SUBS[name];
+  const subArea=document.getElementById('sub-suggestion-area');
+  if(sub){
+    subArea.innerHTML=`<div class="sub-suggestion"><div class="sub-label">✨ While you're out</div><div class="sub-option"><div class="sub-option-title">Use instead: ${sub.sub}</div></div><div class="sub-option buy"><div class="sub-option-title">🛒 Buy next: ${sub.buy}</div></div></div>`;
+  }else{subArea.innerHTML='';}
   document.getElementById('skip-overlay').classList.add('open');
   document.body.style.overflow='hidden';
 }
-function closeSkipSheet(){
-  document.getElementById('skip-overlay').classList.remove('open');
-  document.body.style.overflow='';
-  pendingSkipIndex=null;
-}
-function handleSkipOverlayTap(e){
-  if(e.target===document.getElementById('skip-overlay'))closeSkipSheet();
-}
+function closeSkipSheet(){document.getElementById('skip-overlay').classList.remove('open');document.body.style.overflow='';pendingSkipIndex=null;}
+function handleSkipOverlayTap(e){if(e.target===document.getElementById('skip-overlay'))closeSkipSheet();}
 function confirmSkip(reason){
   if(pendingSkipIndex===null)return;
-  // mark as done (skipped)
   checked[key(day,session,pendingSkipIndex)]=true;
-  // log the skip
   const log=loadSkipLog();
   const now=new Date();
-  log.unshift({
-    date:now.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}),
-    dayKey:day,
-    session:session,
-    step:pendingSkipName,
-    reason:reason,
-    ts:now.getTime()
-  });
-  // keep last 200 entries
+  log.unshift({date:now.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}),dayKey:day,session,step:pendingSkipName,reason,ts:now.getTime()});
   if(log.length>200)log.splice(200);
   saveSkipLog(log);
   closeSkipSheet();
   if(navigator.vibrate)navigator.vibrate([8,40,8]);
   render();
 }
-function resetAll(){
-  getSteps().forEach((_,i)=>{checked[key(day,session,i)]=false;});
-  render();
-}
-function toggleDetail(id){
-  const el=document.getElementById(id);
-  if(el)el.classList.toggle('open');
-}
-function numClass(s,type){
-  if(type==='yoga')return 'num-yoga';
-  if(type==='gua')return 'num-gua';
-  if(type==='device')return 'num-device';
-  if(type==='cleanse')return 'num-cleanse';
-  return session==='am'?'num-am':'num-pm';
+
+// ===== TAB SWITCHING =====
+function showTab(tab){
+  activeTab=tab;
+  const isRoutine=tab==='routine';
+  const isWeek=tab==='week';
+  const isPantry=tab==='pantry';
+  const isChat=tab==='chat';
+
+  document.getElementById('stack-area').style.display=isRoutine?'flex':'none';
+  document.getElementById('week-view').classList.toggle('show',isWeek);
+  document.getElementById('pantry-view').classList.toggle('show',isPantry);
+  document.getElementById('chat-view').classList.toggle('show',isChat);
+  document.getElementById('sub-header').classList.toggle('show',isRoutine);
+  document.getElementById('day-scroll-wrap').classList.toggle('show',isRoutine);
+  document.getElementById('bottom-nav').classList.toggle('show',isRoutine);
+  document.getElementById('checkin-wrap').style.display=(isRoutine&&session==='pm')?'block':'none';
+
+  ['routine','week','pantry','chat'].forEach(t=>{
+    document.getElementById(`tab-${t}`).classList.toggle('active',t===tab);
+  });
+
+  if(isWeek)renderWeekView();
+  if(isPantry)renderPantry();
+  if(isChat)scrollChat();
 }
 
-// ===================== WEEK VIEW =====================
-function toggleWeekView(){
-  weekViewOpen=!weekViewOpen;
-  document.getElementById('week-tab-btn').classList.toggle('active',weekViewOpen);
-  document.getElementById('stack-area').style.display=weekViewOpen?'none':'flex';
-  document.getElementById('week-view').classList.toggle('show',weekViewOpen);
-  if(weekViewOpen)renderWeekView();
-}
-
+// ===== WEEK VIEW =====
 function renderWeekView(){
   const log=loadSkipLog();
   const wv=document.getElementById('week-view');
-
   if(log.length===0){
-    wv.innerHTML=`<div class="empty-state"><div class="empty-icon">📊</div><p>No data yet! As you use your routine and skip steps, your patterns will appear here.<br><br>Tap <strong>Skip →</strong> on any step and pick a reason to start tracking.</p></div>`;
+    wv.innerHTML=`<div class="empty-state"><div class="empty-icon">📊</div><p>No data yet! Skip steps and pick a reason to start building your pattern history.</p></div>`;
     return;
   }
-
-  // Day heatmap — last 7 days
-  const dayMap={};
-  const now=new Date();
-  DAY_KEYS.forEach(dk=>{
-    const steps=AM; // approximate total
-    const total=getRealStepsForDay(dk);
-    const skipped=log.filter(l=>l.dayKey===dk).length;
-    dayMap[dk]={skipped, total};
-  });
+  const dayCounts={},reasonCounts={},stepCounts={};
+  log.forEach(l=>{dayCounts[l.dayKey]=(dayCounts[l.dayKey]||0)+1;reasonCounts[l.reason]=(reasonCounts[l.reason]||0)+1;stepCounts[l.step]=(stepCounts[l.step]||0)+1;});
 
   let heatHtml=`<div class="week-section"><div class="week-section-title">This <span>Week</span></div><div class="day-grid">`;
   DAY_KEYS.forEach(dk=>{
-    const {skipped}=dayMap[dk];
-    let cls='';
-    let pctLabel='—';
-    if(skipped===0){cls='perfect';pctLabel='✓';}
-    else if(skipped<=2){cls='skipped-some';pctLabel=skipped+'⚠';}
-    else{cls='skipped-lots';pctLabel=skipped+'✗';}
-    heatHtml+=`<div class="day-cell has-data ${cls}"><span class="day-label">${DAY_LABELS[dk]}</span><span class="day-pct">${pctLabel}</span></div>`;
+    const skipped=dayCounts[dk]||0;
+    let cls='has-data',pct='✓';
+    if(skipped===0)cls+=' perfect';
+    else if(skipped<=2){cls+=' skipped-some';pct=skipped+'⚠';}
+    else{cls+=' skipped-lots';pct=skipped+'✗';}
+    heatHtml+=`<div class="day-cell ${cls}"><span class="day-label">${DAY_LABELS[dk]}</span><span class="day-pct">${pct}</span></div>`;
   });
   heatHtml+=`</div></div>`;
-
-  // Insights
-  const reasonCounts={};
-  const stepCounts={};
-  const dayCounts={};
-  log.forEach(l=>{
-    reasonCounts[l.reason]=(reasonCounts[l.reason]||0)+1;
-    stepCounts[l.step]=(stepCounts[l.step]||0)+1;
-    dayCounts[l.dayKey]=(dayCounts[l.dayKey]||0)+1;
-  });
 
   const topReason=Object.entries(reasonCounts).sort((a,b)=>b[1]-a[1])[0];
   const topStep=Object.entries(stepCounts).sort((a,b)=>b[1]-a[1])[0];
   const topDay=Object.entries(dayCounts).sort((a,b)=>b[1]-a[1])[0];
 
-  let insightHtml=`<div class="week-section"><div class="week-section-title">Insights</div>`;
+  const suggestions={
+    tired:'Consider moving your most intensive steps (devices, gua sha) to a different night, or building a shorter "tired night" version of your routine.',
+    sensitive:'Your skin may be reacting to something — look for patterns between flushed days and specific products or foods.',
+    product:'Check your Pantry tab for reorder reminders. Running out of key steps disrupts your routine consistency.',
+    forgot:'Try setting a reminder at your usual routine time, or lay out your products the night before.'
+  };
+
+  let insightHtml=`<div class="week-section"><div class="week-section-title"><span>Insights</span></div>`;
   if(topReason){
     const r=SKIP_REASONS[topReason[0]];
-    insightHtml+=`<div class="insight-card"><div class="insight-label">Top Skip Reason</div><div class="insight-text">${r.emoji} <strong>${r.label}</strong> — ${topReason[1]} time${topReason[1]>1?'s':''}</div></div>`;
+    insightHtml+=`<div class="insight-card"><div class="insight-label">Top Skip Reason</div><div class="insight-text">${r.emoji} <strong>${r.label}</strong> — ${topReason[1]} time${topReason[1]>1?'s':''}</div><div class="insight-suggestion">${suggestions[topReason[0]]||''}</div></div>`;
   }
   if(topStep){
-    insightHtml+=`<div class="insight-card"><div class="insight-label">Most Skipped Step</div><div class="insight-text">⚠️ <strong>${topStep[0]}</strong> — skipped ${topStep[1]} time${topStep[1]>1?'s':''}</div></div>`;
+    insightHtml+=`<div class="insight-card"><div class="insight-label">Most Skipped Step</div><div class="insight-text">⚠️ <strong>${topStep[0]}</strong> — skipped ${topStep[1]} time${topStep[1]>1?'s':''}</div><div class="insight-suggestion">Consider whether this step needs to move to a different point in your routine, or if there's a product issue.</div></div>`;
   }
   if(topDay){
-    insightHtml+=`<div class="insight-card"><div class="insight-label">Hardest Day</div><div class="insight-text">📅 <strong>${DAY_LABELS[topDay[0]]}</strong> has the most skips — ${topDay[1]} total</div></div>`;
+    insightHtml+=`<div class="insight-card"><div class="insight-label">Hardest Day</div><div class="insight-text">📅 <strong>${DAY_LABELS[topDay[0]]}</strong> — ${topDay[1]} skip${topDay[1]>1?'s':''} total</div><div class="insight-suggestion">Tap the Ask tab and ask Claudette to analyze your ${DAY_LABELS[topDay[0]]} routine — she can suggest adjustments.</div></div>`;
   }
   insightHtml+=`</div>`;
 
-  // Recent skip log
   let logHtml=`<div class="week-section"><div class="week-section-title">Skip <span>Log</span></div>`;
   log.slice(0,20).forEach(l=>{
     const r=SKIP_REASONS[l.reason]||{emoji:'•',label:l.reason};
-    logHtml+=`<div class="skip-log-item">
-      <div class="skip-log-header">
-        <div class="skip-log-step">${l.step}</div>
-        <div class="skip-log-date">${l.date} · ${l.session==='am'?'☀️':'🌙'}</div>
-      </div>
-      <span class="skip-log-reason">${r.emoji} ${r.label}</span>
-    </div>`;
+    logHtml+=`<div class="skip-log-item"><div class="skip-log-header"><div class="skip-log-step">${l.step}</div><div class="skip-log-date">${l.date} · ${l.session==='am'?'☀️':'🌙'}</div></div><span class="skip-log-reason">${r.emoji} ${r.label}</span></div>`;
   });
   logHtml+=`</div>`;
 
-  // Send to Claude button
-  const claudeBtn=`<button class="send-claude-btn" onclick="sendToClaude()">✨ Analyze with Claude</button>`;
-
-  wv.innerHTML=heatHtml+insightHtml+logHtml+claudeBtn;
+  wv.innerHTML=heatHtml+insightHtml+logHtml+`<button class="send-claude-btn" onclick="sendToClaudetteTab()">✨ Deep dive with Claudette</button>`;
 }
 
-function getRealStepsForDay(dk){
-  const pmSteps=(PM[dk]||PM.mon).filter(s=>!s.alert).length;
-  return AM.filter(s=>!s.alert).length+pmSteps;
-}
-
-function sendToClaude(){
+function sendToClaudetteTab(){
   const log=loadSkipLog();
-  if(log.length===0){alert('No skip data yet!');return;}
-  const summary=log.slice(0,50).map(l=>{
-    const r=SKIP_REASONS[l.reason]||{label:l.reason};
-    return `${l.date} (${l.session==='am'?'AM':'PM'}, ${DAY_LABELS[l.dayKey]}): skipped "${l.step}" — ${r.label}`;
-  }).join('\n');
-  const text=`Here's my skincare routine skip log from the past few weeks. Can you analyze the patterns and tell me:\n1. Which steps I skip most and why\n2. Which days I struggle with\n3. Any routine adjustments you'd suggest\n\nSKIP LOG:\n${summary}`;
-  navigator.clipboard.writeText(text).then(()=>{
-    alert('Copied! Paste it into a new chat with Claude for analysis 🌸');
-  }).catch(()=>{
-    // fallback: show in a textarea
-    const ta=document.createElement('textarea');
-    ta.value=text;ta.style.position='fixed';ta.style.top='0';ta.style.left='0';ta.style.opacity='0';
-    document.body.appendChild(ta);ta.select();document.execCommand('copy');
-    document.body.removeChild(ta);
-    alert('Copied! Paste it into a new chat with Claude for analysis 🌸');
-  });
+  const summary=log.slice(0,30).map(l=>{const r=SKIP_REASONS[l.reason]||{label:l.reason};return`${l.date} (${l.session==='am'?'AM':'PM'}, ${DAY_LABELS[l.dayKey]}): skipped "${l.step}" — ${r.label}`;}).join('\n');
+  showTab('chat');
+  setTimeout(()=>{
+    document.getElementById('chat-input').value=`Can you analyze my skip patterns and tell me what I should change? Here's my log:\n\n${summary}`;
+    sendChat();
+  },300);
 }
 
-// ===================== RENDER =====================
+// ===== PANTRY =====
+function setPantryFilter(f,btn){pantryFilter=f;document.querySelectorAll('.filter-pill').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderPantry(document.getElementById('pantry-search').value);}
+
+function renderPantry(search=''){
+  const products=loadProducts();
+  const list=document.getElementById('pantry-list');
+  const q=(search||'').toLowerCase();
+  const filtered=products.filter(p=>{if(pantryFilter!=='all'&&p.status!==pantryFilter)return false;if(q&&!p.name.toLowerCase().includes(q)&&!p.step.toLowerCase().includes(q))return false;return true;});
+  const groups={using:[],low:[],out:[],next:[],unused:[],wish:[]};
+  filtered.forEach(p=>{if(groups[p.status])groups[p.status].push(p);});
+  const ORDER=['out','low','next','using','unused','wish'];
+  const TITLES={out:'❌ Out — Need to Reorder',low:'⚠️ Running Low',next:'⭐ Up Next to Replace',using:'✅ Using',unused:'📦 Have It, Not Using',wish:'💭 Wishlist'};
+  let html='';let hasAny=false;
+  ORDER.forEach(status=>{
+    if(groups[status].length===0)return;hasAny=true;
+    html+=`<div class="pantry-section">${pantryFilter==='all'?`<div class="pantry-section-title">${TITLES[status]}</div>`:''}`;
+    groups[status].forEach(p=>{
+      const sm=STATUS_META[p.status];
+      html+=`<div class="product-card" onclick="openStatusSheet('${p.id}')"><div class="product-status-dot ${sm.dotClass}"></div><div class="product-info"><div class="product-name">${p.name}</div><div class="product-step">${p.step}</div><span class="product-status-badge ${sm.badgeClass}">${sm.emoji} ${sm.label}</span></div><div class="product-edit-btn">›</div></div>`;
+    });
+    html+=`</div>`;
+  });
+  if(!hasAny)html=`<div class="empty-state" style="margin-top:32px"><div class="empty-icon">🔍</div><p>No products found.</p></div>`;
+  list.innerHTML=html;
+}
+
+function openStatusSheet(productId){
+  editingProductId=productId;
+  const products=loadProducts();
+  const product=products.find(p=>p.id===productId);
+  if(!product)return;
+  document.getElementById('status-product-name').textContent=product.name;
+  document.getElementById('status-options').innerHTML=Object.entries(STATUS_META).map(([key,meta])=>`<button class="status-option-btn${product.status===key?' current-status':''}" onclick="updateProductStatus('${productId}','${key}')"><span style="font-size:18px;width:24px;text-align:center;flex-shrink:0">${meta.emoji}</span>${meta.label}${product.status===key?' ✓':''}</button>`).join('');
+  document.getElementById('status-overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeStatusSheet(){document.getElementById('status-overlay').classList.remove('open');document.body.style.overflow='';editingProductId=null;}
+function handleStatusOverlayTap(e){if(e.target===document.getElementById('status-overlay'))closeStatusSheet();}
+function updateProductStatus(productId,newStatus){
+  const products=loadProducts();
+  const idx=products.findIndex(p=>p.id===productId);
+  if(idx>=0){products[idx].status=newStatus;saveProducts(products);}
+  closeStatusSheet();
+  renderPantry(document.getElementById('pantry-search').value);
+}
+
+// ===== ADD PRODUCT =====
+function openAddSheet(){
+  document.getElementById('add-overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  document.getElementById('add-input').value='';
+  document.getElementById('add-result').classList.remove('show');
+  pendingAddProduct=null;
+}
+function closeAddSheet(){document.getElementById('add-overlay').classList.remove('open');document.body.style.overflow='';}
+function handleAddOverlayTap(e){if(e.target===document.getElementById('add-overlay'))closeAddSheet();}
+
+async function lookupProduct(){
+  const name=document.getElementById('add-input').value.trim();
+  if(!name)return;
+  const resultEl=document.getElementById('add-result');
+  document.getElementById('add-result-name').textContent='Looking up...';
+  document.getElementById('add-result-step').textContent='';
+  document.getElementById('add-result-note').textContent='';
+  resultEl.classList.add('show');
+
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:300,
+        system:'You are a skincare product expert assistant. When given a product name, respond ONLY with valid JSON in this exact format: {"name":"exact product name","step":"which routine step it belongs to","rosaceaSafe":true/false,"note":"1-2 sentence note about this product for someone with vascular rosacea, including key ingredients and any concerns"}. No other text.',
+        messages:[{role:'user',content:`Product: ${name}`}]
+      })
+    });
+    const data=await resp.json();
+    const text=data.content[0].text.replace(/```json|```/g,'').trim();
+    const info=JSON.parse(text);
+    pendingAddProduct={id:'user-'+Date.now(),name:info.name,step:info.step,status:'wish',note:info.note};
+    document.getElementById('add-result-name').textContent=info.name;
+    document.getElementById('add-result-step').textContent=info.step+(info.rosaceaSafe?' · ✅ Generally rosacea-safe':' · ⚠️ Check ingredients carefully');
+    document.getElementById('add-result-note').textContent=info.note;
+  }catch(err){
+    document.getElementById('add-result-name').textContent=name;
+    document.getElementById('add-result-step').textContent='Could not auto-detect step';
+    document.getElementById('add-result-note').textContent='Added to wishlist — tap it in Pantry to update details.';
+    pendingAddProduct={id:'user-'+Date.now(),name,step:'Unknown',status:'wish'};
+  }
+}
+
+function confirmAddProduct(){
+  if(!pendingAddProduct)return;
+  const products=loadProducts();
+  products.push(pendingAddProduct);
+  saveProducts(products);
+  closeAddSheet();
+  renderPantry(document.getElementById('pantry-search').value);
+}
+
+// ===== YOGA MODAL =====
+function openYogaModal(startId){const idx=MOVES.findIndex(m=>m.id===startId);modalMoveIndex=idx>=0?idx:0;document.getElementById('modal-title').innerHTML='Face <span>Yoga</span>';buildModalNav(MOVES,modalMoveIndex);renderModalMove(MOVES[modalMoveIndex]);document.getElementById('yoga-modal').classList.add('open');document.body.style.overflow='hidden';}
+function openGuaModal(){document.getElementById('modal-title').innerHTML='Gua <span>Sha</span>';document.getElementById('modal-nav').innerHTML='';renderModalMove(GUA_STEPS,true);document.getElementById('yoga-modal').classList.add('open');document.body.style.overflow='hidden';}
+function closeModal(){document.getElementById('yoga-modal').classList.remove('open');document.body.style.overflow='';}
+function handleModalTap(e){if(e.target===document.getElementById('yoga-modal'))closeModal();}
+function buildModalNav(moves,activeIdx){document.getElementById('modal-nav').innerHTML=moves.map((m,i)=>`<button class="modal-nav-btn${i===activeIdx?' active':''}" onclick="navToMove(${i})">${m.name.split(' ')[0]}</button>`).join('');}
+function navToMove(idx){modalMoveIndex=idx;buildModalNav(MOVES,idx);renderModalMove(MOVES[idx]);const btns=document.querySelectorAll('.modal-nav-btn');if(btns[idx])btns[idx].scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});}
+function renderModalMove(move,isGua=false){
+  const prev=!isGua&&modalMoveIndex>0?`<button class="move-nav-btn" onclick="navToMove(${modalMoveIndex-1})">← ${MOVES[modalMoveIndex-1].name.split(' ')[0]}</button>`:'<div></div>';
+  const next=!isGua&&modalMoveIndex<MOVES.length-1?`<button class="move-nav-btn primary" onclick="navToMove(${modalMoveIndex+1})">${MOVES[modalMoveIndex+1].name.split(' ')[0]} →</button>`:'<div></div>';
+  document.getElementById('modal-body').innerHTML=`<div class="move-card"><div class="move-visual"><div class="move-visual-fallback"><div class="icon">${move.emoji}</div><p>${move.duration}</p></div></div><div class="move-info"><div class="move-name">${move.name}</div><div class="move-target">${move.target}</div><div class="move-steps">${move.steps}</div><div class="move-tip">💡 ${move.tip}</div></div></div>${!isGua?`<div class="move-nav">${prev}${next}</div>`:''}`;
+}
+
+// ===== RENDER ROUTINE =====
 function render(){
-  if(weekViewOpen)return;
+  if(activeTab!=='routine')return;
   const steps=getSteps();
   const real=getRealSteps();
-  let done=0;
-  real.forEach(s=>{if(checked[key(day,session,steps.indexOf(s))])done++;});
+  let done=0;real.forEach(s=>{if(checked[key(day,session,steps.indexOf(s))])done++;});
   const pct=real.length?Math.round(done/real.length*100):0;
   document.getElementById('prog-label').textContent=`${done} / ${real.length}`;
   document.getElementById('prog-pct').textContent=pct+'%';
   document.getElementById('prog-fill').style.width=pct+'%';
-
   const currentIdx=getCurrentIndex();
   const area=document.getElementById('stack-area');
-
-  if(currentIdx===-1&&real.length>0){
-    area.innerHTML=`<div class="done-banner"><div class="done-banner-title">Routine complete ✨</div><div class="done-banner-sub">your skin is glowing already</div></div>`;
-    document.getElementById('nav-step-info').innerHTML=`<strong>All done!</strong>`;
-    return;
-  }
-
+  if(currentIdx===-1&&real.length>0){area.innerHTML=`<div class="done-banner"><div class="done-banner-title">Routine complete ✨</div><div class="done-banner-sub">your skin is glowing already</div></div>`;document.getElementById('nav-step-info').innerHTML=`<strong>All done!</strong>`;return;}
   let html='';
-  if(session==='pm'&&skinState) html+=`<div class="alert-skin">✨ ${SKIN_NOTES[skinState]}</div>`;
-
-  let shown=0;
-  let stepNum=0;
-  for(let i=0;i<steps.length;i++){
-    if(!steps[i].alert)stepNum++;
-    if(i===currentIdx)break;
-  }
-
+  if(session==='pm'&&skinState)html+=`<div class="alert-skin">✨ ${SKIN_NOTES[skinState]}</div>`;
+  let shown=0,stepNum=0;
+  for(let i=0;i<steps.length;i++){if(!steps[i].alert)stepNum++;if(i===currentIdx)break;}
   for(let i=currentIdx;i<steps.length&&shown<3;i++){
     const s=steps[i];
-    if(s.alert){
-      if(shown===0){
-        const cls={warn:'alert-warn',danger:'alert-danger',info:'alert-info',success:'alert-success'}[s.alert]||'alert-info';
-        html+=`<div class="alert-card ${cls}">${s.text}</div>`;
-      }
-      continue;
-    }
+    if(s.alert){if(shown===0){const cls={warn:'alert-warn',danger:'alert-danger',info:'alert-info',success:'alert-success'}[s.alert]||'alert-info';html+=`<div class="alert-card ${cls}">${s.text}</div>`;}continue;}
     if(checked[key(day,session,i)])continue;
-
     const cardClass=shown===0?'current':shown===1?'next-1':'next-2';
     const did='d'+i;
     let badges='';
@@ -900,79 +1196,11 @@ function render(){
     else if(s.type==='gua')badges+=`<span class="badge b-gua" onclick="event.stopPropagation();openGuaModal()">💜 gua sha — tap to open</span>`;
     if(s.skin)badges+=sk(s.skin);
     const det=(s.d||'').replace(/\n/g,'<br>');
-    const csn=stepNum+shown;
-
-    html+=`<div class="step-card ${cardClass}" id="card-${i}">
-      <div class="card-top" onclick="toggleDetail('${did}')">
-        <div class="step-num ${numClass(s.skin,s.type)}">${csn}</div>
-        <div class="card-main">
-          <div class="card-title">${s.t}</div>
-          <div class="card-product">${s.p}</div>
-          ${badges?`<div class="card-badges">${badges}</div>`:''}
-        </div>
-      </div>
-      <div class="card-detail" id="${did}">${det}</div>
-      <div class="card-action">
-        <button class="complete-btn" onclick="completeStep(${i})">
-          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5l3 3 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Done
-        </button>
-        <button class="skip-btn" onclick="openSkipSheet(${i}, '${s.t.replace(/'/g,"\\'")}')">Skip →</button>
-      </div>
-    </div>`;
+    html+=`<div class="step-card ${cardClass}" id="card-${i}"><div class="card-top" onclick="toggleDetail('${did}')"><div class="step-num ${numClass(s.skin,s.type)}">${stepNum+shown}</div><div class="card-main"><div class="card-title">${s.t}</div><div class="card-product">${s.p}</div>${badges?`<div class="card-badges">${badges}</div>`:''}</div></div><div class="card-detail" id="${did}">${det}</div><div class="card-action"><button class="complete-btn" onclick="completeStep(${i})"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5l3 3 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Done</button><button class="skip-btn" onclick="openSkipSheet(${i},'${s.t.replace(/'/g,"\\'")}')">Skip →</button></div></div>`;
     shown++;
   }
-
   area.innerHTML=html;
   document.getElementById('nav-step-info').innerHTML=`Step <strong>${stepNum}</strong> of ${real.length}`;
-}
-
-// ===================== MODAL =====================
-function openYogaModal(startId){
-  const idx=MOVES.findIndex(m=>m.id===startId);
-  modalMoveIndex=idx>=0?idx:0;
-  document.getElementById('modal-title').innerHTML='Face <span>Yoga</span>';
-  buildModalNav(MOVES,modalMoveIndex);
-  renderModalMove(MOVES[modalMoveIndex]);
-  document.getElementById('yoga-modal').classList.add('open');
-  document.body.style.overflow='hidden';
-}
-function openGuaModal(){
-  document.getElementById('modal-title').innerHTML='Gua <span>Sha</span>';
-  document.getElementById('modal-nav').innerHTML='';
-  renderModalMove(GUA_STEPS,true);
-  document.getElementById('yoga-modal').classList.add('open');
-  document.body.style.overflow='hidden';
-}
-function closeModal(){
-  document.getElementById('yoga-modal').classList.remove('open');
-  document.body.style.overflow='';
-}
-function handleModalTap(e){if(e.target===document.getElementById('yoga-modal'))closeModal();}
-function buildModalNav(moves,activeIdx){
-  document.getElementById('modal-nav').innerHTML=moves.map((m,i)=>`<button class="modal-nav-btn${i===activeIdx?' active':''}" onclick="navToMove(${i})">${m.name.split(' ')[0]}</button>`).join('');
-}
-function navToMove(idx){
-  modalMoveIndex=idx;
-  buildModalNav(MOVES,idx);
-  renderModalMove(MOVES[idx]);
-  const btns=document.querySelectorAll('.modal-nav-btn');
-  if(btns[idx])btns[idx].scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
-}
-function renderModalMove(move,isGua=false){
-  const prev=!isGua&&modalMoveIndex>0?`<button class="move-nav-btn" onclick="navToMove(${modalMoveIndex-1})">← ${MOVES[modalMoveIndex-1].name.split(' ')[0]}</button>`:'<div></div>';
-  const next=!isGua&&modalMoveIndex<MOVES.length-1?`<button class="move-nav-btn primary" onclick="navToMove(${modalMoveIndex+1})">${MOVES[modalMoveIndex+1].name.split(' ')[0]} →</button>`:'<div></div>';
-  document.getElementById('modal-body').innerHTML=`
-    <div class="move-card">
-      <div class="move-visual"><div class="move-visual-fallback"><div class="icon">${move.emoji}</div><p>${move.duration}</p></div></div>
-      <div class="move-info">
-        <div class="move-name">${move.name}</div>
-        <div class="move-target">${move.target}</div>
-        <div class="move-steps">${move.steps}</div>
-        <div class="move-tip">💡 ${move.tip}</div>
-      </div>
-    </div>
-    ${!isGua?`<div class="move-nav">${prev}${next}</div>`:''}`;
 }
 
 render();
