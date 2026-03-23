@@ -609,39 +609,289 @@ function saveProducts(p){try{localStorage.setItem('routine_products',JSON.string
 const SKIN_NOTES={calm:'All clear — carry on with your full routine tonight.',flushed:'Skip gua sha tonight. Use a lighter touch and focus on soothing ingredients.',dry:'Consider layering an extra pump of moisturizer. Re-spritz toner more generously.',sensitive:'Skip retinol if your skin is feeling reactive. Focus on barrier support — niacinamide, ceramides, and PDRN only tonight.'};
 const sk=(s)=>{if(s==='wet')return'<span class="badge b-wet">💧 wet</span>';if(s==='go')return'<span class="badge b-go">✅ go</span>';if(s==='dry')return'<span class="badge b-dry">○ dry</span>';if(s==='refresh')return'<span class="badge b-refresh">🔄 refresh</span>';return'';};
 
+// ===== SVG ILLUSTRATIONS =====
+// Each returns an inline SVG string — no external URLs, always works
+const SVGS = {
+
+'cheek-lifter': `<svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+  <rect width="300" height="200" fill="#faf7f2"/>
+  <!-- face -->
+  <ellipse cx="150" cy="95" rx="58" ry="72" fill="#f5e6da" stroke="#c4907a" stroke-width="1.5"/>
+  <!-- eyes -->
+  <ellipse cx="130" cy="78" rx="10" ry="6" fill="#fff" stroke="#5a4a42" stroke-width="1"/>
+  <ellipse cx="170" cy="78" rx="10" ry="6" fill="#fff" stroke="#5a4a42" stroke-width="1"/>
+  <circle cx="131" cy="79" r="4" fill="#2c2420"/>
+  <circle cx="171" cy="79" r="4" fill="#2c2420"/>
+  <!-- O mouth -->
+  <ellipse cx="150" cy="118" rx="14" ry="18" fill="#c4907a" stroke="#a06b58" stroke-width="1.5"/>
+  <ellipse cx="150" cy="118" rx="9" ry="13" fill="#2c2420"/>
+  <!-- cheek highlights animated -->
+  <ellipse cx="118" cy="100" rx="16" ry="10" fill="#e8c4b0" opacity="0.7">
+    <animate attributeName="ry" values="10;14;10" dur="1.4s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.7;1;0.7" dur="1.4s" repeatCount="indefinite"/>
+  </ellipse>
+  <ellipse cx="182" cy="100" rx="16" ry="10" fill="#e8c4b0" opacity="0.7">
+    <animate attributeName="ry" values="10;14;10" dur="1.4s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.7;1;0.7" dur="1.4s" repeatCount="indefinite"/>
+  </ellipse>
+  <!-- fingertip dots -->
+  <circle cx="110" cy="98" r="5" fill="#c4907a" opacity="0.9"/>
+  <circle cx="120" cy="94" r="5" fill="#c4907a" opacity="0.9"/>
+  <circle cx="130" cy="92" r="5" fill="#c4907a" opacity="0.9"/>
+  <circle cx="170" cy="92" r="5" fill="#c4907a" opacity="0.9"/>
+  <circle cx="180" cy="94" r="5" fill="#c4907a" opacity="0.9"/>
+  <circle cx="190" cy="98" r="5" fill="#c4907a" opacity="0.9"/>
+  <!-- up arrows -->
+  <g fill="#b8965a">
+    <polygon points="118,72 114,82 122,82" opacity="0.9"><animate attributeName="opacity" values="0.9;0.3;0.9" dur="1.4s" repeatCount="indefinite"/></polygon>
+    <polygon points="182,72 178,82 186,82" opacity="0.9"><animate attributeName="opacity" values="0.9;0.3;0.9" dur="1.4s" repeatCount="indefinite"/></polygon>
+  </g>
+  <text x="150" y="188" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" fill="#9a8a82" letter-spacing="1">LIFT &amp; HOLD</text>
+</svg>`,
+
+'jawline-definer': `<svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+  <rect width="300" height="200" fill="#faf7f2"/>
+  <!-- side profile face tilted back -->
+  <ellipse cx="150" cy="80" rx="52" ry="62" fill="#f5e6da" stroke="#c4907a" stroke-width="1.5" transform="rotate(-20 150 80)"/>
+  <!-- neck -->
+  <rect x="132" y="128" width="36" height="40" rx="10" fill="#f5e6da" stroke="#c4907a" stroke-width="1.5"/>
+  <!-- eye -->
+  <ellipse cx="166" cy="68" rx="9" ry="5" fill="#fff" stroke="#5a4a42" stroke-width="1"/>
+  <circle cx="167" cy="69" r="3.5" fill="#2c2420"/>
+  <!-- puckered lips -->
+  <ellipse cx="148" cy="100" rx="10" ry="7" fill="#c4907a" stroke="#a06b58" stroke-width="1"/>
+  <path d="M142,100 Q150,96 158,100" fill="none" stroke="#a06b58" stroke-width="1"/>
+  <!-- ceiling kiss arrow -->
+  <line x1="150" y1="28" x2="150" y2="58" stroke="#b8965a" stroke-width="2" stroke-dasharray="4,3"/>
+  <polygon points="150,18 144,32 156,32" fill="#b8965a"/>
+  <!-- platysma lines on neck -->
+  <line x1="138" y1="135" x2="136" y2="165" stroke="#e8c4b0" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <line x1="150" y1="133" x2="150" y2="165" stroke="#e8c4b0" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <line x1="162" y1="135" x2="164" y2="165" stroke="#e8c4b0" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <text x="150" y="188" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" fill="#9a8a82" letter-spacing="1">KISS THE CEILING</text>
+</svg>`,
+
+'happy-cheeks': `<svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+  <rect width="300" height="200" fill="#faf7f2"/>
+  <ellipse cx="150" cy="92" rx="58" ry="70" fill="#f5e6da" stroke="#c4907a" stroke-width="1.5"/>
+  <!-- eyes smiling -->
+  <path d="M120,75 Q130,70 140,75" fill="none" stroke="#2c2420" stroke-width="2" stroke-linecap="round"/>
+  <path d="M160,75 Q170,70 180,75" fill="none" stroke="#2c2420" stroke-width="2" stroke-linecap="round"/>
+  <!-- big smile -->
+  <path d="M125,112 Q150,135 175,112" fill="none" stroke="#2c2420" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- cheek apples animated rising -->
+  <ellipse cx="116" cy="104" rx="18" ry="12" fill="#e8a090" opacity="0.6">
+    <animate attributeName="cy" values="104;96;104" dur="1.6s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.6;0.9;0.6" dur="1.6s" repeatCount="indefinite"/>
+  </ellipse>
+  <ellipse cx="184" cy="104" rx="18" ry="12" fill="#e8a090" opacity="0.6">
+    <animate attributeName="cy" values="104;96;104" dur="1.6s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.6;0.9;0.6" dur="1.6s" repeatCount="indefinite"/>
+  </ellipse>
+  <!-- finger lines -->
+  <line x1="106" y1="120" x2="110" y2="100" stroke="#c4907a" stroke-width="2" stroke-linecap="round"/>
+  <line x1="175" y1="120" x2="186" y2="100" stroke="#c4907a" stroke-width="2" stroke-linecap="round"/>
+  <!-- up arrows -->
+  <polygon points="116,80 111,92 121,92" fill="#b8965a" opacity="0.8"><animate attributeName="opacity" values="0.8;0.2;0.8" dur="1.6s" repeatCount="indefinite"/></polygon>
+  <polygon points="184,80 179,92 189,92" fill="#b8965a" opacity="0.8"><animate attributeName="opacity" values="0.8;0.2;0.8" dur="1.6s" repeatCount="indefinite"/></polygon>
+  <text x="150" y="188" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" fill="#9a8a82" letter-spacing="1">FORCE CHEEKS UP</text>
+</svg>`,
+
+'tongue-press': `<svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+  <rect width="300" height="200" fill="#faf7f2"/>
+  <ellipse cx="150" cy="90" rx="58" ry="70" fill="#f5e6da" stroke="#c4907a" stroke-width="1.5"/>
+  <!-- eyes -->
+  <ellipse cx="130" cy="72" rx="10" ry="6" fill="#fff" stroke="#5a4a42" stroke-width="1"/>
+  <ellipse cx="170" cy="72" rx="10" ry="6" fill="#fff" stroke="#5a4a42" stroke-width="1"/>
+  <circle cx="131" cy="73" r="4" fill="#2c2420"/>
+  <circle cx="171" cy="73" r="4" fill="#2c2420"/>
+  <!-- wide smile -->
+  <path d="M118,112 Q150,138 182,112" fill="none" stroke="#2c2420" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- tongue pressing up indicator -->
+  <ellipse cx="150" cy="118" rx="12" ry="7" fill="#e8a090" opacity="0.8"/>
+  <line x1="150" y1="116" x2="150" y2="102" stroke="#c4907a" stroke-width="2" stroke-dasharray="3,2"/>
+  <polygon points="150,94 145,106 155,106" fill="#c4907a">
+    <animate attributeName="opacity" values="1;0.3;1" dur="1.2s" repeatCount="indefinite"/>
+  </polygon>
+  <!-- roof of mouth label -->
+  <path d="M120,96 Q150,88 180,96" fill="none" stroke="#e8c4b0" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <text x="150" y="188" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" fill="#9a8a82" letter-spacing="1">TONGUE TO ROOF · SMILE WIDE</text>
+</svg>`,
+
+'eyebrow-lifter': `<svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+  <rect width="300" height="200" fill="#faf7f2"/>
+  <ellipse cx="150" cy="100" rx="58" ry="70" fill="#f5e6da" stroke="#c4907a" stroke-width="1.5"/>
+  <!-- brows -->
+  <path d="M116,72 Q130,65 144,70" fill="none" stroke="#5a4a42" stroke-width="3" stroke-linecap="round"/>
+  <path d="M156,70 Q170,65 184,72" fill="none" stroke="#5a4a42" stroke-width="3" stroke-linecap="round"/>
+  <!-- eyes wide open -->
+  <ellipse cx="130" cy="82" rx="13" ry="10" fill="#fff" stroke="#5a4a42" stroke-width="1.5"/>
+  <ellipse cx="170" cy="82" rx="13" ry="10" fill="#fff" stroke="#5a4a42" stroke-width="1.5"/>
+  <circle cx="130" cy="83" r="6" fill="#2c2420"/>
+  <circle cx="170" cy="83" r="6" fill="#2c2420"/>
+  <!-- fingertips under brows -->
+  <rect x="112" y="68" width="8" height="5" rx="2.5" fill="#c4907a"/>
+  <rect x="123" y="65" width="8" height="5" rx="2.5" fill="#c4907a"/>
+  <rect x="134" y="63" width="8" height="5" rx="2.5" fill="#c4907a"/>
+  <rect x="150" y="63" width="8" height="5" rx="2.5" fill="#c4907a"/>
+  <rect x="161" y="65" width="8" height="5" rx="2.5" fill="#c4907a"/>
+  <rect x="172" y="68" width="8" height="5" rx="2.5" fill="#c4907a"/>
+  <!-- resist arrows down -->
+  <polygon points="130,52 125,62 135,62" fill="#b8965a" transform="rotate(180 130 57)"/>
+  <polygon points="170,52 165,62 175,62" fill="#b8965a" transform="rotate(180 170 57)"/>
+  <text x="150" y="188" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" fill="#9a8a82" letter-spacing="1">PUSH UP · RESIST DOWN</text>
+</svg>`,
+
+'thumb-flick': `<svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+  <rect width="300" height="200" fill="#faf7f2"/>
+  <ellipse cx="150" cy="90" rx="58" ry="70" fill="#f5e6da" stroke="#c4907a" stroke-width="1.5"/>
+  <!-- eyes neutral -->
+  <ellipse cx="130" cy="74" rx="10" ry="6" fill="#fff" stroke="#5a4a42" stroke-width="1"/>
+  <ellipse cx="170" cy="74" rx="10" ry="6" fill="#fff" stroke="#5a4a42" stroke-width="1"/>
+  <circle cx="131" cy="75" r="4" fill="#2c2420"/>
+  <circle cx="171" cy="75" r="4" fill="#2c2420"/>
+  <!-- 11 lines highlighted -->
+  <line x1="145" y1="68" x2="144" y2="88" stroke="#c47a7a" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="155" y1="68" x2="156" y2="88" stroke="#c47a7a" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- thumb flicking animated -->
+  <g>
+    <ellipse cx="150" cy="78" rx="10" ry="6" fill="#f5e6da" stroke="#c4907a" stroke-width="1.5">
+      <animate attributeName="cx" values="150;146;154;150" dur="0.6s" repeatCount="indefinite"/>
+    </ellipse>
+    <circle cx="150" cy="78" r="5" fill="#c4907a" opacity="0.8">
+      <animate attributeName="cx" values="150;146;154;150" dur="0.6s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  <!-- relaxation waves -->
+  <path d="M130,60 Q150,54 170,60" fill="none" stroke="#b8965a" stroke-width="1" opacity="0.5" stroke-dasharray="3,3"/>
+  <path d="M125,55 Q150,48 175,55" fill="none" stroke="#b8965a" stroke-width="1" opacity="0.3" stroke-dasharray="3,3"/>
+  <text x="150" y="188" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" fill="#9a8a82" letter-spacing="1">FLICK · RELAX THE PROCERUS</text>
+</svg>`,
+
+'pinch-resist': `<svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+  <rect width="300" height="200" fill="#faf7f2"/>
+  <ellipse cx="150" cy="90" rx="58" ry="70" fill="#f5e6da" stroke="#c4907a" stroke-width="1.5"/>
+  <ellipse cx="130" cy="74" rx="10" ry="6" fill="#fff" stroke="#5a4a42" stroke-width="1"/>
+  <ellipse cx="170" cy="74" rx="10" ry="6" fill="#fff" stroke="#5a4a42" stroke-width="1"/>
+  <circle cx="131" cy="75" r="4" fill="#2c2420"/>
+  <circle cx="171" cy="75" r="4" fill="#2c2420"/>
+  <!-- 11 lines -->
+  <line x1="145" y1="62" x2="144" y2="85" stroke="#c47a7a" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="155" y1="62" x2="156" y2="85" stroke="#c47a7a" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- pinch fingers -->
+  <ellipse cx="140" cy="74" rx="8" ry="5" fill="#f5e6da" stroke="#c4907a" stroke-width="1.5" transform="rotate(-20 140 74)"/>
+  <ellipse cx="160" cy="74" rx="8" ry="5" fill="#f5e6da" stroke="#c4907a" stroke-width="1.5" transform="rotate(20 160 74)"/>
+  <!-- resist arrows outward -->
+  <polygon points="132,74 122,69 122,79" fill="#b8965a" opacity="0.8"/>
+  <polygon points="168,74 178,69 178,79" fill="#b8965a" opacity="0.8"/>
+  <text x="150" y="188" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" fill="#9a8a82" letter-spacing="1">PINCH · TRY TO FROWN · RESIST</text>
+</svg>`,
+
+'upward-stroke': `<svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+  <rect width="300" height="200" fill="#faf7f2"/>
+  <ellipse cx="150" cy="95" rx="58" ry="70" fill="#f5e6da" stroke="#c4907a" stroke-width="1.5"/>
+  <ellipse cx="130" cy="76" rx="10" ry="6" fill="#fff" stroke="#5a4a42" stroke-width="1"/>
+  <ellipse cx="170" cy="76" rx="10" ry="6" fill="#fff" stroke="#5a4a42" stroke-width="1"/>
+  <circle cx="131" cy="77" r="4" fill="#2c2420"/>
+  <circle cx="171" cy="77" r="4" fill="#2c2420"/>
+  <!-- nose bridge -->
+  <path d="M147,88 Q150,95 153,88" fill="none" stroke="#c4907a" stroke-width="1.5"/>
+  <!-- upward stroke line animated -->
+  <line x1="150" y1="92" x2="150" y2="55" stroke="#b8965a" stroke-width="3" stroke-linecap="round">
+    <animate attributeName="y2" values="92;40;92" dur="1.5s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
+  </line>
+  <!-- arrow tip animated -->
+  <polygon points="150,40 144,56 156,56" fill="#b8965a">
+    <animate attributeName="points" values="150,40 144,56 156,56;150,25 144,41 156,41;150,40 144,56 156,56" dur="1.5s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
+  </polygon>
+  <!-- hooked finger -->
+  <path d="M145,95 Q138,90 140,82 Q142,75 150,72" fill="none" stroke="#c4907a" stroke-width="2.5" stroke-linecap="round"/>
+  <text x="150" y="188" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" fill="#9a8a82" letter-spacing="1">STROKE UPWARD · IRON IT OUT</text>
+</svg>`,
+
+'knuckle-slide': `<svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+  <rect width="300" height="200" fill="#faf7f2"/>
+  <ellipse cx="150" cy="95" rx="58" ry="70" fill="#f5e6da" stroke="#c4907a" stroke-width="1.5"/>
+  <!-- eyes -->
+  <ellipse cx="130" cy="78" rx="10" ry="6" fill="#fff" stroke="#5a4a42" stroke-width="1"/>
+  <ellipse cx="170" cy="78" rx="10" ry="6" fill="#fff" stroke="#5a4a42" stroke-width="1"/>
+  <circle cx="131" cy="79" r="4" fill="#2c2420"/>
+  <circle cx="171" cy="79" r="4" fill="#2c2420"/>
+  <!-- forehead zone -->
+  <rect x="110" y="52" width="80" height="22" rx="6" fill="#e8d5c4" opacity="0.5"/>
+  <!-- left knuckle sliding outward -->
+  <g>
+    <rect x="134" y="55" width="16" height="10" rx="4" fill="#c4907a" opacity="0.9">
+      <animate attributeName="x" values="134;108;134" dur="2s" repeatCount="indefinite"/>
+    </rect>
+  </g>
+  <!-- right knuckle sliding outward -->
+  <g>
+    <rect x="150" y="55" width="16" height="10" rx="4" fill="#c4907a" opacity="0.9">
+      <animate attributeName="x" values="150;176;150" dur="2s" repeatCount="indefinite"/>
+    </rect>
+  </g>
+  <!-- arrows outward -->
+  <polygon points="108,60 120,54 120,66" fill="#b8965a" opacity="0.7"><animate attributeName="opacity" values="0.7;0.1;0.7" dur="2s" repeatCount="indefinite"/></polygon>
+  <polygon points="192,60 180,54 180,66" fill="#b8965a" opacity="0.7"><animate attributeName="opacity" values="0.7;0.1;0.7" dur="2s" repeatCount="indefinite"/></polygon>
+  <text x="150" y="188" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" fill="#9a8a82" letter-spacing="1">SLIDE OUTWARD TO TEMPLES</text>
+</svg>`,
+
+'gua-sha': `<svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+  <rect width="300" height="200" fill="#2c2420"/>
+  <!-- face outline -->
+  <ellipse cx="150" cy="95" rx="60" ry="72" fill="#3d2e28" stroke="#b8965a" stroke-width="1"/>
+  <!-- neck -->
+  <rect x="133" y="158" width="34" height="28" rx="10" fill="#3d2e28" stroke="#b8965a" stroke-width="1"/>
+  <!-- eyes -->
+  <ellipse cx="130" cy="78" rx="10" ry="5" fill="#4a3830" stroke="#b8965a" stroke-width="0.8"/>
+  <ellipse cx="170" cy="78" rx="10" ry="5" fill="#4a3830" stroke="#b8965a" stroke-width="0.8"/>
+  <!-- gua sha stone shape -->
+  <path d="M218,55 Q228,60 226,78 Q224,96 214,100 Q204,104 200,90 Q196,76 204,64 Z" fill="#9b8faa" stroke="#6b5f7a" stroke-width="1"/>
+  <!-- stroke lines animated -->
+  <!-- jawline stroke -->
+  <line x1="150" y1="145" x2="192" y2="118" stroke="#b8965a" stroke-width="2" stroke-dasharray="6,4" stroke-linecap="round">
+    <animate attributeName="stroke-dashoffset" values="0;-20" dur="1s" repeatCount="indefinite"/>
+  </line>
+  <polygon points="192,118 182,116 186,126" fill="#b8965a"><animate attributeName="opacity" values="1;0.3;1" dur="1s" repeatCount="indefinite"/></polygon>
+  <!-- cheek stroke -->
+  <line x1="118" y1="108" x2="185" y2="100" stroke="#d4b07a" stroke-width="1.5" stroke-dasharray="5,3" stroke-linecap="round">
+    <animate attributeName="stroke-dashoffset" values="0;-16" dur="1.2s" repeatCount="indefinite"/>
+  </line>
+  <polygon points="185,100 174,96 176,106" fill="#d4b07a"><animate attributeName="opacity" values="1;0.3;1" dur="1.2s" repeatCount="indefinite"/></polygon>
+  <!-- neck stroke downward -->
+  <line x1="145" y1="158" x2="145" y2="184" stroke="#c4907a" stroke-width="1.5" stroke-dasharray="4,3" stroke-linecap="round">
+    <animate attributeName="stroke-dashoffset" values="0;-14" dur="0.9s" repeatCount="indefinite"/>
+  </line>
+  <polygon points="145,184 140,172 150,172" fill="#c4907a"><animate attributeName="opacity" values="1;0.3;1" dur="0.9s" repeatCount="indefinite"/></polygon>
+  <text x="150" y="14" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#b8965a" letter-spacing="2">ALWAYS UPWARD &amp; OUTWARD</text>
+</svg>`
+};
+
 // ===== MOVES =====
-// visual: gif = animated GIF URL, img = static illustration URL, type: 'gif'|'img'
 const MOVES=[
   {id:'cheek-lifter',name:'Cheek Lifter',target:'Cheeks · Mid-face',
-   visual:{type:'gif',url:'https://media3.giphy.com/media/KduvXGMPBZAv0tGyT8/giphy.gif',credit:'Face Yoga Method'},
    steps:`<strong>1.</strong> Open mouth into a big O shape.<br><strong>2.</strong> Fold upper lip over top teeth.<br><strong>3.</strong> Smile as wide as you can to push cheeks up.<br><strong>4.</strong> Place fingertips lightly on top of cheeks.<br><strong>5.</strong> Lower and lift cheeks 10×.<br><strong>6.</strong> Hold lifted for 20 seconds.`,tip:'Feel the burn in your cheek muscles — that means it\'s working.',duration:'1 min'},
   {id:'jawline-definer',name:'Jawline Definer',target:'Jaw · Neck · Platysma',
-   visual:{type:'img',url:'https://mindbodygreen-res.cloudinary.com/image/upload/w_480,q_90,f_auto,fl_lossy/org/fatr9kaumkc517wp8.jpg',credit:'MindBodyGreen'},
    steps:`<strong>1.</strong> Sit up straight.<br><strong>2.</strong> Tilt head back — look at the ceiling.<br><strong>3.</strong> Pucker lips like kissing the ceiling.<br><strong>4.</strong> Hold 5 seconds.<br><strong>5.</strong> Relax. Repeat 10×.`,tip:'Strengthens the platysma muscle running down the jaw and neck.',duration:'1 min'},
   {id:'happy-cheeks',name:'Happy Cheeks Sculpting',target:'Cheekbones · Zygomaticus',
-   visual:{type:'gif',url:'https://media4.giphy.com/media/MDxZTv3CelDQWCAKOS/giphy.gif',credit:'Face Yoga Method'},
    steps:`<strong>1.</strong> Smile without showing teeth.<br><strong>2.</strong> Purse lips together.<br><strong>3.</strong> Smile again — force cheeks upward.<br><strong>4.</strong> Place fingers at corners of mouth.<br><strong>5.</strong> Slide fingers up to top of cheeks.<br><strong>6.</strong> Hold 20 seconds. Repeat 3×.`,tip:'Targets zygomaticus muscles for lifted cheekbones.',duration:'1 min'},
   {id:'tongue-press',name:'Tongue Press Smile',target:'Jawline · Chin',
-   visual:{type:'gif',url:'https://media2.giphy.com/media/H1e7NCXEuZW7U9deHQ/giphy.gif',credit:'Face Yoga Method'},
    steps:`<strong>1.</strong> Press tongue firmly against roof of mouth.<br><strong>2.</strong> Smile as wide as possible while keeping tongue up.<br><strong>3.</strong> Hold 5 seconds.<br><strong>4.</strong> Release. Repeat 10–15×.`,tip:'Defines jawline and reduces double chin simultaneously.',duration:'1 min'},
   {id:'eyebrow-lifter',name:'Eyebrow Lifter',target:'Brow · Upper face',
-   visual:{type:'img',url:'https://mindbodygreen-res.cloudinary.com/image/upload/w_480,q_90,f_auto,fl_lossy/org/nfi6jyu2fkc51bvkj.jpg',credit:'MindBodyGreen'},
    steps:`<strong>1.</strong> Place 3 fingertips under each eyebrow.<br><strong>2.</strong> Push eyes wide open with fingers.<br><strong>3.</strong> Try to push brows DOWN against your fingers.<br><strong>4.</strong> Close eyes and roll eyeballs upward.<br><strong>5.</strong> Hold 20 seconds. Repeat 3×.`,tip:'Prevents forehead lines while lifting the brow area.',duration:'30 sec'},
   {id:'thumb-flick',name:'Thumb Flick Relaxer',target:'11 Lines · Procerus',
-   visual:{type:'img',url:'https://mindbodygreen-res.cloudinary.com/image/upload/w_480,q_90,f_auto,fl_lossy/org/5wdh7ctfnkc5195e3.jpg',credit:'MindBodyGreen'},
    steps:`<strong>1.</strong> Hold thumb upside down.<br><strong>2.</strong> Gently flick the pad of your thumb against your 11 lines.<br><strong>3.</strong> Continue for 1 full minute.`,tip:'Sends signals to the procerus muscle to RELAX.',duration:'1 min'},
   {id:'pinch-resist',name:'Pinch and Resist',target:'11 Lines · Procerus',
-   visual:{type:'gif',url:'https://prod-strapi-wellness.s3.eu-west-1.amazonaws.com/giphy_1_aef3481524.gif',credit:'Luvly'},
    steps:`<strong>1.</strong> Pinch the skin between your eyebrows gently.<br><strong>2.</strong> Try to frown against the resistance.<br><strong>3.</strong> Hold 3 seconds. Release. Repeat for 1 minute.`,tip:'Trains the procerus muscle NOT to contract.',duration:'1 min'},
   {id:'upward-stroke',name:'Upward Stroke Smoothing',target:'11 Lines · Smoothing',
-   visual:{type:'gif',url:'https://prod-strapi-wellness.s3.eu-west-1.amazonaws.com/giphy_1_532d320544.gif',credit:'Luvly'},
    steps:`<strong>1.</strong> Bend index finger into a hook.<br><strong>2.</strong> Stroke UPWARD from bridge of nose to forehead.<br><strong>3.</strong> Light but firm pressure.<br><strong>4.</strong> Repeat for 30 seconds.`,tip:'Always stroke upward, never downward.',duration:'30 sec'},
   {id:'knuckle-slide',name:'Knuckle Slide',target:'11 Lines · Full Forehead',
-   visual:{type:'gif',url:'https://prod-strapi-wellness.s3.eu-west-1.amazonaws.com/giphy_5d0c57e05e.gif',credit:'Luvly'},
    steps:`<strong>1.</strong> Make loose fists with both hands.<br><strong>2.</strong> Place knuckles at center of forehead.<br><strong>3.</strong> Apply gentle pressure.<br><strong>4.</strong> Slowly slide fists outward toward temples.<br><strong>5.</strong> Return to center. Repeat 5× for 2–3 sets.`,tip:'Releases tension across entire forehead.',duration:'1 min'}
 ];
 const GUA_STEPS={id:'gua-sha',name:'Gua Sha',target:'Lymphatic drainage · Jawline · Full face',
-  visual:{type:'gif',url:'https://media1.tenor.com/m/EzG0MKnwcEwAAAAd/facial-gua-sha.gif',credit:'Tenor'},
   steps:`<strong>1. NECK FIRST</strong> — stroke downward from jaw to collarbone, 5× each side.<br><br><strong>2. JAWLINE</strong> — stone at 45°, stroke chin to earlobe, 5× each side.<br><br><strong>3. CHEEKS</strong> — stroke nose outward to ear, 5× each side.<br><br><strong>4. UNDER EYES</strong> — smallest edge, very light pressure, 3× each side.<br><br><strong>5. FOREHEAD</strong> — stroke brow upward to hairline, 5×.<br><br><strong>6. FINISH</strong> — press stone flat on each cheek 5 sec.`,tip:'Always UPWARD and OUTWARD. Skip if skin looks very flushed. Always after face oil.',duration:'5 min'};
 
 // ===== ROUTINE DATA =====
@@ -1183,21 +1433,11 @@ function navToMove(idx){modalMoveIndex=idx;buildModalNav(MOVES,idx);renderModalM
 function renderModalMove(move,isGua=false){
   const prev=!isGua&&modalMoveIndex>0?`<button class="move-nav-btn" onclick="navToMove(${modalMoveIndex-1})">← ${MOVES[modalMoveIndex-1].name.split(' ')[0]}</button>`:'<div></div>';
   const next=!isGua&&modalMoveIndex<MOVES.length-1?`<button class="move-nav-btn primary" onclick="navToMove(${modalMoveIndex+1})">${MOVES[modalMoveIndex+1].name.split(' ')[0]} →</button>`:'<div></div>';
-  const v=move.visual;
-  const uid='mv'+Math.random().toString(36).substr(2,5);
-  const visualHtml=v
-    ?`<div class="move-visual" style="background:#111;position:relative;overflow:hidden;">
-        <img id="i${uid}" src="${v.url}" alt="${move.name}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none';document.getElementById('f${uid}').style.display='flex';">
-        <div id="f${uid}" style="display:none;position:absolute;inset:0;background:linear-gradient(135deg,var(--warm-white),var(--blush));align-items:center;justify-content:center;flex-direction:column;gap:8px;">
-          <div style="font-size:48px">${move.emoji||'🌿'}</div>
-          <div style="font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-light)">${move.duration}</div>
-        </div>
-        ${v.credit?`<div style="position:absolute;bottom:6px;right:8px;font-size:9px;color:rgba(255,255,255,0.45);background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:6px;">${v.credit}</div>`:''}
-      </div>`
-    :`<div class="move-visual"><div class="move-visual-fallback"><div class="icon">${move.emoji||'🌿'}</div><p>${move.duration}</p></div></div>`;
+  const svgKey=isGua?'gua-sha':move.id;
+  const svgContent=SVGS[svgKey]||`<div class="move-visual-fallback"><div style="font-size:48px">🌿</div><p>${move.duration}</p></div>`;
   document.getElementById('modal-body').innerHTML=`
     <div class="move-card">
-      ${visualHtml}
+      <div class="move-visual" style="padding:0;overflow:hidden;">${svgContent}</div>
       <div class="move-info">
         <div class="move-name">${move.name}</div>
         <div class="move-target">${move.target}</div>
