@@ -517,6 +517,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text-d
 </div>
 
 <script>
+// ===== API CONFIG =====
+const API_HEADERS = {
+  'Content-Type': 'application/json',
+  'x-api-key': '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',
+  'anthropic-version': '2023-06-01',
+  'anthropic-dangerous-direct-browser-access': 'true'
+};
+
 // ===== CONSTANTS =====
 const DAY_KEYS=['mon','tue','wed','thu','fri','sat','sun'];
 const DAY_LABELS={mon:'Mon',tue:'Tue',wed:'Wed',thu:'Thu',fri:'Fri',sat:'Sat',sun:'Sun'};
@@ -610,22 +618,17 @@ const SKIN_NOTES={calm:'All clear — carry on with your full routine tonight.',
 const sk=(s)=>{if(s==='wet')return'<span class="badge b-wet">💧 wet</span>';if(s==='go')return'<span class="badge b-go">✅ go</span>';if(s==='dry')return'<span class="badge b-dry">○ dry</span>';if(s==='refresh')return'<span class="badge b-refresh">🔄 refresh</span>';return'';};
 
 // ===== SVG ILLUSTRATIONS =====
-// Each returns an inline SVG string — no external URLs, always works
 const SVGS = {
 
 'cheek-lifter': `<svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
   <rect width="300" height="200" fill="#faf7f2"/>
-  <!-- face -->
   <ellipse cx="150" cy="95" rx="58" ry="72" fill="#f5e6da" stroke="#c4907a" stroke-width="1.5"/>
-  <!-- eyes -->
   <ellipse cx="130" cy="78" rx="10" ry="6" fill="#fff" stroke="#5a4a42" stroke-width="1"/>
   <ellipse cx="170" cy="78" rx="10" ry="6" fill="#fff" stroke="#5a4a42" stroke-width="1"/>
   <circle cx="131" cy="79" r="4" fill="#2c2420"/>
   <circle cx="171" cy="79" r="4" fill="#2c2420"/>
-  <!-- O mouth -->
   <ellipse cx="150" cy="118" rx="14" ry="18" fill="#c4907a" stroke="#a06b58" stroke-width="1.5"/>
   <ellipse cx="150" cy="118" rx="9" ry="13" fill="#2c2420"/>
-  <!-- cheek highlights animated -->
   <ellipse cx="118" cy="100" rx="16" ry="10" fill="#e8c4b0" opacity="0.7">
     <animate attributeName="ry" values="10;14;10" dur="1.4s" repeatCount="indefinite"/>
     <animate attributeName="opacity" values="0.7;1;0.7" dur="1.4s" repeatCount="indefinite"/>
@@ -634,14 +637,12 @@ const SVGS = {
     <animate attributeName="ry" values="10;14;10" dur="1.4s" repeatCount="indefinite"/>
     <animate attributeName="opacity" values="0.7;1;0.7" dur="1.4s" repeatCount="indefinite"/>
   </ellipse>
-  <!-- fingertip dots -->
   <circle cx="110" cy="98" r="5" fill="#c4907a" opacity="0.9"/>
   <circle cx="120" cy="94" r="5" fill="#c4907a" opacity="0.9"/>
   <circle cx="130" cy="92" r="5" fill="#c4907a" opacity="0.9"/>
   <circle cx="170" cy="92" r="5" fill="#c4907a" opacity="0.9"/>
   <circle cx="180" cy="94" r="5" fill="#c4907a" opacity="0.9"/>
   <circle cx="190" cy="98" r="5" fill="#c4907a" opacity="0.9"/>
-  <!-- up arrows -->
   <g fill="#b8965a">
     <polygon points="118,72 114,82 122,82" opacity="0.9"><animate attributeName="opacity" values="0.9;0.3;0.9" dur="1.4s" repeatCount="indefinite"/></polygon>
     <polygon points="182,72 178,82 186,82" opacity="0.9"><animate attributeName="opacity" values="0.9;0.3;0.9" dur="1.4s" repeatCount="indefinite"/></polygon>
@@ -651,20 +652,14 @@ const SVGS = {
 
 'jawline-definer': `<svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
   <rect width="300" height="200" fill="#faf7f2"/>
-  <!-- side profile face tilted back -->
   <ellipse cx="150" cy="80" rx="52" ry="62" fill="#f5e6da" stroke="#c4907a" stroke-width="1.5" transform="rotate(-20 150 80)"/>
-  <!-- neck -->
   <rect x="132" y="128" width="36" height="40" rx="10" fill="#f5e6da" stroke="#c4907a" stroke-width="1.5"/>
-  <!-- eye -->
   <ellipse cx="166" cy="68" rx="9" ry="5" fill="#fff" stroke="#5a4a42" stroke-width="1"/>
   <circle cx="167" cy="69" r="3.5" fill="#2c2420"/>
-  <!-- puckered lips -->
   <ellipse cx="148" cy="100" rx="10" ry="7" fill="#c4907a" stroke="#a06b58" stroke-width="1"/>
   <path d="M142,100 Q150,96 158,100" fill="none" stroke="#a06b58" stroke-width="1"/>
-  <!-- ceiling kiss arrow -->
   <line x1="150" y1="28" x2="150" y2="58" stroke="#b8965a" stroke-width="2" stroke-dasharray="4,3"/>
   <polygon points="150,18 144,32 156,32" fill="#b8965a"/>
-  <!-- platysma lines on neck -->
   <line x1="138" y1="135" x2="136" y2="165" stroke="#e8c4b0" stroke-width="1.5" stroke-dasharray="3,2"/>
   <line x1="150" y1="133" x2="150" y2="165" stroke="#e8c4b0" stroke-width="1.5" stroke-dasharray="3,2"/>
   <line x1="162" y1="135" x2="164" y2="165" stroke="#e8c4b0" stroke-width="1.5" stroke-dasharray="3,2"/>
@@ -674,12 +669,9 @@ const SVGS = {
 'happy-cheeks': `<svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
   <rect width="300" height="200" fill="#faf7f2"/>
   <ellipse cx="150" cy="92" rx="58" ry="70" fill="#f5e6da" stroke="#c4907a" stroke-width="1.5"/>
-  <!-- eyes smiling -->
   <path d="M120,75 Q130,70 140,75" fill="none" stroke="#2c2420" stroke-width="2" stroke-linecap="round"/>
   <path d="M160,75 Q170,70 180,75" fill="none" stroke="#2c2420" stroke-width="2" stroke-linecap="round"/>
-  <!-- big smile -->
   <path d="M125,112 Q150,135 175,112" fill="none" stroke="#2c2420" stroke-width="2.5" stroke-linecap="round"/>
-  <!-- cheek apples animated rising -->
   <ellipse cx="116" cy="104" rx="18" ry="12" fill="#e8a090" opacity="0.6">
     <animate attributeName="cy" values="104;96;104" dur="1.6s" repeatCount="indefinite"/>
     <animate attributeName="opacity" values="0.6;0.9;0.6" dur="1.6s" repeatCount="indefinite"/>
@@ -688,10 +680,8 @@ const SVGS = {
     <animate attributeName="cy" values="104;96;104" dur="1.6s" repeatCount="indefinite"/>
     <animate attributeName="opacity" values="0.6;0.9;0.6" dur="1.6s" repeatCount="indefinite"/>
   </ellipse>
-  <!-- finger lines -->
   <line x1="106" y1="120" x2="110" y2="100" stroke="#c4907a" stroke-width="2" stroke-linecap="round"/>
   <line x1="175" y1="120" x2="186" y2="100" stroke="#c4907a" stroke-width="2" stroke-linecap="round"/>
-  <!-- up arrows -->
   <polygon points="116,80 111,92 121,92" fill="#b8965a" opacity="0.8"><animate attributeName="opacity" values="0.8;0.2;0.8" dur="1.6s" repeatCount="indefinite"/></polygon>
   <polygon points="184,80 179,92 189,92" fill="#b8965a" opacity="0.8"><animate attributeName="opacity" values="0.8;0.2;0.8" dur="1.6s" repeatCount="indefinite"/></polygon>
   <text x="150" y="188" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" fill="#9a8a82" letter-spacing="1">FORCE CHEEKS UP</text>
@@ -700,20 +690,14 @@ const SVGS = {
 'tongue-press': `<svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
   <rect width="300" height="200" fill="#faf7f2"/>
   <ellipse cx="150" cy="90" rx="58" ry="70" fill="#f5e6da" stroke="#c4907a" stroke-width="1.5"/>
-  <!-- eyes -->
   <ellipse cx="130" cy="72" rx="10" ry="6" fill="#fff" stroke="#5a4a42" stroke-width="1"/>
   <ellipse cx="170" cy="72" rx="10" ry="6" fill="#fff" stroke="#5a4a42" stroke-width="1"/>
   <circle cx="131" cy="73" r="4" fill="#2c2420"/>
   <circle cx="171" cy="73" r="4" fill="#2c2420"/>
-  <!-- wide smile -->
   <path d="M118,112 Q150,138 182,112" fill="none" stroke="#2c2420" stroke-width="2.5" stroke-linecap="round"/>
-  <!-- tongue pressing up indicator -->
   <ellipse cx="150" cy="118" rx="12" ry="7" fill="#e8a090" opacity="0.8"/>
   <line x1="150" y1="116" x2="150" y2="102" stroke="#c4907a" stroke-width="2" stroke-dasharray="3,2"/>
-  <polygon points="150,94 145,106 155,106" fill="#c4907a">
-    <animate attributeName="opacity" values="1;0.3;1" dur="1.2s" repeatCount="indefinite"/>
-  </polygon>
-  <!-- roof of mouth label -->
+  <polygon points="150,94 145,106 155,106" fill="#c4907a"><animate attributeName="opacity" values="1;0.3;1" dur="1.2s" repeatCount="indefinite"/></polygon>
   <path d="M120,96 Q150,88 180,96" fill="none" stroke="#e8c4b0" stroke-width="1.5" stroke-dasharray="3,2"/>
   <text x="150" y="188" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" fill="#9a8a82" letter-spacing="1">TONGUE TO ROOF · SMILE WIDE</text>
 </svg>`,
@@ -721,22 +705,18 @@ const SVGS = {
 'eyebrow-lifter': `<svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
   <rect width="300" height="200" fill="#faf7f2"/>
   <ellipse cx="150" cy="100" rx="58" ry="70" fill="#f5e6da" stroke="#c4907a" stroke-width="1.5"/>
-  <!-- brows -->
   <path d="M116,72 Q130,65 144,70" fill="none" stroke="#5a4a42" stroke-width="3" stroke-linecap="round"/>
   <path d="M156,70 Q170,65 184,72" fill="none" stroke="#5a4a42" stroke-width="3" stroke-linecap="round"/>
-  <!-- eyes wide open -->
   <ellipse cx="130" cy="82" rx="13" ry="10" fill="#fff" stroke="#5a4a42" stroke-width="1.5"/>
   <ellipse cx="170" cy="82" rx="13" ry="10" fill="#fff" stroke="#5a4a42" stroke-width="1.5"/>
   <circle cx="130" cy="83" r="6" fill="#2c2420"/>
   <circle cx="170" cy="83" r="6" fill="#2c2420"/>
-  <!-- fingertips under brows -->
   <rect x="112" y="68" width="8" height="5" rx="2.5" fill="#c4907a"/>
   <rect x="123" y="65" width="8" height="5" rx="2.5" fill="#c4907a"/>
   <rect x="134" y="63" width="8" height="5" rx="2.5" fill="#c4907a"/>
   <rect x="150" y="63" width="8" height="5" rx="2.5" fill="#c4907a"/>
   <rect x="161" y="65" width="8" height="5" rx="2.5" fill="#c4907a"/>
   <rect x="172" y="68" width="8" height="5" rx="2.5" fill="#c4907a"/>
-  <!-- resist arrows down -->
   <polygon points="130,52 125,62 135,62" fill="#b8965a" transform="rotate(180 130 57)"/>
   <polygon points="170,52 165,62 175,62" fill="#b8965a" transform="rotate(180 170 57)"/>
   <text x="150" y="188" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" fill="#9a8a82" letter-spacing="1">PUSH UP · RESIST DOWN</text>
@@ -745,15 +725,12 @@ const SVGS = {
 'thumb-flick': `<svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
   <rect width="300" height="200" fill="#faf7f2"/>
   <ellipse cx="150" cy="90" rx="58" ry="70" fill="#f5e6da" stroke="#c4907a" stroke-width="1.5"/>
-  <!-- eyes neutral -->
   <ellipse cx="130" cy="74" rx="10" ry="6" fill="#fff" stroke="#5a4a42" stroke-width="1"/>
   <ellipse cx="170" cy="74" rx="10" ry="6" fill="#fff" stroke="#5a4a42" stroke-width="1"/>
   <circle cx="131" cy="75" r="4" fill="#2c2420"/>
   <circle cx="171" cy="75" r="4" fill="#2c2420"/>
-  <!-- 11 lines highlighted -->
   <line x1="145" y1="68" x2="144" y2="88" stroke="#c47a7a" stroke-width="2.5" stroke-linecap="round"/>
   <line x1="155" y1="68" x2="156" y2="88" stroke="#c47a7a" stroke-width="2.5" stroke-linecap="round"/>
-  <!-- thumb flicking animated -->
   <g>
     <ellipse cx="150" cy="78" rx="10" ry="6" fill="#f5e6da" stroke="#c4907a" stroke-width="1.5">
       <animate attributeName="cx" values="150;146;154;150" dur="0.6s" repeatCount="indefinite"/>
@@ -762,7 +739,6 @@ const SVGS = {
       <animate attributeName="cx" values="150;146;154;150" dur="0.6s" repeatCount="indefinite"/>
     </circle>
   </g>
-  <!-- relaxation waves -->
   <path d="M130,60 Q150,54 170,60" fill="none" stroke="#b8965a" stroke-width="1" opacity="0.5" stroke-dasharray="3,3"/>
   <path d="M125,55 Q150,48 175,55" fill="none" stroke="#b8965a" stroke-width="1" opacity="0.3" stroke-dasharray="3,3"/>
   <text x="150" y="188" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" fill="#9a8a82" letter-spacing="1">FLICK · RELAX THE PROCERUS</text>
@@ -775,13 +751,10 @@ const SVGS = {
   <ellipse cx="170" cy="74" rx="10" ry="6" fill="#fff" stroke="#5a4a42" stroke-width="1"/>
   <circle cx="131" cy="75" r="4" fill="#2c2420"/>
   <circle cx="171" cy="75" r="4" fill="#2c2420"/>
-  <!-- 11 lines -->
   <line x1="145" y1="62" x2="144" y2="85" stroke="#c47a7a" stroke-width="2.5" stroke-linecap="round"/>
   <line x1="155" y1="62" x2="156" y2="85" stroke="#c47a7a" stroke-width="2.5" stroke-linecap="round"/>
-  <!-- pinch fingers -->
   <ellipse cx="140" cy="74" rx="8" ry="5" fill="#f5e6da" stroke="#c4907a" stroke-width="1.5" transform="rotate(-20 140 74)"/>
   <ellipse cx="160" cy="74" rx="8" ry="5" fill="#f5e6da" stroke="#c4907a" stroke-width="1.5" transform="rotate(20 160 74)"/>
-  <!-- resist arrows outward -->
   <polygon points="132,74 122,69 122,79" fill="#b8965a" opacity="0.8"/>
   <polygon points="168,74 178,69 178,79" fill="#b8965a" opacity="0.8"/>
   <text x="150" y="188" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" fill="#9a8a82" letter-spacing="1">PINCH · TRY TO FROWN · RESIST</text>
@@ -794,19 +767,15 @@ const SVGS = {
   <ellipse cx="170" cy="76" rx="10" ry="6" fill="#fff" stroke="#5a4a42" stroke-width="1"/>
   <circle cx="131" cy="77" r="4" fill="#2c2420"/>
   <circle cx="171" cy="77" r="4" fill="#2c2420"/>
-  <!-- nose bridge -->
   <path d="M147,88 Q150,95 153,88" fill="none" stroke="#c4907a" stroke-width="1.5"/>
-  <!-- upward stroke line animated -->
   <line x1="150" y1="92" x2="150" y2="55" stroke="#b8965a" stroke-width="3" stroke-linecap="round">
     <animate attributeName="y2" values="92;40;92" dur="1.5s" repeatCount="indefinite"/>
     <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
   </line>
-  <!-- arrow tip animated -->
   <polygon points="150,40 144,56 156,56" fill="#b8965a">
     <animate attributeName="points" values="150,40 144,56 156,56;150,25 144,41 156,41;150,40 144,56 156,56" dur="1.5s" repeatCount="indefinite"/>
     <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
   </polygon>
-  <!-- hooked finger -->
   <path d="M145,95 Q138,90 140,82 Q142,75 150,72" fill="none" stroke="#c4907a" stroke-width="2.5" stroke-linecap="round"/>
   <text x="150" y="188" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" fill="#9a8a82" letter-spacing="1">STROKE UPWARD · IRON IT OUT</text>
 </svg>`,
@@ -814,26 +783,21 @@ const SVGS = {
 'knuckle-slide': `<svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
   <rect width="300" height="200" fill="#faf7f2"/>
   <ellipse cx="150" cy="95" rx="58" ry="70" fill="#f5e6da" stroke="#c4907a" stroke-width="1.5"/>
-  <!-- eyes -->
   <ellipse cx="130" cy="78" rx="10" ry="6" fill="#fff" stroke="#5a4a42" stroke-width="1"/>
   <ellipse cx="170" cy="78" rx="10" ry="6" fill="#fff" stroke="#5a4a42" stroke-width="1"/>
   <circle cx="131" cy="79" r="4" fill="#2c2420"/>
   <circle cx="171" cy="79" r="4" fill="#2c2420"/>
-  <!-- forehead zone -->
   <rect x="110" y="52" width="80" height="22" rx="6" fill="#e8d5c4" opacity="0.5"/>
-  <!-- left knuckle sliding outward -->
   <g>
     <rect x="134" y="55" width="16" height="10" rx="4" fill="#c4907a" opacity="0.9">
       <animate attributeName="x" values="134;108;134" dur="2s" repeatCount="indefinite"/>
     </rect>
   </g>
-  <!-- right knuckle sliding outward -->
   <g>
     <rect x="150" y="55" width="16" height="10" rx="4" fill="#c4907a" opacity="0.9">
       <animate attributeName="x" values="150;176;150" dur="2s" repeatCount="indefinite"/>
     </rect>
   </g>
-  <!-- arrows outward -->
   <polygon points="108,60 120,54 120,66" fill="#b8965a" opacity="0.7"><animate attributeName="opacity" values="0.7;0.1;0.7" dur="2s" repeatCount="indefinite"/></polygon>
   <polygon points="192,60 180,54 180,66" fill="#b8965a" opacity="0.7"><animate attributeName="opacity" values="0.7;0.1;0.7" dur="2s" repeatCount="indefinite"/></polygon>
   <text x="150" y="188" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" fill="#9a8a82" letter-spacing="1">SLIDE OUTWARD TO TEMPLES</text>
@@ -841,27 +805,19 @@ const SVGS = {
 
 'gua-sha': `<svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
   <rect width="300" height="200" fill="#2c2420"/>
-  <!-- face outline -->
   <ellipse cx="150" cy="95" rx="60" ry="72" fill="#3d2e28" stroke="#b8965a" stroke-width="1"/>
-  <!-- neck -->
   <rect x="133" y="158" width="34" height="28" rx="10" fill="#3d2e28" stroke="#b8965a" stroke-width="1"/>
-  <!-- eyes -->
   <ellipse cx="130" cy="78" rx="10" ry="5" fill="#4a3830" stroke="#b8965a" stroke-width="0.8"/>
   <ellipse cx="170" cy="78" rx="10" ry="5" fill="#4a3830" stroke="#b8965a" stroke-width="0.8"/>
-  <!-- gua sha stone shape -->
   <path d="M218,55 Q228,60 226,78 Q224,96 214,100 Q204,104 200,90 Q196,76 204,64 Z" fill="#9b8faa" stroke="#6b5f7a" stroke-width="1"/>
-  <!-- stroke lines animated -->
-  <!-- jawline stroke -->
   <line x1="150" y1="145" x2="192" y2="118" stroke="#b8965a" stroke-width="2" stroke-dasharray="6,4" stroke-linecap="round">
     <animate attributeName="stroke-dashoffset" values="0;-20" dur="1s" repeatCount="indefinite"/>
   </line>
   <polygon points="192,118 182,116 186,126" fill="#b8965a"><animate attributeName="opacity" values="1;0.3;1" dur="1s" repeatCount="indefinite"/></polygon>
-  <!-- cheek stroke -->
   <line x1="118" y1="108" x2="185" y2="100" stroke="#d4b07a" stroke-width="1.5" stroke-dasharray="5,3" stroke-linecap="round">
     <animate attributeName="stroke-dashoffset" values="0;-16" dur="1.2s" repeatCount="indefinite"/>
   </line>
   <polygon points="185,100 174,96 176,106" fill="#d4b07a"><animate attributeName="opacity" values="1;0.3;1" dur="1.2s" repeatCount="indefinite"/></polygon>
-  <!-- neck stroke downward -->
   <line x1="145" y1="158" x2="145" y2="184" stroke="#c4907a" stroke-width="1.5" stroke-dasharray="4,3" stroke-linecap="round">
     <animate attributeName="stroke-dashoffset" values="0;-14" dur="0.9s" repeatCount="indefinite"/>
   </line>
@@ -1044,11 +1000,10 @@ async function analyzeSkinPhoto(input){
     const textEl=document.getElementById('skin-analysis-text');
     analysisEl.classList.add('show');
     textEl.textContent='Analyzing your skin...';
-
     try{
       const resp=await fetch('https://api.anthropic.com/v1/messages',{
         method:'POST',
-        headers:{'Content-Type':'application/json','x-api-key':'YOUR_API_KEY','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+        headers:API_HEADERS,
         body:JSON.stringify({
           model:'claude-sonnet-4-20250514',
           max_tokens:1000,
@@ -1083,7 +1038,6 @@ function buildSystemPrompt(){
   const outProducts=products.filter(p=>p.status==='out').map(p=>p.name).join(', ')||'none';
   const lowProducts=products.filter(p=>p.status==='low').map(p=>p.name).join(', ')||'none';
   const skipSummary=log.slice(0,20).map(l=>`${l.date}: skipped ${l.step} (${l.reason})`).join('\n')||'No skips recorded yet';
-
   return `You are Claudette, Elena's personal skincare AI assistant inside her routine app. You know everything about her routine.
 
 ELENA'S PROFILE:
@@ -1129,16 +1083,13 @@ async function sendChat(){
   const input=document.getElementById('chat-input');
   const text=input.value.trim();
   if(!text&&!chatPhotoData)return;
-
   const userMsg=text||(chatPhotoData?'[photo attached]':'');
   addChatMsg(userMsg,'user');
   input.value='';
   input.style.height='auto';
   input.placeholder='Ask Claudette anything...';
-
   const thinkingEl=addChatMsg('Thinking...','assistant',true);
   document.getElementById('chat-suggestions').style.display='none';
-
   const userContent=[];
   if(chatPhotoData){
     userContent.push({type:'image',source:{type:'base64',media_type:chatPhotoData.mediaType,data:chatPhotoData.base64}});
@@ -1146,13 +1097,11 @@ async function sendChat(){
   }
   if(text) userContent.push({type:'text',text});
   else userContent.push({type:'text',text:'Please analyze this photo of my skin.'});
-
   chatHistory.push({role:'user',content:userContent});
-
   try{
     const resp=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':'YOUR_API_KEY','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      headers:API_HEADERS,
       body:JSON.stringify({
         model:'claude-sonnet-4-20250514',
         max_tokens:1000,
@@ -1165,12 +1114,10 @@ async function sendChat(){
     thinkingEl.querySelector('.msg-bubble').textContent=reply;
     thinkingEl.querySelector('.msg-bubble').classList.remove('thinking');
     chatHistory.push({role:'assistant',content:reply});
-    // keep history manageable
     if(chatHistory.length>20)chatHistory=chatHistory.slice(-16);
   }catch(err){
     thinkingEl.querySelector('.msg-bubble').textContent='Sorry, I had trouble connecting. Check your internet and try again.';
   }
-
   scrollChat();
 }
 
@@ -1237,7 +1184,6 @@ function showTab(tab){
   const isWeek=tab==='week';
   const isPantry=tab==='pantry';
   const isChat=tab==='chat';
-
   document.getElementById('stack-area').style.display=isRoutine?'flex':'none';
   document.getElementById('week-view').classList.toggle('show',isWeek);
   document.getElementById('pantry-view').classList.toggle('show',isPantry);
@@ -1246,11 +1192,9 @@ function showTab(tab){
   document.getElementById('day-scroll-wrap').classList.toggle('show',isRoutine);
   document.getElementById('bottom-nav').classList.toggle('show',isRoutine);
   document.getElementById('checkin-wrap').style.display=(isRoutine&&session==='pm')?'block':'none';
-
   ['routine','week','pantry','chat'].forEach(t=>{
     document.getElementById(`tab-${t}`).classList.toggle('active',t===tab);
   });
-
   if(isWeek)renderWeekView();
   if(isPantry)renderPantry();
   if(isChat)scrollChat();
@@ -1266,7 +1210,6 @@ function renderWeekView(){
   }
   const dayCounts={},reasonCounts={},stepCounts={};
   log.forEach(l=>{dayCounts[l.dayKey]=(dayCounts[l.dayKey]||0)+1;reasonCounts[l.reason]=(reasonCounts[l.reason]||0)+1;stepCounts[l.step]=(stepCounts[l.step]||0)+1;});
-
   let heatHtml=`<div class="week-section"><div class="week-section-title">This <span>Week</span></div><div class="day-grid">`;
   DAY_KEYS.forEach(dk=>{
     const skipped=dayCounts[dk]||0;
@@ -1277,38 +1220,23 @@ function renderWeekView(){
     heatHtml+=`<div class="day-cell ${cls}"><span class="day-label">${DAY_LABELS[dk]}</span><span class="day-pct">${pct}</span></div>`;
   });
   heatHtml+=`</div></div>`;
-
   const topReason=Object.entries(reasonCounts).sort((a,b)=>b[1]-a[1])[0];
   const topStep=Object.entries(stepCounts).sort((a,b)=>b[1]-a[1])[0];
   const topDay=Object.entries(dayCounts).sort((a,b)=>b[1]-a[1])[0];
-
   const suggestions={
     tired:'Consider moving your most intensive steps (devices, gua sha) to a different night, or building a shorter "tired night" version of your routine.',
     sensitive:'Your skin may be reacting to something — look for patterns between flushed days and specific products or foods.',
     product:'Check your Pantry tab for reorder reminders. Running out of key steps disrupts your routine consistency.',
     forgot:'Try setting a reminder at your usual routine time, or lay out your products the night before.'
   };
-
   let insightHtml=`<div class="week-section"><div class="week-section-title"><span>Insights</span></div>`;
-  if(topReason){
-    const r=SKIP_REASONS[topReason[0]];
-    insightHtml+=`<div class="insight-card"><div class="insight-label">Top Skip Reason</div><div class="insight-text">${r.emoji} <strong>${r.label}</strong> — ${topReason[1]} time${topReason[1]>1?'s':''}</div><div class="insight-suggestion">${suggestions[topReason[0]]||''}</div></div>`;
-  }
-  if(topStep){
-    insightHtml+=`<div class="insight-card"><div class="insight-label">Most Skipped Step</div><div class="insight-text">⚠️ <strong>${topStep[0]}</strong> — skipped ${topStep[1]} time${topStep[1]>1?'s':''}</div><div class="insight-suggestion">Consider whether this step needs to move to a different point in your routine, or if there's a product issue.</div></div>`;
-  }
-  if(topDay){
-    insightHtml+=`<div class="insight-card"><div class="insight-label">Hardest Day</div><div class="insight-text">📅 <strong>${DAY_LABELS[topDay[0]]}</strong> — ${topDay[1]} skip${topDay[1]>1?'s':''} total</div><div class="insight-suggestion">Tap the Ask tab and ask Claudette to analyze your ${DAY_LABELS[topDay[0]]} routine — she can suggest adjustments.</div></div>`;
-  }
+  if(topReason){const r=SKIP_REASONS[topReason[0]];insightHtml+=`<div class="insight-card"><div class="insight-label">Top Skip Reason</div><div class="insight-text">${r.emoji} <strong>${r.label}</strong> — ${topReason[1]} time${topReason[1]>1?'s':''}</div><div class="insight-suggestion">${suggestions[topReason[0]]||''}</div></div>`;}
+  if(topStep){insightHtml+=`<div class="insight-card"><div class="insight-label">Most Skipped Step</div><div class="insight-text">⚠️ <strong>${topStep[0]}</strong> — skipped ${topStep[1]} time${topStep[1]>1?'s':''}</div><div class="insight-suggestion">Consider whether this step needs to move to a different point in your routine, or if there's a product issue.</div></div>`;}
+  if(topDay){insightHtml+=`<div class="insight-card"><div class="insight-label">Hardest Day</div><div class="insight-text">📅 <strong>${DAY_LABELS[topDay[0]]}</strong> — ${topDay[1]} skip${topDay[1]>1?'s':''} total</div><div class="insight-suggestion">Tap the Ask tab and ask Claudette to analyze your ${DAY_LABELS[topDay[0]]} routine — she can suggest adjustments.</div></div>`;}
   insightHtml+=`</div>`;
-
   let logHtml=`<div class="week-section"><div class="week-section-title">Skip <span>Log</span></div>`;
-  log.slice(0,20).forEach(l=>{
-    const r=SKIP_REASONS[l.reason]||{emoji:'•',label:l.reason};
-    logHtml+=`<div class="skip-log-item"><div class="skip-log-header"><div class="skip-log-step">${l.step}</div><div class="skip-log-date">${l.date} · ${l.session==='am'?'☀️':'🌙'}</div></div><span class="skip-log-reason">${r.emoji} ${r.label}</span></div>`;
-  });
+  log.slice(0,20).forEach(l=>{const r=SKIP_REASONS[l.reason]||{emoji:'•',label:l.reason};logHtml+=`<div class="skip-log-item"><div class="skip-log-header"><div class="skip-log-step">${l.step}</div><div class="skip-log-date">${l.date} · ${l.session==='am'?'☀️':'🌙'}</div></div><span class="skip-log-reason">${r.emoji} ${r.label}</span></div>`;});
   logHtml+=`</div>`;
-
   wv.innerHTML=heatHtml+insightHtml+logHtml+`<button class="send-claude-btn" onclick="sendToClaudetteTab()">✨ Deep dive with Claudette</button>`;
 }
 
@@ -1338,10 +1266,7 @@ function renderPantry(search=''){
   ORDER.forEach(status=>{
     if(groups[status].length===0)return;hasAny=true;
     html+=`<div class="pantry-section">${pantryFilter==='all'?`<div class="pantry-section-title">${TITLES[status]}</div>`:''}`;
-    groups[status].forEach(p=>{
-      const sm=STATUS_META[p.status];
-      html+=`<div class="product-card" onclick="openStatusSheet('${p.id}')"><div class="product-status-dot ${sm.dotClass}"></div><div class="product-info"><div class="product-name">${p.name}</div><div class="product-step">${p.step}</div><span class="product-status-badge ${sm.badgeClass}">${sm.emoji} ${sm.label}</span></div><div class="product-edit-btn">›</div></div>`;
-    });
+    groups[status].forEach(p=>{const sm=STATUS_META[p.status];html+=`<div class="product-card" onclick="openStatusSheet('${p.id}')"><div class="product-status-dot ${sm.dotClass}"></div><div class="product-info"><div class="product-name">${p.name}</div><div class="product-step">${p.step}</div><span class="product-status-badge ${sm.badgeClass}">${sm.emoji} ${sm.label}</span></div><div class="product-edit-btn">›</div></div>`;});
     html+=`</div>`;
   });
   if(!hasAny)html=`<div class="empty-state" style="margin-top:32px"><div class="empty-icon">🔍</div><p>No products found.</p></div>`;
@@ -1387,11 +1312,10 @@ async function lookupProduct(){
   document.getElementById('add-result-step').textContent='';
   document.getElementById('add-result-note').textContent='';
   resultEl.classList.add('show');
-
   try{
     const resp=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':'YOUR_API_KEY','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      headers:API_HEADERS,
       body:JSON.stringify({
         model:'claude-sonnet-4-20250514',
         max_tokens:300,
