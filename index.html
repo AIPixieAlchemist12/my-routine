@@ -145,6 +145,17 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text-d
 .card-detail.open{display:block;}
 .alert-card{border-radius:16px;padding:13px 16px;font-size:12px;line-height:1.65;font-family:'DM Sans',sans-serif;flex-shrink:0;}
 .alert-warn{background:#fff8e1;color:#856404;border:1px solid #ffe08a;}.alert-info{background:#e8f4fd;color:#0c5460;border:1px solid #bee5eb;}.alert-success{background:#e8f5e9;color:#155724;border:1px solid #c3e6cb;}.alert-skin{background:#fdf4ff;color:#6b21a8;border:1px solid #e9d5ff;border-radius:16px;padding:13px 16px;font-size:12px;line-height:1.65;flex-shrink:0;}
+.device-card{background:#fff;border:1px solid var(--border);border-radius:22px;padding:14px 16px;flex-shrink:0;box-shadow:0 4px 20px var(--shadow-lg);}
+.device-card-title{font-size:10px;color:var(--text-light);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px;font-weight:500;}
+.device-chips{display:flex;gap:8px;flex-wrap:wrap;}
+.device-chip{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--warm-white);font-size:12px;font-family:'DM Sans',sans-serif;color:var(--text-mid);cursor:pointer;transition:all 0.2s cubic-bezier(0.34,1.56,0.64,1);}
+.device-chip:active{transform:scale(0.94);}
+.device-chip.used{background:#e8f5e9;border-color:#a5d6a7;color:#2e7d32;}
+.device-chip.deferred{background:#fff8e1;border-color:#ffe082;color:#b8965a;}
+.device-chip.blocked{background:var(--warm-white);border-color:var(--border);color:var(--text-light);opacity:0.5;cursor:default;}
+.device-chip-icon{font-size:15px;}
+.device-block-note{font-size:11px;color:var(--text-light);margin-top:10px;font-style:italic;}
+  
 
 /* BOTTOM NAV */
 .bottom-nav{padding:10px 20px calc(env(safe-area-inset-bottom,0px) + 14px);background:var(--warm-white);border-top:1px solid var(--border);display:none;align-items:center;justify-content:space-between;flex-shrink:0;}
@@ -399,7 +410,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text-d
   <div class="checkin-note" id="checkin-note"></div>
 </div>
 
-<div class="stack-area" id="stack-area"></div>
+<div id="device-card-container" style="padding:14px 14px 0;flex-shrink:0;"></div> <div class="stack-area" id="stack-area"></div>
 
 <div class="week-view" id="week-view"></div>
 
@@ -600,7 +611,7 @@ const DEFAULT_PRODUCTS=[
 
 // ===== STATE =====
 // ===== STATE =====
-let day='mon',session='am',checked={},skinState=null,modalMoveIndex=0;
+let day='mon',session='am',checked={},skinState=null,modalMoveIndex=0,devicesDone=[];
 
 // ===== PERSISTENCE =====
 function getTodayKey(){
@@ -608,7 +619,7 @@ function getTodayKey(){
   return['sun','mon','tue','wed','thu','fri','sat'][d.getDay()];
 }
 function saveSessionState(){
-  try{localStorage.setItem('routine_state',JSON.stringify({day,session,checked,ts:Date.now()}));}catch(e){}
+  try{localStorage.setItem('routine_state',JSON.stringify({day,session,checked,devicesDone,ts:Date.now()}));}catch(e){}
 }
 function loadSessionState(){
   try{
@@ -617,8 +628,8 @@ function loadSessionState(){
     const lastDate=new Date(s.ts);
     const now=new Date();
     const sameDay=lastDate.toDateString()===now.toDateString();
-    if(sameDay){
-      day=s.day;session=s.session;checked=s.checked||{};
+  if(sameDay){
+      day=s.day;session=s.session;checked=s.checked||{};devicesDone=s.devicesDone||[];
       // smart resume: if AM checked steps exist but no PM steps, switch to PM
       const amSteps=AM.filter((_,i)=>s.checked[day+'_am_'+i]);
       if(session==='am'&&amSteps.length>0&&amSteps.length>=AM.filter(x=>!x.alert).length){
@@ -1226,9 +1237,104 @@ function openSkipSheet(i,name){
   document.getElementById('skip-overlay').classList.add('open');
   document.body.style.overflow='hidden';
 }
-function confirmRedo(){
+// ===== DEVICE CARD =====
+const DEVICE_SCHEDULE={
+  mon:{am:['nuderma','led','airshot'],pm:['airshot','guasha'],blocked:false},
+  tue:{am:['nuderma','led','airshot'],pm:[],blocked:'retinol night'},
+  wed:{am:['nuderma','led','airshot'],pm:[],blocked:'acid night'},
+  thu:{am:['nuderma','led','airshot'],pm:['nuderma','led','guasha'],blocked:false},
+  fri:{am:['nuderma','led','airshot'],pm:[],blocked:'retinol night'},
+  sat:{am:['nuderma','led','airshot'],pm:['airshot','guasha'],blocked:false},
+  sun:{am:['nuderma','led','airshot'],pm:['guasha'],blocked:false}
+};
+const DEVICE_META={
+  nuderma:{icon:'⚡',label:'NuDerma'},
+  led:{icon:'💡',label:'LED Mask'},
+  airshot:{icon:'💨',label:'Air Shot'},
+  guasha:{icon:'💜',label:'Gua Sha'}
+};
+
+function getDevicesForSession(){
+  const schedule=DEVICE_SCHEDULE[day];
+  if(!schedule)return{devices:[],blocked:false};
+  if(session==='am')return{devices:schedule.am,blocked:false};
+  // PM: show scheduled devices, but if done in AM mark as done
+  // On blocked nights show all as blocked
+  if(schedule.blocked)return{devices:['nuderma','led','airshot','guasha'],blocked:schedule.blocked};
+  return{devices:schedule.pm,blocked:false};
+}
+
+function markDeviceDone(deviceId){
+  if(!devicesDone.includes(deviceId)){devicesDone.push(deviceId);}
+  saveSessionState();
+  renderDeviceCard();
+  // if this is a gua sha device, we don't need to re-render full routine
+  // but for others re-render in case PM steps need updating
+  if(session==='pm')render();
+}
+
+function renderDeviceCard(){
+  const container=document.getElementById('device-card-container');
+  if(!container)return;
+  const {devices,blocked}=getDevicesForSession();
+  const schedule=DEVICE_SCHEDULE[day];
+
+  let html=`<div class="device-card"><div class="device-card-title">Today's Devices</div><div class="device-chips">`;
+
+  if(blocked){
+    // show all devices greyed out
+    ['nuderma','led','airshot','guasha'].forEach(id=>{
+      const d=DEVICE_META[id];
+      const doneInAM=devicesDone.includes(id);
+      if(doneInAM){
+        html+=`<div class="device-chip used"><span class="device-chip-icon">${d.icon}</span>${d.label} ✓</div>`;
+      } else {
+        html+=`<div class="device-chip blocked"><span class="device-chip-icon">${d.icon}</span>${d.label}</div>`;
+      }
+    });
+    html+=`</div><div class="device-block-note">🚫 ${blocked} — no PM devices tonight${devicesDone.length>0?' (used in AM ✓)':''}</div>`;
+  } else {
+    // combine AM deferrals + PM scheduled
+    const allDevices=session==='pm'
+      ? [...new Set([...schedule.pm,...schedule.am.filter(d=>!devicesDone.includes(d)&&schedule.pm.includes(d))])]
+      : devices;
+
+    const pmScheduled=schedule.pm||[];
+
+    devices.forEach(id=>{
+      const d=DEVICE_META[id];
+      const done=devicesDone.includes(id);
+      const deferredToPM=session==='am'&&!done;
+      if(done){
+        html+=`<div class="device-chip used"><span class="device-chip-icon">${d.icon}</span>${d.label} ✓</div>`;
+      } else {
+        html+=`<div class="device-chip" onclick="markDeviceDone('${id}')"><span class="device-chip-icon">${d.icon}</span>${d.label}</div>`;
+      }
+    });
+
+    // if AM session, show PM-only devices as "tonight" hint
+    if(session==='am'){
+      pmScheduled.filter(id=>!devices.includes(id)).forEach(id=>{
+        const d=DEVICE_META[id];
+        html+=`<div class="device-chip deferred"><span class="device-chip-icon">${d.icon}</span>${d.label} · tonight</div>`;
+      });
+    }
+
+    // if PM, show AM-used devices that weren't PM scheduled
+    if(session==='pm'){
+      devicesDone.filter(id=>!pmScheduled.includes(id)).forEach(id=>{
+        const d=DEVICE_META[id];
+        html+=`<div class="device-chip used"><span class="device-chip-icon">${d.icon}</span>${d.label} ✓ AM</div>`;
+      });
+    }
+  }
+
+  html+=`</div></div>`;
+  container.innerHTML=html;
+}
+  function confirmRedo(){
   if(confirm('Start this session over from the beginning?')){
-    checked={};saveSessionState();render();
+    checked={};devicesDone=[];saveSessionState();render();
   }
 }
   function closeSkipSheet(){document.getElementById('skip-overlay').classList.remove('open');document.body.style.overflow='';pendingSkipIndex=null;}
@@ -1518,6 +1624,7 @@ function renderModalMove(move,isGua=false){
 // ===== RENDER ROUTINE =====
 function render(){
   if(activeTab!=='routine')return;
+  renderDeviceCard();
   const steps=getSteps();
   const real=getRealSteps();
   let done=0;real.forEach(s=>{if(checked[key(day,session,steps.indexOf(s))])done++;});
