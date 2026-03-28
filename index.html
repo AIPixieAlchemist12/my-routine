@@ -518,12 +518,17 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text-d
 
 <script>
 // ===== API CONFIG =====
-const API_HEADERS = {
-  'Content-Type': 'application/json',
-  'x-api-key': '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',
-  'anthropic-version': '2023-06-01',
-  'anthropic-dangerous-direct-browser-access': 'true'
-};
+const PROXY_URL = 'https://project-fvy9w.vercel.app/api/proxy';
+const API_HEADERS = {'Content-Type': 'application/json'};
+```
+
+**Change 2** — Find and replace all 3 occurrences of:
+```
+'https://api.anthropic.com/v1/messages'
+```
+With:
+```
+PROXY_URL
 
 // ===== CONSTANTS =====
 const DAY_KEYS=['mon','tue','wed','thu','fri','sat','sun'];
