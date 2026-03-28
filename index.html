@@ -596,7 +596,72 @@ const DEFAULT_PRODUCTS=[
 ];
 
 // ===== STATE =====
+// ===== STATE =====
 let day='mon',session='am',checked={},skinState=null,modalMoveIndex=0;
+
+// ===== PERSISTENCE =====
+function getTodayKey(){
+  const d=new Date();
+  return['sun','mon','tue','wed','thu','fri','sat'][d.getDay()];
+}
+function saveSessionState(){
+  try{localStorage.setItem('routine_state',JSON.stringify({day,session,checked,ts:Date.now()}));}catch(e){}
+}
+function loadSessionState(){
+  try{
+    const s=JSON.parse(localStorage.getItem('routine_state')||'null');
+    if(!s)return false;
+    const lastDate=new Date(s.ts);
+    const now=new Date();
+    const sameDay=lastDate.toDateString()===now.toDateString();
+    if(sameDay){
+      day=s.day;session=s.session;checked=s.checked||{};
+      // smart resume: if AM checked steps exist but no PM steps, switch to PM
+      const amSteps=AM.filter((_,i)=>s.checked[day+'_am_'+i]);
+      if(session==='am'&&amSteps.length>0&&amSteps.length>=AM.filter(x=>!x.alert).length){
+        session='pm';
+      }
+      return true;
+    }else{
+      // new day — show prompt
+      return false;
+    }
+  }catch(e){return false;}
+}
+function showDayPrompt(){
+  const today=getTodayKey();
+  const labels={mon:'Monday',tue:'Tuesday',wed:'Wednesday',thu:'Thursday',fri:'Friday',sat:'Saturday',sun:'Sunday'};
+  const el=document.createElement('div');
+  el.id='day-prompt-overlay';
+  el.style.cssText='position:fixed;inset:0;background:rgba(44,36,32,0.7);backdrop-filter:blur(8px);z-index:1000;display:flex;align-items:center;justify-content:center;padding:24px;';
+  el.innerHTML=`
+    <div style="background:var(--cream);border-radius:24px;padding:28px 24px;max-width:320px;width:100%;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,0.2);">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:var(--text-dark);margin-bottom:6px;">Good ${new Date().getHours()<12?'morning':'evening'} ✨</div>
+      <div style="font-size:13px;color:var(--text-light);margin-bottom:24px;">It's <strong style="color:var(--text-dark)">${labels[today]}</strong> — where are you starting?</div>
+      <div style="display:flex;gap:10px;justify-content:center;margin-bottom:16px;">
+        <button onclick="startSession('${today}','am')" style="flex:1;padding:14px;background:var(--warm-white);border:1.5px solid var(--border);border-radius:16px;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;transition:all 0.18s;">☀️ Morning</button>
+        <button onclick="startSession('${today}','pm')" style="flex:1;padding:14px;background:var(--warm-white);border:1.5px solid var(--border);border-radius:16px;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;transition:all 0.18s;">🌙 Evening</button>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;">
+        ${Object.entries(labels).filter(([k])=>k!==today).map(([k,v])=>`<button onclick="startSession('${k}','am')" style="padding:6px 12px;background:transparent;border:1px solid var(--border);border-radius:20px;font-size:11px;color:var(--text-light);cursor:pointer;font-family:'DM Sans',sans-serif;">${v}</button>`).join('')}
+      </div>
+    </div>`;
+  document.body.appendChild(el);
+}
+function startSession(d,s){
+  day=d;session=s;checked={};
+  const prompt=document.getElementById('day-prompt-overlay');
+  if(prompt)prompt.remove();
+  // sync day pill UI
+  document.querySelectorAll('.day-pill').forEach(b=>{
+    b.classList.toggle('active',b.getAttribute('onclick').includes(`'${d}'`));
+  });
+  document.getElementById('btn-am').classList.toggle('active',s==='am');
+  document.getElementById('btn-pm').classList.toggle('active',s==='pm');
+  document.getElementById('checkin-wrap').style.display=(s==='pm')?'block':'none';
+  saveSessionState();
+  render();
+}
 let activeTab='routine';
 let pendingSkipIndex=null,pendingSkipName='';
 let pantryFilter='all';
@@ -977,7 +1042,7 @@ function getCurrentIndex(){const steps=getSteps();for(let i=0;i<steps.length;i++
 function setSkinState(s){skinState=s;document.querySelectorAll('.checkin-opt').forEach(b=>b.classList.toggle('selected',b.getAttribute('onclick').includes(`'${s}'`)));document.getElementById('checkin-note').textContent=SKIN_NOTES[s]||'';render();}
 function setDay(d,btn){day=d;document.querySelectorAll('.day-pill').forEach(b=>b.classList.remove('active'));btn.classList.add('active');render();}
 function setSession(s){session=s;document.getElementById('btn-am').classList.toggle('active',s==='am');document.getElementById('btn-pm').classList.toggle('active',s==='pm');document.getElementById('checkin-wrap').classList.toggle('show',s==='pm'&&activeTab==='routine');render();}
-function completeStep(i){checked[key(day,session,i)]=true;if(navigator.vibrate)navigator.vibrate(12);render();}
+function completeStep(i){checked[key(day,session,i)]=true;if(navigator.vibrate)navigator.vibrate(12);saveSessionState();render();}
 function toggleDetail(id){const el=document.getElementById(id);if(el)el.classList.toggle('open');}
 function numClass(s,type){if(type==='yoga')return'num-yoga';if(type==='gua')return'num-gua';if(type==='device')return'num-device';if(type==='cleanse')return'num-cleanse';return session==='am'?'num-am':'num-pm';}
 
@@ -1170,6 +1235,7 @@ function confirmSkip(reason){
   saveSkipLog(log);
   closeSkipSheet();
   if(navigator.vibrate)navigator.vibrate([8,40,8]);
+  saveSessionState();
   render();
 }
 
@@ -1406,7 +1472,18 @@ function render(){
   document.getElementById('nav-step-info').innerHTML=`Step <strong>${stepNum}</strong> of ${real.length}`;
 }
 
-render();
+// ===== INIT =====
+(function init(){
+  const resumed=loadSessionState();
+  if(!resumed)showDayPrompt();
+  // sync UI to loaded state
+  document.querySelectorAll('.day-pill').forEach(b=>{
+    b.classList.toggle('active',b.getAttribute('onclick').includes(`'${day}'`));
+  });
+  document.getElementById('btn-am').classList.toggle('active',session==='am');
+  document.getElementById('btn-pm').classList.toggle('active',session==='pm');
+  render();
+})();
 </script>
 </body>
 </html>
