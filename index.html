@@ -151,6 +151,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text-d
 .bottom-nav.show{display:flex;}
 .nav-step-info{font-size:11px;color:var(--text-light);letter-spacing:0.04em;}
 .nav-step-info strong{color:var(--text-dark);font-weight:500;}
+.redo-btn{padding:6px 12px;background:transparent;border:1px solid var(--border);border-radius:20px;font-size:10px;color:var(--text-light);cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:0.03em;transition:all 0.15s;}
+.redo-btn:active{background:var(--warm-white);}
 .legend-mini{display:flex;gap:5px;flex-wrap:wrap;}
 
 /* ===== WEEK / INSIGHTS VIEW ===== */
@@ -441,7 +443,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text-d
 </div>
 
 <div class="bottom-nav show" id="bottom-nav">
-  <div class="nav-step-info" id="nav-step-info">Step <strong>1</strong></div>
+  <div class="nav-step-info" id="nav-step-info">Step <strong>1</strong></div> <button class="redo-btn" onclick="confirmRedo()">↺ Start over</button>
   <div class="legend-mini">
     <span class="badge b-wet">💧 wet</span>
     <span class="badge b-go">✅ go</span>
@@ -1223,7 +1225,12 @@ function openSkipSheet(i,name){
   document.getElementById('skip-overlay').classList.add('open');
   document.body.style.overflow='hidden';
 }
-function closeSkipSheet(){document.getElementById('skip-overlay').classList.remove('open');document.body.style.overflow='';pendingSkipIndex=null;}
+function confirmRedo(){
+  if(confirm('Start this session over from the beginning?')){
+    checked={};saveSessionState();render();
+  }
+}
+  function closeSkipSheet(){document.getElementById('skip-overlay').classList.remove('open');document.body.style.overflow='';pendingSkipIndex=null;}
 function handleSkipOverlayTap(e){if(e.target===document.getElementById('skip-overlay'))closeSkipSheet();}
 function confirmSkip(reason){
   if(pendingSkipIndex===null)return;
