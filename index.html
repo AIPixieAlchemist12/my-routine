@@ -520,15 +520,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text-d
 // ===== API CONFIG =====
 const PROXY_URL = 'https://project-fvy9w.vercel.app/api/proxy';
 const API_HEADERS = {'Content-Type': 'application/json'};
-```
-
-**Change 2** — Find and replace all 3 occurrences of:
-```
-'https://api.anthropic.com/v1/messages'
-```
-With:
-```
-PROXY_URL
 
 // ===== CONSTANTS =====
 const DAY_KEYS=['mon','tue','wed','thu','fri','sat','sun'];
@@ -1006,7 +997,7 @@ async function analyzeSkinPhoto(input){
     analysisEl.classList.add('show');
     textEl.textContent='Analyzing your skin...';
     try{
-      const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      const resp=await fetch(PROXY_URL,{
         method:'POST',
         headers:API_HEADERS,
         body:JSON.stringify({
