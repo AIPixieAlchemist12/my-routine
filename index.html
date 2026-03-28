@@ -1298,11 +1298,8 @@ function renderDeviceCard(){
     html+=`</div><div class="device-block-note">🚫 ${blocked} — no PM devices tonight${devicesDone.length>0?' (used in AM ✓)':''}</div>`;
   } else {
     // combine AM deferrals + PM scheduled
-    const allDevices=session==='pm'
-      ? [...new Set([...schedule.pm,...schedule.am.filter(d=>!devicesDone.includes(d)&&schedule.pm.includes(d))])]
-      : devices;
-
     const pmScheduled=schedule.pm||[];
+    const amScheduled=schedule.am||[];
 
     devices.forEach(id=>{
       const d=DEVICE_META[id];
