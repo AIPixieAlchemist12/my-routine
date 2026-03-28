@@ -385,7 +385,6 @@ let html=`<div class="device-card"><div class="device-chips">`;
     <div class="progress-track"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
     <span class="progress-label" id="prog-pct">0%</span>
   </div>
- <div id="device-card-container" style="padding:0 16px 10px;flex-shrink:0;"></div>
 
 <div class="checkin-wrap" id="checkin-wrap">
   <div class="checkin-title">How's your skin feeling <span>right now?</span></div>
@@ -410,7 +409,6 @@ let html=`<div class="device-card"><div class="device-chips">`;
   <div class="checkin-note" id="checkin-note"></div>
 </div>
 
-<div style="flex:1;display:flex;flex-direction:column;overflow:hidden;">
   <div class="stack-area" id="stack-area"></div>
   <div class="week-view" id="week-view"></div>
   <div class="pantry-view" id="pantry-view">
@@ -1277,8 +1275,14 @@ function markDeviceDone(deviceId){
 }
 
 function renderDeviceCard(){
-  const container=document.getElementById('device-card-container');
-  if(!container)return;
+  const existing=document.getElementById('device-card-container');
+  if(existing)existing.remove();
+  if(activeTab!=='routine')return;
+  const container=document.createElement('div');
+  container.id='device-card-container';
+  container.style.cssText='padding:0 16px 10px;flex-shrink:0;';
+  const subHeader=document.getElementById('sub-header');
+  subHeader.insertAdjacentElement('afterend',container);
   const {devices,blocked}=getDevicesForSession();
   const schedule=DEVICE_SCHEDULE[day];
 
