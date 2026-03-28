@@ -112,7 +112,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text-d
 .skin-analysis-label{font-size:10px;color:#9b8faa;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:6px;font-weight:500;}
 
 /* STACK AREA */
-.stack-area{flex:1;overflow:hidden;padding:14px 14px 0;display:flex;flex-direction:column;gap:10px;position:relative;min-height:0;}
+.stack-area{flex:1;overflow:hidden;padding:14px 14px 0;display:flex;flex-direction:column;gap:10px;position:relative;}
 
 /* STEP CARDS */
 .step-card{background:#fff;border:1px solid var(--border);border-radius:22px;overflow:hidden;box-shadow:0 4px 20px var(--shadow-lg);transition:all 0.32s cubic-bezier(0.4,0,0.2,1);flex-shrink:0;}
@@ -147,11 +147,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text-d
 .alert-warn{background:#fff8e1;color:#856404;border:1px solid #ffe08a;}.alert-info{background:#e8f4fd;color:#0c5460;border:1px solid #bee5eb;}.alert-success{background:#e8f5e9;color:#155724;border:1px solid #c3e6cb;}.alert-skin{background:#fdf4ff;color:#6b21a8;border:1px solid #e9d5ff;border-radius:16px;padding:13px 16px;font-size:12px;line-height:1.65;flex-shrink:0;}
 .device-card{flex-shrink:0;}
 .device-card-title{font-size:9px;color:var(--text-light);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px;font-weight:500;}
-.device-chips{display:flex;gap:6px;flex-wrap:wrap;}
-.device-chip{display:flex;align-items:center;gap:4px;padding:4px 8px;border-radius:20px;border:1px solid var(--border);background:var(--warm-white);font-size:10px;font-family:'DM Sans',sans-serif;color:var(--text-mid);cursor:pointer;transition:all 0.2s cubic-bezier(0.34,1.56,0.64,1);}
+.device-chips{display:flex;gap:8px;flex-wrap:wrap;}
+.device-chip{display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;border:1px solid var(--border);background:var(--warm-white);font-size:11px;font-family:'DM Sans',sans-serif;color:var(--text-mid);cursor:pointer;transition:all 0.2s cubic-bezier(0.34,1.56,0.64,1);}
 .device-chip:active{transform:scale(0.94);}
 .device-chip.used{background:#e8f5e9;border-color:#a5d6a7;color:#2e7d32;}
-.device-chip.deferred{background:#fff8e1;border-color:#ffe082;color:#b8965a;font-size:10px;padding:3px 8px;}
+.device-chip.deferred{background:#fff8e1;border-color:#ffe082;color:#b8965a;}
 .device-chip.blocked{background:var(--warm-white);border-color:var(--border);color:var(--text-light);opacity:0.5;cursor:default;}
 let html=`<div class="device-card"><div class="device-chips">`;
 .device-block-note{font-size:11px;color:var(--text-light);margin-top:10px;font-style:italic;}
@@ -385,6 +385,7 @@ let html=`<div class="device-card"><div class="device-chips">`;
     <div class="progress-track"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
     <span class="progress-label" id="prog-pct">0%</span>
   </div>
+  <div id="device-card-container" style="padding:0 16px 10px;"></div>
 
 <div class="checkin-wrap" id="checkin-wrap">
   <div class="checkin-title">How's your skin feeling <span>right now?</span></div>
@@ -409,48 +410,49 @@ let html=`<div class="device-card"><div class="device-chips">`;
   <div class="checkin-note" id="checkin-note"></div>
 </div>
 
-  <div class="stack-area" id="stack-area"></div>
-  <div class="week-view" id="week-view"></div>
-  <div class="pantry-view" id="pantry-view">
-    <div class="pantry-search-wrap">
-      <input class="pantry-search" type="text" placeholder="Search products..." oninput="renderPantry(this.value)" id="pantry-search">
-    </div>
-    <div class="pantry-filter">
-      <button class="filter-pill active" onclick="setPantryFilter('all',this)">All</button>
-      <button class="filter-pill" onclick="setPantryFilter('using',this)">✅ Using</button>
-      <button class="filter-pill" onclick="setPantryFilter('low',this)">⚠️ Low</button>
-      <button class="filter-pill" onclick="setPantryFilter('out',this)">❌ Out</button>
-      <button class="filter-pill" onclick="setPantryFilter('unused',this)">📦 Not Using</button>
-      <button class="filter-pill" onclick="setPantryFilter('next',this)">⭐ Up Next</button>
-      <button class="filter-pill" onclick="setPantryFilter('buynext',this)">🛒 Buy Next</button>
-      <button class="filter-pill" onclick="setPantryFilter('wish',this)">💭 Wishlist</button>
-    </div>
-    <button class="add-product-btn" onclick="openAddSheet()">✦ Add New Product</button>
-    <div id="pantry-list"></div>
+<div id="device-card-container" style="padding:14px 14px 0;flex-shrink:0;"></div> <div class="stack-area" id="stack-area"></div>
+
+<div class="week-view" id="week-view"></div>
+
+<div class="pantry-view" id="pantry-view">
+  <div class="pantry-search-wrap">
+    <input class="pantry-search" type="text" placeholder="Search products..." oninput="renderPantry(this.value)" id="pantry-search">
   </div>
-  <div class="chat-view" id="chat-view">
-    <div class="chat-messages" id="chat-messages">
-      <div class="msg assistant">
-        <div class="msg-bubble">Hi Elena! I'm Claudette 🌸 I know your full routine, your rosacea triggers, your products, and your skip patterns. Ask me anything — whether to add something new, what to do on a flare night, or why a product isn't working. What's on your mind?</div>
-      </div>
+  <div class="pantry-filter">
+    <button class="filter-pill active" onclick="setPantryFilter('all',this)">All</button>
+    <button class="filter-pill" onclick="setPantryFilter('using',this)">✅ Using</button>
+    <button class="filter-pill" onclick="setPantryFilter('low',this)">⚠️ Low</button>
+    <button class="filter-pill" onclick="setPantryFilter('out',this)">❌ Out</button>
+    <button class="filter-pill" onclick="setPantryFilter('unused',this)">📦 Not Using</button>
+    <button class="filter-pill" onclick="setPantryFilter('next',this)">⭐ Up Next</button> <button class="filter-pill" onclick="setPantryFilter('buynext',this)">🛒 Buy Next</button>
+    <button class="filter-pill" onclick="setPantryFilter('wish',this)">💭 Wishlist</button>
+  </div>
+  <button class="add-product-btn" onclick="openAddSheet()">✦ Add New Product</button>
+  <div id="pantry-list"></div>
+</div>
+
+<div class="chat-view" id="chat-view">
+  <div class="chat-messages" id="chat-messages">
+    <div class="msg assistant">
+      <div class="msg-bubble">Hi Elena! I'm Claudette 🌸 I know your full routine, your rosacea triggers, your products, and your skip patterns. Ask me anything — whether to add something new, what to do on a flare night, or why a product isn't working. What's on your mind?</div>
     </div>
-    <div class="chat-suggestions" id="chat-suggestions">
-      <button class="chat-suggestion" onclick="sendSuggestion(this)">Is my routine safe tonight?</button>
-      <button class="chat-suggestion" onclick="sendSuggestion(this)">Can I add a new product?</button>
-      <button class="chat-suggestion" onclick="sendSuggestion(this)">My skin is flushed — what do I skip?</button>
-      <button class="chat-suggestion" onclick="sendSuggestion(this)">What's my most skipped step?</button>
-    </div>
-    <div class="chat-input-area">
-      <button class="chat-photo-btn" onclick="openChatPhotoInput()" title="Attach skin photo">📸</button>
-      <input type="file" id="chat-photo-input" accept="image/*" capture="user" style="display:none" onchange="attachChatPhoto(this)">
-      <textarea class="chat-input" id="chat-input" placeholder="Ask Claudette anything..." rows="1" onkeydown="handleChatKey(event)" oninput="autoResize(this)"></textarea>
-      <button class="chat-send-btn" onclick="sendChat()">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8l12-6-5 6 5 6-12-6z" fill="#2a1f0e"/></svg>
-      </button>
-    </div>
+  </div>
+  <div class="chat-suggestions" id="chat-suggestions">
+    <button class="chat-suggestion" onclick="sendSuggestion(this)">Is my routine safe tonight?</button>
+    <button class="chat-suggestion" onclick="sendSuggestion(this)">Can I add a new product?</button>
+    <button class="chat-suggestion" onclick="sendSuggestion(this)">My skin is flushed — what do I skip?</button>
+    <button class="chat-suggestion" onclick="sendSuggestion(this)">What's my most skipped step?</button>
+  </div>
+  <div class="chat-input-area">
+    <button class="chat-photo-btn" onclick="openChatPhotoInput()" title="Attach skin photo">📸</button>
+    <input type="file" id="chat-photo-input" accept="image/*" capture="user" style="display:none" onchange="attachChatPhoto(this)">
+    <textarea class="chat-input" id="chat-input" placeholder="Ask Claudette anything..." rows="1" onkeydown="handleChatKey(event)" oninput="autoResize(this)"></textarea>
+    <button class="chat-send-btn" onclick="sendChat()">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8l12-6-5 6 5 6-12-6z" fill="#2a1f0e"/></svg>
+    </button>
   </div>
 </div>
-  
+
 <div class="bottom-nav show" id="bottom-nav">
   <div class="nav-step-info" id="nav-step-info">Step <strong>1</strong></div> <button class="redo-btn" onclick="confirmRedo()">↺ Start over</button>
   <div class="legend-mini">
@@ -1275,14 +1277,8 @@ function markDeviceDone(deviceId){
 }
 
 function renderDeviceCard(){
-  const existing=document.getElementById('device-card-container');
-  if(existing)existing.remove();
-  if(activeTab!=='routine')return;
-  const container=document.createElement('div');
-  container.id='device-card-container';
-  container.style.cssText='padding:0 16px 10px;flex-shrink:0;';
-  const subHeader=document.getElementById('sub-header');
-  subHeader.insertAdjacentElement('afterend',container);
+  const container=document.getElementById('device-card-container');
+  if(!container)return;
   const {devices,blocked}=getDevicesForSession();
   const schedule=DEVICE_SCHEDULE[day];
 
@@ -1302,8 +1298,11 @@ function renderDeviceCard(){
     html+=`</div><div class="device-block-note">🚫 ${blocked} — no PM devices tonight${devicesDone.length>0?' (used in AM ✓)':''}</div>`;
   } else {
     // combine AM deferrals + PM scheduled
+    const allDevices=session==='pm'
+      ? [...new Set([...schedule.pm,...schedule.am.filter(d=>!devicesDone.includes(d)&&schedule.pm.includes(d))])]
+      : devices;
+
     const pmScheduled=schedule.pm||[];
-    const amScheduled=schedule.am||[];
 
     devices.forEach(id=>{
       const d=DEVICE_META[id];
@@ -1320,7 +1319,7 @@ function renderDeviceCard(){
     if(session==='am'){
       pmScheduled.filter(id=>!devices.includes(id)).forEach(id=>{
         const d=DEVICE_META[id];
-        html+=`<div class="device-chip deferred"><span class="device-chip-icon">${d.icon}</span>tonight</div>`;
+        html+=`<div class="device-chip deferred"><span class="device-chip-icon">${d.icon}</span>${d.label} · tonight</div>`;
       });
     }
 
@@ -1364,7 +1363,7 @@ function showTab(tab){
   const isWeek=tab==='week';
   const isPantry=tab==='pantry';
   const isChat=tab==='chat';
-  document.getElementById('stack-area').style.display=isRoutine?'flex':'none'; document.getElementById('stack-area').style.flex=isRoutine?'1':'0';
+  document.getElementById('stack-area').style.display=isRoutine?'flex':'none';
   document.getElementById('week-view').classList.toggle('show',isWeek);
   document.getElementById('pantry-view').classList.toggle('show',isPantry);
   document.getElementById('chat-view').classList.toggle('show',isChat);
@@ -1679,3 +1678,4 @@ function render(){
 </script>
 </body>
 </html>
+
