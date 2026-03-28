@@ -153,7 +153,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text-d
 .device-chip.used{background:#e8f5e9;border-color:#a5d6a7;color:#2e7d32;}
 .device-chip.deferred{background:#fff8e1;border-color:#ffe082;color:#b8965a;}
 .device-chip.blocked{background:var(--warm-white);border-color:var(--border);color:var(--text-light);opacity:0.5;cursor:default;}
-.device-chip-icon{font-size:12px;}
+let html=`<div class="device-card"><div class="device-chips">`;
 .device-block-note{font-size:11px;color:var(--text-light);margin-top:10px;font-style:italic;}
   
 
@@ -1245,7 +1245,7 @@ const DEVICE_SCHEDULE={
   thu:{am:['nuderma','led','airshot'],pm:['nuderma','led','guasha'],blocked:false},
   fri:{am:['nuderma','led','airshot'],pm:[],blocked:'retinol night'},
   sat:{am:['nuderma','led','airshot'],pm:['airshot','guasha'],blocked:false},
-  sun:{am:['nuderma','led','airshot'],pm:['guasha'],blocked:false}
+  sun:{am:['nuderma','led'],pm:['guasha'],blocked:false}
 };
 const DEVICE_META={
   nuderma:{icon:'⚡',label:'NuDerma'},
