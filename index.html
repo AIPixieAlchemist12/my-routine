@@ -1265,7 +1265,7 @@ function getDevicesForSession(){
 function markDeviceDone(deviceId){
   if(!devicesDone.includes(deviceId)){devicesDone.push(deviceId);}
   saveSessionState();
-  renderDeviceCard();
+  renderDeviceBar();
   if(session==='pm')render();
 }
 function confirmRedo(){
