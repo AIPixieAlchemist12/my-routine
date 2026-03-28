@@ -198,12 +198,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text-d
 .product-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:13px 14px;margin-bottom:8px;display:flex;align-items:flex-start;gap:12px;transition:all 0.15s;cursor:pointer;}
 .product-card:active{background:var(--warm-white);}
 .product-status-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:4px;}
-.s-using{background:#7a8c7a;}.s-low{background:#b8965a;}.s-out{background:#c47a7a;}.s-unused{background:#9b8faa;}.s-next{background:#c4907a;}.s-wish{background:#9a8a82;opacity:0.5;}
+.s-using{background:#7a8c7a;}.s-low{background:#b8965a;}.s-out{background:#c47a7a;}.s-unused{background:#9b8faa;}.s-next{background:#c4907a;}.s-buynext{background:#4caf50;}.s-wish{background:#9a8a82;opacity:0.5;}
 .product-info{flex:1;min-width:0;}
 .product-name{font-size:13px;font-weight:500;color:var(--text-dark);margin-bottom:2px;line-height:1.3;}
 .product-step{font-size:10px;color:var(--text-light);letter-spacing:0.04em;margin-bottom:5px;}
 .product-status-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:2px 9px;border-radius:20px;font-family:'DM Sans',sans-serif;font-weight:500;letter-spacing:0.03em;}
-.sb-using{background:#e8f5e9;color:#2e7d32;}.sb-low{background:#fff8e1;color:#b8965a;}.sb-out{background:#fde8e8;color:#c47a7a;}.sb-unused{background:#ede9fe;color:#6b21a8;}.sb-next{background:#fce4ec;color:#c2185b;}.sb-wish{background:#f5f0e8;color:#9a8a82;}
+.sb-using{background:#e8f5e9;color:#2e7d32;}.sb-low{background:#fff8e1;color:#b8965a;}.sb-out{background:#fde8e8;color:#c47a7a;}.sb-unused{background:#ede9fe;color:#6b21a8;}.sb-next{background:#fce4ec;color:#c2185b;}.sb-buynext{background:#e8f4e8;color:#2e7d32;border:1px solid #a5d6a7;}.sb-wish{background:#f5f0e8;color:#9a8a82;}
 .product-edit-btn{width:28px;height:28px;border-radius:50%;background:var(--warm-white);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;color:var(--text-light);flex-shrink:0;}
 .add-product-btn{margin:16px 16px 0;width:calc(100% - 32px);padding:13px;background:linear-gradient(135deg,#2a2218,#3a2f1a);color:var(--gold-light);border:1px solid rgba(196,164,90,0.3);border-radius:14px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;letter-spacing:0.05em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.18s;}
 .add-product-btn:active{transform:scale(0.97);}
@@ -413,7 +413,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text-d
     <button class="filter-pill" onclick="setPantryFilter('low',this)">⚠️ Low</button>
     <button class="filter-pill" onclick="setPantryFilter('out',this)">❌ Out</button>
     <button class="filter-pill" onclick="setPantryFilter('unused',this)">📦 Not Using</button>
-    <button class="filter-pill" onclick="setPantryFilter('next',this)">⭐ Up Next</button>
+    <button class="filter-pill" onclick="setPantryFilter('next',this)">⭐ Up Next</button> <button class="filter-pill" onclick="setPantryFilter('buynext',this)">🛒 Buy Next</button>
     <button class="filter-pill" onclick="setPantryFilter('wish',this)">💭 Wishlist</button>
   </div>
   <button class="add-product-btn" onclick="openAddSheet()">✦ Add New Product</button>
@@ -532,7 +532,8 @@ const STATUS_META={
   low:{label:'Running low',emoji:'⚠️',badgeClass:'sb-low',dotClass:'s-low'},
   out:{label:'Out — need to reorder',emoji:'❌',badgeClass:'sb-out',dotClass:'s-out'},
   unused:{label:'Have it, not using',emoji:'📦',badgeClass:'sb-unused',dotClass:'s-unused'},
-  next:{label:'Up next to replace',emoji:'⭐',badgeClass:'sb-next',dotClass:'s-next'},
+  next:{label:'Up next to use',emoji:'⭐',badgeClass:'sb-next',dotClass:'s-next'},
+  buynext:{label:'Buy Next',emoji:'🛒',badgeClass:'sb-buynext',dotClass:'s-buynext'},
   wish:{label:'Wishlist',emoji:'💭',badgeClass:'sb-wish',dotClass:'s-wish'}
 };
 
@@ -1327,10 +1328,10 @@ function renderPantry(search=''){
   const list=document.getElementById('pantry-list');
   const q=(search||'').toLowerCase();
   const filtered=products.filter(p=>{if(pantryFilter!=='all'&&p.status!==pantryFilter)return false;if(q&&!p.name.toLowerCase().includes(q)&&!p.step.toLowerCase().includes(q))return false;return true;});
-  const groups={using:[],low:[],out:[],next:[],unused:[],wish:[]};
+  const groups={using:[],low:[],out:[],buynext:[],next:[],unused:[],wish:[]};
   filtered.forEach(p=>{if(groups[p.status])groups[p.status].push(p);});
-  const ORDER=['out','low','next','using','unused','wish'];
-  const TITLES={out:'❌ Out — Need to Reorder',low:'⚠️ Running Low',next:'⭐ Up Next to Replace',using:'✅ Using',unused:'📦 Have It, Not Using',wish:'💭 Wishlist'};
+  const ORDER=['out','buynext','low','next','using','unused','wish'];
+  const TITLES={out:'❌ Out — Need to Reorder',buynext:'🛒 Buy Next',low:'⚠️ Running Low',next:'⭐ Up Next to Use',using:'✅ Using',unused:'📦 Have It, Not Using',wish:'💭 Wishlist'};
   let html='';let hasAny=false;
   ORDER.forEach(status=>{
     if(groups[status].length===0)return;hasAny=true;
@@ -1360,6 +1361,79 @@ function updateProductStatus(productId,newStatus){
   if(idx>=0){products[idx].status=newStatus;saveProducts(products);}
   closeStatusSheet();
   renderPantry(document.getElementById('pantry-search').value);
+  if(newStatus==='out'){
+    setTimeout(()=>triggerClaudetteRecommendation(productId),400);
+  }
+}
+
+async function triggerClaudetteRecommendation(productId){
+  const products=loadProducts();
+  const product=products.find(p=>p.id===productId);
+  if(!product)return;
+  const cardId='rec-'+productId;
+  const existing=document.getElementById(cardId);
+  if(existing)return;
+  const productEl=document.querySelector(`[onclick="openStatusSheet('${productId}')"]`);
+  if(!productEl)return;
+  const card=document.createElement('div');
+  card.id=cardId;
+  card.style.cssText='margin:0 16px 12px;padding:16px;background:linear-gradient(135deg,#fdf4ff,#f5f0ff);border:1px solid rgba(155,143,170,0.3);border-radius:16px;animation:slideDown 0.3s ease;';
+  card.innerHTML=`<div style="font-size:11px;color:#9b8faa;letter-spacing:0.06em;text-transform:uppercase;font-weight:500;margin-bottom:8px;">✨ Claudette suggests</div><div style="font-size:13px;color:#5a4a42;margin-bottom:12px;font-style:italic;">Finding upgrades for ${product.name}...</div>`;
+  productEl.insertAdjacentElement('afterend',card);
+  try{
+    const resp=await fetch(PROXY_URL,{
+      method:'POST',
+      headers:API_HEADERS,
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:600,
+        system:`You are Claudette, Elena's skincare AI. Elena has vascular rosacea. Her triggers are fragrance, witch hazel, strong glycolic acid, and fragrant essential oils (orange, mandarin, lavender, bergamot, yuzu, geranium, sandalwood). Always screen for these. Respond ONLY with valid JSON, no other text, in this exact format: {"reason":"1 sentence on why an upgrade makes sense now","options":[{"name":"Product Name","brand":"Brand","why":"1 sentence rosacea-safe reason"},{"name":"Product Name","brand":"Brand","why":"1 sentence rosacea-safe reason"},{"name":"Product Name","brand":"Brand","why":"1 sentence rosacea-safe reason"}]}`,
+        messages:[{role:'user',content:`Elena just ran out of ${product.name} (used for: ${product.step}). Suggest 2-3 upgrade alternatives that are fragrance-free and rosacea-safe.`}]
+      })
+    });
+    const data=await resp.json();
+    const text=data.content[0].text.replace(/```json|```/g,'').trim();
+    const rec=JSON.parse(text);
+    card.innerHTML=`
+      <div style="font-size:11px;color:#9b8faa;letter-spacing:0.06em;text-transform:uppercase;font-weight:500;margin-bottom:6px;">✨ Claudette suggests</div>
+      <div style="font-size:12px;color:#5a4a42;margin-bottom:12px;line-height:1.6;">${rec.reason}</div>
+      ${rec.options.map((opt,i)=>`
+        <div style="background:#fff;border:1px solid rgba(155,143,170,0.2);border-radius:12px;padding:12px 14px;margin-bottom:8px;">
+          <div style="font-size:13px;font-weight:500;color:#2c2420;margin-bottom:2px;">${opt.name}</div>
+          <div style="font-size:10px;color:#9b8faa;margin-bottom:6px;">${opt.brand}</div>
+          <div style="font-size:11px;color:#5a4a42;line-height:1.5;margin-bottom:10px;">${opt.why}</div>
+          <div style="display:flex;gap:8px;">
+            <button onclick="saveBuyNext('${productId}','${opt.name.replace(/'/g,"\\'")}','${opt.brand.replace(/'/g,"\\'")}','${product.step}')" style="flex:1;padding:8px;background:#4caf50;color:#fff;border:none;border-radius:10px;font-size:11px;font-family:'DM Sans',sans-serif;cursor:pointer;">🛒 Save as Buy Next</button>
+            <button onclick="chatAboutProduct('${opt.name.replace(/'/g,"\\'")}','${product.name.replace(/'/g,"\\'")}','${product.step}')" style="flex:1;padding:8px;background:transparent;border:1px solid rgba(155,143,170,0.4);border-radius:10px;font-size:11px;color:#6b21a8;font-family:'DM Sans',sans-serif;cursor:pointer;">💬 Chat about this</button>
+          </div>
+        </div>`).join('')}
+      <button onclick="document.getElementById('${cardId}').remove()" style="width:100%;padding:8px;background:transparent;border:none;font-size:11px;color:#9a8a82;cursor:pointer;margin-top:4px;font-family:'DM Sans',sans-serif;">Dismiss</button>`;
+  }catch(err){
+    card.innerHTML=`<div style="font-size:12px;color:#5a4a42;">Couldn't load suggestions right now — tap Ask to chat with Claudette about a replacement.</div><button onclick="document.getElementById('${cardId}').remove()" style="margin-top:8px;padding:6px 12px;background:transparent;border:1px solid var(--border);border-radius:20px;font-size:11px;color:#9a8a82;cursor:pointer;font-family:'DM Sans',sans-serif;">Dismiss</button>`;
+  }
+}
+
+function saveBuyNext(outProductId,name,brand,step){
+  const products=loadProducts();
+  const existing=products.find(p=>p.name===name&&p.status==='buynext');
+  if(!existing){
+    products.push({id:'buynext-'+Date.now(),name:`${name} by ${brand}`,step,status:'buynext',linkedTo:outProductId});
+    saveProducts(products);
+  }
+  const card=document.getElementById('rec-'+outProductId);
+  if(card){
+    card.innerHTML=`<div style="font-size:12px;color:#2e7d32;font-weight:500;">🛒 Saved to Buy Next!</div><div style="font-size:11px;color:#5a4a42;margin-top:4px;">${name} added to your Pantry.</div>`;
+    setTimeout(()=>card.remove(),2500);
+  }
+  renderPantry(document.getElementById('pantry-search').value);
+}
+
+function chatAboutProduct(newProduct,oldProduct,step){
+  showTab('chat');
+  setTimeout(()=>{
+    document.getElementById('chat-input').value=`I just ran out of ${oldProduct}. You suggested ${newProduct} as an upgrade for my ${step} step — can you tell me more about why it works for rosacea and where I should buy it?`;
+    sendChat();
+  },300);
 }
 
 // ===== ADD PRODUCT =====
