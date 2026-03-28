@@ -1319,7 +1319,7 @@ function renderDeviceCard(){
     if(session==='am'){
       pmScheduled.filter(id=>!devices.includes(id)).forEach(id=>{
         const d=DEVICE_META[id];
-        html+=`<div class="device-chip deferred"><span class="device-chip-icon">${d.icon}</span>${d.label} · tonight</div>`;
+        html+=`<div class="device-chip deferred"><span class="device-chip-icon">${d.icon}</span>tonight</div>`;
       });
     }
 
