@@ -385,7 +385,7 @@ let html=`<div class="device-card"><div class="device-chips">`;
     <div class="progress-track"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
     <span class="progress-label" id="prog-pct">0%</span>
   </div>
-  <div id="device-card-container" style="padding:0 16px 10px;"></div>
+ <div id="device-card-container" style="padding:0 16px 10px;flex-shrink:0;"></div>
 
 <div class="checkin-wrap" id="checkin-wrap">
   <div class="checkin-title">How's your skin feeling <span>right now?</span></div>
@@ -410,49 +410,49 @@ let html=`<div class="device-card"><div class="device-chips">`;
   <div class="checkin-note" id="checkin-note"></div>
 </div>
 
-<div class="stack-area" id="stack-area"></div>
-
-<div class="week-view" id="week-view"></div>
-
-<div class="pantry-view" id="pantry-view">
-  <div class="pantry-search-wrap">
-    <input class="pantry-search" type="text" placeholder="Search products..." oninput="renderPantry(this.value)" id="pantry-search">
+<div style="flex:1;display:flex;flex-direction:column;overflow:hidden;">
+  <div class="stack-area" id="stack-area"></div>
+  <div class="week-view" id="week-view"></div>
+  <div class="pantry-view" id="pantry-view">
+    <div class="pantry-search-wrap">
+      <input class="pantry-search" type="text" placeholder="Search products..." oninput="renderPantry(this.value)" id="pantry-search">
+    </div>
+    <div class="pantry-filter">
+      <button class="filter-pill active" onclick="setPantryFilter('all',this)">All</button>
+      <button class="filter-pill" onclick="setPantryFilter('using',this)">✅ Using</button>
+      <button class="filter-pill" onclick="setPantryFilter('low',this)">⚠️ Low</button>
+      <button class="filter-pill" onclick="setPantryFilter('out',this)">❌ Out</button>
+      <button class="filter-pill" onclick="setPantryFilter('unused',this)">📦 Not Using</button>
+      <button class="filter-pill" onclick="setPantryFilter('next',this)">⭐ Up Next</button>
+      <button class="filter-pill" onclick="setPantryFilter('buynext',this)">🛒 Buy Next</button>
+      <button class="filter-pill" onclick="setPantryFilter('wish',this)">💭 Wishlist</button>
+    </div>
+    <button class="add-product-btn" onclick="openAddSheet()">✦ Add New Product</button>
+    <div id="pantry-list"></div>
   </div>
-  <div class="pantry-filter">
-    <button class="filter-pill active" onclick="setPantryFilter('all',this)">All</button>
-    <button class="filter-pill" onclick="setPantryFilter('using',this)">✅ Using</button>
-    <button class="filter-pill" onclick="setPantryFilter('low',this)">⚠️ Low</button>
-    <button class="filter-pill" onclick="setPantryFilter('out',this)">❌ Out</button>
-    <button class="filter-pill" onclick="setPantryFilter('unused',this)">📦 Not Using</button>
-    <button class="filter-pill" onclick="setPantryFilter('next',this)">⭐ Up Next</button> <button class="filter-pill" onclick="setPantryFilter('buynext',this)">🛒 Buy Next</button>
-    <button class="filter-pill" onclick="setPantryFilter('wish',this)">💭 Wishlist</button>
-  </div>
-  <button class="add-product-btn" onclick="openAddSheet()">✦ Add New Product</button>
-  <div id="pantry-list"></div>
-</div>
-
-<div class="chat-view" id="chat-view">
-  <div class="chat-messages" id="chat-messages">
-    <div class="msg assistant">
-      <div class="msg-bubble">Hi Elena! I'm Claudette 🌸 I know your full routine, your rosacea triggers, your products, and your skip patterns. Ask me anything — whether to add something new, what to do on a flare night, or why a product isn't working. What's on your mind?</div>
+  <div class="chat-view" id="chat-view">
+    <div class="chat-messages" id="chat-messages">
+      <div class="msg assistant">
+        <div class="msg-bubble">Hi Elena! I'm Claudette 🌸 I know your full routine, your rosacea triggers, your products, and your skip patterns. Ask me anything — whether to add something new, what to do on a flare night, or why a product isn't working. What's on your mind?</div>
+      </div>
+    </div>
+    <div class="chat-suggestions" id="chat-suggestions">
+      <button class="chat-suggestion" onclick="sendSuggestion(this)">Is my routine safe tonight?</button>
+      <button class="chat-suggestion" onclick="sendSuggestion(this)">Can I add a new product?</button>
+      <button class="chat-suggestion" onclick="sendSuggestion(this)">My skin is flushed — what do I skip?</button>
+      <button class="chat-suggestion" onclick="sendSuggestion(this)">What's my most skipped step?</button>
+    </div>
+    <div class="chat-input-area">
+      <button class="chat-photo-btn" onclick="openChatPhotoInput()" title="Attach skin photo">📸</button>
+      <input type="file" id="chat-photo-input" accept="image/*" capture="user" style="display:none" onchange="attachChatPhoto(this)">
+      <textarea class="chat-input" id="chat-input" placeholder="Ask Claudette anything..." rows="1" onkeydown="handleChatKey(event)" oninput="autoResize(this)"></textarea>
+      <button class="chat-send-btn" onclick="sendChat()">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8l12-6-5 6 5 6-12-6z" fill="#2a1f0e"/></svg>
+      </button>
     </div>
   </div>
-  <div class="chat-suggestions" id="chat-suggestions">
-    <button class="chat-suggestion" onclick="sendSuggestion(this)">Is my routine safe tonight?</button>
-    <button class="chat-suggestion" onclick="sendSuggestion(this)">Can I add a new product?</button>
-    <button class="chat-suggestion" onclick="sendSuggestion(this)">My skin is flushed — what do I skip?</button>
-    <button class="chat-suggestion" onclick="sendSuggestion(this)">What's my most skipped step?</button>
-  </div>
-  <div class="chat-input-area">
-    <button class="chat-photo-btn" onclick="openChatPhotoInput()" title="Attach skin photo">📸</button>
-    <input type="file" id="chat-photo-input" accept="image/*" capture="user" style="display:none" onchange="attachChatPhoto(this)">
-    <textarea class="chat-input" id="chat-input" placeholder="Ask Claudette anything..." rows="1" onkeydown="handleChatKey(event)" oninput="autoResize(this)"></textarea>
-    <button class="chat-send-btn" onclick="sendChat()">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8l12-6-5 6 5 6-12-6z" fill="#2a1f0e"/></svg>
-    </button>
-  </div>
 </div>
-
+  
 <div class="bottom-nav show" id="bottom-nav">
   <div class="nav-step-info" id="nav-step-info">Step <strong>1</strong></div> <button class="redo-btn" onclick="confirmRedo()">↺ Start over</button>
   <div class="legend-mini">
