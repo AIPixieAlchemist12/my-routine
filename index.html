@@ -1095,7 +1095,7 @@ async function sendChat(){
   else userContent.push({type:'text',text:'Please analyze this photo of my skin.'});
   chatHistory.push({role:'user',content:userContent});
   try{
-    const resp=await fetch('PROXY_URLes',{
+    const resp=await fetch('PROXY_URL',{
       method:'POST',
       headers:API_HEADERS,
       body:JSON.stringify({
