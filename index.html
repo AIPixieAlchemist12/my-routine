@@ -1268,65 +1268,6 @@ function markDeviceDone(deviceId){
   renderDeviceCard();
   if(session==='pm')render();
 }
-
-function renderDeviceCard(){
-  const existing=document.getElementById('device-card-container');
-  if(existing)existing.remove();
-  if(activeTab!=='routine')return;
-  const container=document.createElement('div');
-  container.id='device-card-container';
-  container.style.cssText='padding:0 16px 10px;flex-shrink:0;';
-  const subHeader=document.getElementById('sub-header');
-  subHeader.insertAdjacentElement('afterend',container);
-  const {devices,blocked}=getDevicesForSession();
-  const schedule=DEVICE_SCHEDULE[day];
-
-  let html=`<div class="device-card"><div class="device-card-title">Today's Devices</div><div class="device-chips">`;
-
-  if(blocked){
-    ['nuderma','led','airshot','guasha'].forEach(id=>{
-      const d=DEVICE_META[id];
-      const doneInAM=devicesDone.includes(id);
-      if(doneInAM){
-        html+=`<div class="device-chip used"><span class="device-chip-icon">${d.icon}</span>${d.label} ✓</div>`;
-      } else {
-        html+=`<div class="device-chip blocked"><span class="device-chip-icon">${d.icon}</span>${d.label}</div>`;
-      }
-    });
-    html+=`</div><div class="device-block-note">🚫 ${blocked} — no PM devices tonight${devicesDone.length>0?' (used in AM ✓)':''}</div>`;
-  } else {
-    const pmScheduled=schedule.pm||[];
-    const amScheduled=schedule.am||[];
-
-    devices.forEach(id=>{
-      const d=DEVICE_META[id];
-      const done=devicesDone.includes(id);
-      if(done){
-        html+=`<div class="device-chip used"><span class="device-chip-icon">${d.icon}</span>${d.label} ✓</div>`;
-      } else {
-        html+=`<div class="device-chip" onclick="markDeviceDone('${id}')"><span class="device-chip-icon">${d.icon}</span>${d.label}</div>`;
-      }
-    });
-
-    if(session==='am'){
-      pmScheduled.filter(id=>!devices.includes(id)).forEach(id=>{
-        const d=DEVICE_META[id];
-        html+=`<div class="device-chip deferred"><span class="device-chip-icon">${d.icon}</span>tonight</div>`;
-      });
-    }
-
-    if(session==='pm'){
-      devicesDone.filter(id=>!pmScheduled.includes(id)).forEach(id=>{
-        const d=DEVICE_META[id];
-        html+=`<div class="device-chip used"><span class="device-chip-icon">${d.icon}</span>${d.label} ✓ AM</div>`;
-      });
-    }
-  }
-
-  html+=`</div></div>`;
-  container.innerHTML=html;
-}
-
 function confirmRedo(){
   if(confirm('Start this session over from the beginning?')){
     checked={};devicesDone=[];saveSessionState();render();
@@ -1621,7 +1562,7 @@ function renderModalMove(move,isGua=false){
 // ===== RENDER ROUTINE =====
 function render(){
   if(activeTab!=='routine')return;
-  renderDeviceCard();
+  renderDeviceBar();
   const steps=getSteps();
   const real=getRealSteps();
   let done=0;real.forEach(s=>{if(checked[key(day,session,steps.indexOf(s))])done++;});
