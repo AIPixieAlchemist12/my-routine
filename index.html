@@ -1095,7 +1095,7 @@ async function sendChat(){
   else userContent.push({type:'text',text:'Please analyze this photo of my skin.'});
   chatHistory.push({role:'user',content:userContent});
   try{
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+    const resp=await fetch('PROXY_URLes',{
       method:'POST',
       headers:API_HEADERS,
       body:JSON.stringify({
@@ -1309,7 +1309,7 @@ async function lookupProduct(){
   document.getElementById('add-result-note').textContent='';
   resultEl.classList.add('show');
   try{
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+    const resp=await fetch('PROXY_URLes',{
       method:'POST',
       headers:API_HEADERS,
       body:JSON.stringify({
