@@ -1261,7 +1261,41 @@ function getDevicesForSession(){
   if(schedule.blocked)return{devices:['nuderma','led','airshot','guasha'],blocked:schedule.blocked};
   return{devices:schedule.pm,blocked:false};
 }
-
+function renderDeviceBar(){
+  const bar=document.getElementById('device-bar');
+  const chipsEl=document.getElementById('device-chips');
+  const noteEl=document.getElementById('device-block-note');
+  if(activeTab!=='routine'){bar.classList.remove('show');return;}
+  const schedule=DEVICE_SCHEDULE[day];
+  if(!schedule){bar.classList.remove('show');return;}
+  bar.classList.add('show');
+  const blocked=schedule.blocked;
+  const sessionDevices=session==='am'?schedule.am:schedule.pm;
+  const pmDevices=schedule.pm||[];
+  let html='';
+  if(session==='pm'&&blocked){
+    ['nuderma','led','airshot','guasha'].forEach(id=>{
+      const d=DEVICE_META[id];
+      const doneInAM=devicesDone.includes(id);
+      html+=doneInAM?`<div class="device-chip used">${d.icon} ${d.label} ✓ AM</div>`:`<div class="device-chip blocked">${d.icon} ${d.label}</div>`;
+    });
+    noteEl.textContent=`🚫 ${blocked} — no PM devices tonight`;
+    noteEl.style.display='block';
+  }else{
+    noteEl.style.display='none';
+    sessionDevices.forEach(id=>{
+      const d=DEVICE_META[id];
+      const done=devicesDone.includes(id);
+      html+=done?`<div class="device-chip used">${d.icon} ${d.label} ✓</div>`:`<div class="device-chip" onclick="markDeviceDone('${id}')">${d.icon} ${d.label}</div>`;
+    });
+    if(session==='am'){
+      pmDevices.filter(id=>!sessionDevices.includes(id)).forEach(id=>{
+        html+=`<div class="device-chip deferred">${DEVICE_META[id].icon} tonight</div>`;
+      });
+    }
+  }
+  chipsEl.innerHTML=html;
+}
 function markDeviceDone(deviceId){
   if(!devicesDone.includes(deviceId)){devicesDone.push(deviceId);}
   saveSessionState();
