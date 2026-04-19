@@ -26,7 +26,7 @@ Bump it for every release. Current: v1.4.
 - After every deploy, iPhone needs: delete the app → clear Safari cache (Settings → Safari → Clear History) → re-add to home screen. PWA caches aggressively.
 
 ## Current branch
-- Active dev branch: `claude/v1.4-implementation-cSn4V`.
+- Active dev branch: `claude/skincare-routine-pwa-EiUzr`.
 
 ## Known quirks
 - Yoga modal uses inline SVGs in the `SVGS` object near line 699. No GIFs are planned; leave as-is.
