@@ -1,5 +1,7 @@
 # My Routine — Claude quick reference
 
+> **At session start, also read `HANDOVER.md`** in this repo for in-flight context (current state, open questions, what's next). This file holds durable rules; `HANDOVER.md` holds the stuff that changes between sessions.
+
 ## Architecture
 - **Single-file PWA.** All HTML, CSS, and JS live in `index.html`. Don't split it.
 - `pwa/` holds static PWA assets only (manifest, icons, splash screens). Never put logic there.
