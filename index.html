@@ -1,14 +1,69 @@
 <!DOCTYPE html>
+<!-- v1.4 | 2026-04-18 | Added: days + incompatibles in Pantry (Option A) -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="My Routine ✨">
+<meta name="apple-mobile-web-app-title" content="MSC">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#2a2218">
+<link rel="manifest" href="/pwa/manifest.json">
+<link rel="apple-touch-icon" sizes="180x180" href="/pwa/icon-180.png">
+<link rel="apple-touch-icon" sizes="192x192" href="/pwa/icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/pwa/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/pwa/icon-512.png">
+<link rel="apple-touch-startup-image" href="/pwa/splash-iphone-15-pro-max-1290x2796.png" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3)">
+<link rel="apple-touch-startup-image" href="/pwa/splash-iphone-15-pro-1179x2556.png" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3)">
+<link rel="apple-touch-startup-image" href="/pwa/splash-iphone-14-1170x2532.png" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3)">
+<link rel="apple-touch-startup-image" href="/pwa/splash-iphone-13-pro-max-1284x2778.png" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3)">
+<link rel="apple-touch-startup-image" href="/pwa/splash-iphone-11-828x1792.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)">
+<link rel="apple-touch-startup-image" href="/pwa/splash-iphone-x-1125x2436.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)">
 <title>My Skincare Routine</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
+/* PWA native polish — safe areas, tap polish, iOS quirks (v1.4) */
+html, body {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+input, textarea, [contenteditable] {
+  -webkit-user-select: text;
+  user-select: text;
+}
+body {
+  position: fixed;
+  width: 100%;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  box-sizing: border-box;
+}
+.header {
+  margin-top: calc(env(safe-area-inset-top) * -1);
+  padding-top: calc(env(safe-area-inset-top) + 14px);
+}
+.bottom-nav {
+  padding-bottom: calc(env(safe-area-inset-bottom) + 16px);
+}
+.stack-area,
+.week-view,
+.pantry-view,
+.chat-messages {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+* {
+  touch-action: manipulation;
+}
+
 :root {
   --cream: #faf7f2;
   --warm-white: #f5f0e8;
@@ -578,42 +633,42 @@ const STEP_SUBS={
 };
 
 const DEFAULT_PRODUCTS=[
-  {id:'tatcha-rice',name:'Tatcha The Rice Wash',step:'Cleanse',status:'using',sub:'Any gentle low-pH cleanser',buy:'Tatcha The Rice Wash — reorder'},
-  {id:'anua-oil',name:'Anua Heartleaf Pore Control Cleansing Oil',step:'Oil cleanse',status:'using'},
-  {id:'anua-toner',name:'Anua Heartleaf 77% Soothing Toner',step:'Spray toner',status:'using'},
-  {id:'anua-rice-toner',name:'Anua Rice 70+ Ceramide Milky Toner',step:'Rice Milky Toner',status:'using'},
-  {id:'medik8-pha',name:'Medik8 Press & Glow PHA Toner',step:'Sunday exfoliant',status:'using'},
-  {id:'cluma',name:'DE C-Luma Vitamin C Serum',step:'Vitamin C serum',status:'using'},
-  {id:'timeless-vitc',name:'Timeless 20% Vit C + E + Ferulic',step:'Vitamin C serum (restock)',status:'next'},
-  {id:'glass-skin',name:'Peach & Lily Glass Skin Serum',step:'Glass Skin serum',status:'using'},
-  {id:'bha-serum',name:'Be The Skin Pore Zero BHA Serum',step:'Pore refinement serum',status:'using'},
-  {id:'numbuzin',name:'Numbuzin No. 9 Serum',step:'PM first serum',status:'using'},
-  {id:'gf-serum',name:'The Ordinary GF 15% Solution',step:'Growth Factor serum',status:'using'},
-  {id:'nia-medicube',name:'Medicube Pore Zero Niacinamide',step:'Niacinamide serum',status:'using'},
-  {id:'argireline',name:'The Ordinary Argireline 10%',step:'Peptide serums',status:'using'},
-  {id:'volufiline',name:'The Ordinary Volufiline 92%',step:'Peptide serums',status:'using'},
-  {id:'copper-peptide',name:'Peach & Lily Copper Peptide Pro',step:'Copper Peptide serum',status:'using'},
-  {id:'celimax-retinal',name:'Celimax Retinal Shot',step:'Retinal (Tue/Sat)',status:'using'},
-  {id:'dallas-retinol',name:'Dallas & James Retinol Oil',step:'Retinol (Fri)',status:'using'},
-  {id:'anua-acid',name:'Anua 10% AHA/BHA Serum',step:'Wednesday acid exfoliant',status:'using'},
-  {id:'ceramidin-eye',name:'Dr. Jart+ Ceramidin Eye Cream',step:'Eye treatment',status:'using'},
-  {id:'ootd-eye',name:'#OOTD Intensive Eye Serum',step:'Eye treatment',status:'using'},
-  {id:'seoul-eye',name:'Seoul 1988 Retinal Eye Cream',step:'Eye treatment (retinol nights)',status:'using'},
-  {id:'mediheal-patches',name:'Mediheal Retinol Collagen Eye Patches',step:'Eye patches (optional)',status:'using'},
-  {id:'purito-panthenol',name:'Purito Panthenol Cream',step:'Moisturize AM',status:'using'},
-  {id:'saint-jane',name:'Saint Jane Rich Rescue Cream',step:'Moisturize AM (dry days)',status:'using'},
-  {id:'vt-pdrn',name:'VT PDRN Capsule Cream 100',step:'Seal PM (most nights)',status:'using'},
-  {id:'rejuall',name:'Dr. Reju-All PDRN Rejuvenating Cream',step:'Seal PM (retinol nights)',status:'using'},
-  {id:'loumi-oil',name:'Loumi Rose Glow Face Oil',step:'Face oil (gua sha nights)',status:'using'},
-  {id:'replenix-oil',name:'Replenix Rapid Repair Radiance Remedy',step:'Face oil (retinol nights)',status:'using'},
-  {id:'boj-spf',name:'Beauty of Joseon Relief Sun SPF 50+',step:'SPF',status:'using'},
-  {id:'supergoop',name:'Supergoop Dew Screen SPF 40',step:'SPF (makeup days)',status:'using'},
-  {id:'airshot',name:'Medicube Age-R Air Shot',step:'Device (Mon/Sat)',status:'using'},
-  {id:'nuderma',name:'NuDerma High Frequency Wand',step:'Device (Thu)',status:'using'},
-  {id:'led-mask',name:'LED Face Mask',step:'Device (Thu)',status:'using'},
-  {id:'mighty-bamboo',name:'Purito Mighty Bamboo Panthenol',step:'Moisturize (Wed acid nights)',status:'unused'},
-  {id:'elf-vitc',name:'e.l.f. Bright Icon Vitamin C+E+Ferulic Serum',step:'Vitamin C serum (AM)',status:'using'},
-  {id:'elf-eye',name:'e.l.f. Bright & Beautiful Eye Cream',step:'Eye treatment (AM)',status:'using'},
+  {id:'tatcha-rice',name:'Tatcha The Rice Wash',step:'Cleanse',status:'using',days:'☀️ Daily · 🌙 Daily',sub:'Any gentle low-pH cleanser',buy:'Tatcha The Rice Wash — reorder'},
+  {id:'anua-oil',name:'Anua Heartleaf Pore Control Cleansing Oil',step:'Oil cleanse',status:'using',days:'🌙 Daily'},
+  {id:'anua-toner',name:'Anua Heartleaf 77% Soothing Toner',step:'Spray toner',status:'using',days:'☀️ Daily · 🌙 Daily'},
+  {id:'anua-rice-toner',name:'Anua Rice 70+ Ceramide Milky Toner',step:'Rice Milky Toner',status:'using',days:'☀️ Daily'},
+  {id:'medik8-pha',name:'Medik8 Press & Glow PHA Toner',step:'Sunday exfoliant',status:'using',days:'🌙 Sun only',incompatible:'Not same night as retinol or AHA/BHA'},
+  {id:'cluma',name:'DE C-Luma Vitamin C Serum',step:'Vitamin C serum',status:'using',days:'☀️ Daily',incompatible:'Never same session as GF 15%'},
+  {id:'timeless-vitc',name:'Timeless 20% Vit C + E + Ferulic',step:'Vitamin C serum (restock)',status:'next',days:'☀️ Daily',incompatible:'Never same session as GF 15%'},
+  {id:'glass-skin',name:'Peach & Lily Glass Skin Serum',step:'Glass Skin serum',status:'using',days:'☀️ Daily'},
+  {id:'bha-serum',name:'Be The Skin Pore Zero BHA Serum',step:'Pore refinement serum',status:'using',days:'☀️ Daily',incompatible:'Not same night as retinol'},
+  {id:'numbuzin',name:'Numbuzin No. 9 Serum',step:'PM first serum',status:'using',days:'🌙 Mon · Tue · Thu · Fri · Sat · Sun'},
+  {id:'gf-serum',name:'The Ordinary GF 15% Solution',step:'Growth Factor serum',status:'using',days:'🌙 Mon · Thu',incompatible:'Never with Vitamin C, AHA/BHA, or retinol'},
+  {id:'nia-medicube',name:'Medicube Pore Zero Niacinamide',step:'Niacinamide serum',status:'using',days:'☀️ Daily · 🌙 Mon–Sat'},
+  {id:'argireline',name:'The Ordinary Argireline 10%',step:'Peptide serums',status:'using',days:'☀️ Daily · 🌙 Mon · Thu · Sat · Sun'},
+  {id:'volufiline',name:'The Ordinary Volufiline 92%',step:'Peptide serums',status:'using',days:'☀️ Daily · 🌙 Mon · Thu · Sat · Sun'},
+  {id:'copper-peptide',name:'Peach & Lily Copper Peptide Pro',step:'Copper Peptide serum',status:'using',days:'🌙 Mon · Thu',incompatible:'Not same night as retinol'},
+  {id:'celimax-retinal',name:'Celimax Retinal Shot',step:'Retinal (Tue/Sat)',status:'using',days:'🌙 Tue · Sat',incompatible:'Not with AHA/BHA, GF, Vitamin C, or copper peptides. No devices same night.'},
+  {id:'dallas-retinol',name:'Dallas & James Retinol Oil',step:'Retinol (Fri)',status:'using',days:'🌙 Fri only',incompatible:'Not with AHA/BHA, GF, Vitamin C, or copper peptides. No devices same night.'},
+  {id:'anua-acid',name:'Anua 10% AHA/BHA Serum',step:'Wednesday acid exfoliant',status:'using',days:'🌙 Wed only',incompatible:'Not with retinol, GF, devices, or gua sha. 5 min contact time on dry skin.'},
+  {id:'ceramidin-eye',name:'Dr. Jart+ Ceramidin Eye Cream',step:'Eye treatment',status:'using',days:'☀️ Daily · 🌙 Mon · Thu · Sun'},
+  {id:'ootd-eye',name:'#OOTD Intensive Eye Serum',step:'Eye treatment',status:'using',days:'🌙 Thu (alternate)'},
+  {id:'seoul-eye',name:'Seoul 1988 Retinal Eye Cream',step:'Eye treatment (retinol nights)',status:'using',days:'🌙 Tue · Fri · Sat',incompatible:'Not same night as Mediheal eye patches'},
+  {id:'mediheal-patches',name:'Mediheal Retinol Collagen Eye Patches',step:'Eye patches (optional)',status:'using',days:'🌙 Tue · Sat (optional)',incompatible:'Not same night as Seoul 1988 Eye Cream'},
+  {id:'purito-panthenol',name:'Purito Panthenol Cream',step:'Moisturize AM',status:'using',days:'☀️ Daily'},
+  {id:'saint-jane',name:'Saint Jane Rich Rescue Cream',step:'Moisturize AM (dry days)',status:'using',days:'☀️ Dry days only'},
+  {id:'vt-pdrn',name:'VT PDRN Capsule Cream 100',step:'Seal PM (most nights)',status:'using',days:'🌙 Mon · Thu · Sat · Sun'},
+  {id:'rejuall',name:'Dr. Reju-All PDRN Rejuvenating Cream',step:'Seal PM (retinol nights)',status:'using',days:'🌙 Tue · Fri'},
+  {id:'loumi-oil',name:'Loumi Rose Glow Face Oil',step:'Face oil (gua sha nights)',status:'using',days:'🌙 Mon · Wed · Sun'},
+  {id:'replenix-oil',name:'Replenix Rapid Repair Radiance Remedy',step:'Face oil (retinol nights)',status:'using',days:'🌙 Tue · Thu · Sat'},
+  {id:'boj-spf',name:'Beauty of Joseon Relief Sun SPF 50+',step:'SPF',status:'using',days:'☀️ Daily',incompatible:'Always last AM step — wait 15 min before makeup'},
+  {id:'supergoop',name:'Supergoop Dew Screen SPF 40',step:'SPF (makeup days)',status:'using',days:'☀️ Makeup days',incompatible:'Always last AM step — wait 15 min before makeup'},
+  {id:'airshot',name:'Medicube Age-R Air Shot',step:'Device (Mon/Sat)',status:'using',days:'🌙 Mon · Sat (or ☀️ defer to AM)',incompatible:'Not on retinol or acid nights. Completely dry skin only.'},
+  {id:'nuderma',name:'NuDerma High Frequency Wand',step:'Device (Thu)',status:'using',days:'🌙 Thu (or ☀️ defer to AM)',incompatible:'Not on retinol or acid nights. Completely dry skin only.'},
+  {id:'led-mask',name:'LED Face Mask',step:'Device (Thu)',status:'using',days:'🌙 Thu (or ☀️ defer to AM)',incompatible:'Not on acid nights. Dry skin only. Always before serums.'},
+  {id:'mighty-bamboo',name:'Purito Mighty Bamboo Panthenol',step:'Moisturize (Wed acid nights)',status:'unused',days:'🌙 Wed only'},
+  {id:'elf-vitc',name:'e.l.f. Bright Icon Vitamin C+E+Ferulic Serum',step:'Vitamin C serum (AM)',status:'using',days:'☀️ Daily',incompatible:'Never same session as GF 15%'},
+  {id:'elf-eye',name:'e.l.f. Bright & Beautiful Eye Cream',step:'Eye treatment (AM)',status:'using',days:'☀️ Daily'},
 ];
 
 // ===== STATE =====
@@ -689,7 +744,23 @@ let chatHistory=[];
 
 function loadSkipLog(){try{return JSON.parse(localStorage.getItem('routine_skip_log')||'[]');}catch(e){return[];}}
 function saveSkipLog(log){try{localStorage.setItem('routine_skip_log',JSON.stringify(log));}catch(e){}}
-function loadProducts(){try{const s=JSON.parse(localStorage.getItem('routine_products')||'null');if(s)return s;}catch(e){}return DEFAULT_PRODUCTS.map(p=>({...p}));}
+function loadProducts(){
+  try{
+    const s=JSON.parse(localStorage.getItem('routine_products')||'null');
+    if(s){
+      const merged=s.map(p=>{
+        const def=DEFAULT_PRODUCTS.find(d=>d.id===p.id);
+        if(def){
+          if(!p.days&&def.days)p.days=def.days;
+          if(!p.incompatible&&def.incompatible)p.incompatible=def.incompatible;
+        }
+        return p;
+      });
+      return merged;
+    }
+  }catch(e){}
+  return DEFAULT_PRODUCTS.map(p=>({...p}));
+}
 function saveProducts(p){try{localStorage.setItem('routine_products',JSON.stringify(p));}catch(e){}}
 
 const SKIN_NOTES={calm:'All clear — carry on with your full routine tonight.',flushed:'Skip gua sha tonight. Use a lighter touch and focus on soothing ingredients.',dry:'Consider layering an extra pump of moisturizer. Re-spritz toner more generously.',sensitive:'Skip retinol if your skin is feeling reactive. Focus on barrier support — niacinamide, ceramides, and PDRN only tonight.'};
@@ -1419,7 +1490,7 @@ function renderPantry(search=''){
   ORDER.forEach(status=>{
     if(groups[status].length===0)return;hasAny=true;
     html+=`<div class="pantry-section">${pantryFilter==='all'?`<div class="pantry-section-title">${TITLES[status]}</div>`:''}`;
-    groups[status].forEach(p=>{const sm=STATUS_META[p.status];html+=`<div class="product-card" onclick="openStatusSheet('${p.id}')"><div class="product-status-dot ${sm.dotClass}"></div><div class="product-info"><div class="product-name">${p.name}</div><div class="product-step">${p.step}</div><span class="product-status-badge ${sm.badgeClass}">${sm.emoji} ${sm.label}</span></div><div class="product-edit-btn">›</div></div>`;});
+    groups[status].forEach(p=>{const sm=STATUS_META[p.status];html+=`<div class="product-card" onclick="openStatusSheet('${p.id}')"><div class="product-status-dot ${sm.dotClass}"></div><div class="product-info"><div class="product-name">${p.name}</div><div class="product-step">${p.step}</div><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:5px;"><span class="product-status-badge ${sm.badgeClass}">${sm.emoji} ${sm.label}</span>${p.days?`<span style="display:inline-flex;align-items:center;font-size:10px;padding:2px 8px;border-radius:20px;background:var(--warm-white);border:1px solid var(--border);color:var(--text-light);font-family:'DM Sans',sans-serif;">${p.days}</span>`:''}${p.incompatible?`<span style="display:inline-flex;align-items:center;font-size:10px;padding:2px 8px;border-radius:20px;background:#fff8e1;border:1px solid #ffe082;color:#b8965a;font-family:'DM Sans',sans-serif;cursor:pointer;" onclick="event.stopPropagation();this.nextElementSibling.style.display=this.nextElementSibling.style.display==='block'?'none':'block'">⚠️ conflicts</span><div style="display:none;font-size:11px;color:var(--text-mid);background:var(--warm-white);border-radius:8px;padding:8px 10px;margin-top:4px;line-height:1.6;width:100%;">${p.incompatible}</div>`:''}</div></div><div class="product-edit-btn">›</div></div>`;});
     html+=`</div>`;
   });
   if(!hasAny)html=`<div class="empty-state" style="margin-top:32px"><div class="empty-icon">🔍</div><p>No products found.</p></div>`;
@@ -1636,6 +1707,14 @@ function render(){
   area.innerHTML=html;
   document.getElementById('nav-step-info').innerHTML=`Step <strong>${stepNum}</strong> of ${real.length}`;
 }
+
+// ===== HAPTICS (iOS PWA) =====
+function haptic(ms = 10) { try { navigator.vibrate?.(ms); } catch (e) {} }
+document.addEventListener('click', e => {
+  if (e.target.closest('.skip-btn, .tab-btn, .day-pill, .checkin-opt, .status-option-btn')) {
+    haptic(10);
+  }
+}, { passive: true });
 
 // ===== INIT =====
 (function init(){
