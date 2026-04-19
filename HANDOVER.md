@@ -33,7 +33,8 @@ Read this alongside `CLAUDE.md`. `CLAUDE.md` holds durable rules that never chan
 - **Design adaptations vs. the original brief:**
   - Safe-area padding was moved from `.app` (class doesn't exist in `index.html`) to `body`.
   - Haptic JS selector list trimmed to selectors that exist: `.skip-btn, .tab-btn, .day-pill, .checkin-opt, .status-option-btn`. The brief's `.done-btn .ses-btn .skip-opt .chat-input-wrap` selectors do not exist in the codebase.
-- **Design source of truth** for future UI work: `/tmp/design-extract/my-skin-routine-design-system/`. The `project/preview/components-pantry.html` deliberately *doesn't* dictate how days/conflicts display — that's why Option A was approved.
+- **Design source of truth** for future UI work: the zip at `https://api.anthropic.com/v1/design/h/uD8YuAwMoIAATyxWrP1KQQ`, previously extracted to `/tmp/design-extract/my-skin-routine-design-system/`. ⚠️ `/tmp` is wiped between sandbox sessions — the extract is gone. Re-fetch the zip before doing UI work that references it.
+- **Design status:** only the **iOS-native-polish subset** of the design system shipped in v1.4 (safe-area padding, haptic feedback selectors, icons, splash screens). The broader visual redesign from the zip (component styles, colors, layout) was **not** implemented — the app still uses the pre-design-system styles in `index.html`. The `project/preview/components-pantry.html` reference was consulted and deliberately *didn't* dictate how days/conflicts display, which is why Option A (inline chips) was approved for pantry — that decision stands even after a broader redesign.
 - **Line anchors (drift as edits continue):** `DEFAULT_PRODUCTS` ~line 601, `loadProducts()` ~line 746, `renderPantry()` card template ~line 1491, `(function init(){` ~line 1721, `<style>` opens ~line 25, `SVGS` object ~line 699.
 
 ## 5. What comes next
@@ -59,6 +60,11 @@ All remaining tasks are off-codebase — they need Elena (or Vercel dashboard ac
 
 - Was only tested on desktop Chrome before v1.4. Verify on iPhone after the install above.
 
+### Visual redesign (from the design zip)
+
+- Not yet implemented. The full design system at `https://api.anthropic.com/v1/design/h/uD8YuAwMoIAATyxWrP1KQQ` still needs to be applied to `index.html`. Scope is TBD — before diving in, confirm with Elena which views to redesign first (stack-area / week-view / pantry-view / chat-view) and whether she has fresh specs that supersede the zip.
+- Reminder: surgical edits, one change at a time, respect the single-file rule.
+
 ### Claudette sanity check
 
 - If the Anthropic key was rotated, update the Vercel project's env var (`project-fvy9w`) and redeploy. Confirm Claudette still replies in the chat view.
@@ -68,6 +74,7 @@ All remaining tasks are off-codebase — they need Elena (or Vercel dashboard ac
 1. **Did the iPhone install checklist pass?** If not, which items failed — that tells us which splash media query or CSS fallback needs a fix.
 2. **Is Claudette responding** after any Anthropic key rotation? If no, the Vercel proxy env var update is pending.
 3. **Any new design specs from Elena** not in the zip? She was iterating before the last handover — check before further UI work.
+4. **Visual redesign scope:** which views first, and does the original zip still represent Elena's intent? Nothing from the broader design system has been applied yet.
 
 ## 7. How to use this doc in a new session
 
